@@ -32,7 +32,7 @@ import org.javajdj.util.hex.ByteUtils;
  * 
  * @param <D> The type used to describe parameters.
  * 
- * @author Jan de Jongh,
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
 public abstract class AbstractMidiDevice_RolandBoss<D extends ParameterDescriptor_RolandBoss>
