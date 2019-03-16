@@ -7,10 +7,25 @@
   
   <groupId>org.javajdj</groupId>
   <artifactId>jmididevice</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <description>A Java library holding a few MIDI device implementations, some with Swing components.</description>
   <url>https://github.com/jandejongh/jmididevice</url>
   
+  <developers>
+    <developer>
+      <name>Jan de Jongh</name>
+      <email>jfcmdejongh@gmail.com</email>
+    </developer>
+  </developers>
+  
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+ 
   <packaging>jar</packaging>
   
   <dependencies>
@@ -27,4 +42,48 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   
+  <build>
+    <plugins>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.1</version>
+         <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <archive>
+                <manifest>
+                  <mainClass>
+                    org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80
+                  </mainClass>
+                </manifest>
+              </archive>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
 </project>
