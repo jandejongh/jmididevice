@@ -26,7 +26,16 @@ import org.javajdj.util.hex.HexUtils;
 
 /** Description of a parameter (key, value pair) in a {@link MidiDevice},
  *  in particular for Roland-Boss devices.
+ * 
+ * <p>
+ * Setting the parameter on the device is supported though
+ * MIDI Program Change message, Control Change Message,
+ * and through Roland-Boss-specific SysEx protocols (RQ1/DT1).
+ * Currently, the implementation of the latter is restricted to
+ * 4-byte addresses and 4-byte length/size specifications.
  *
+ * @param <E> The type of the parameter value (in {@link MidiDevice}).
+ * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
