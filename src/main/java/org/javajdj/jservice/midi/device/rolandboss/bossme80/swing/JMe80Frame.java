@@ -1,3 +1,19 @@
+/* 
+ * Copyright 2019 Jan de Jongh <jfcmdejongh@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Dimension;
@@ -20,7 +36,7 @@ import org.javajdj.jservice.midi.swing.JMidiService;
 
 /** A {@link JFrame} for MIDI instruments.
  * 
- * @author Jan de Jongh, TNO
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
 public class JMe80Frame
@@ -73,7 +89,7 @@ public class JMe80Frame
     final JMenuItem helpAboutItem = new JMenuItem ("About");
     helpAboutItem.addActionListener ((ActionEvent) ->
     {
-      JOptionPane.showMessageDialog (JMe80Frame.this, "JMidiSwing was designed and realized by \n\n" +
+      JOptionPane.showMessageDialog (JMe80Frame.this, "JMe80 was designed and realized by \n\n" +
         "Jan de Jongh\n\n"
         + "Copyright (c) 2019 Jan de Jongh");
     });
@@ -106,16 +122,6 @@ public class JMe80Frame
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   private final JTabbedPane tabbedPane;
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // MIDI DEVICES
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  public final void newMe80 ()
-  {
-  }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -155,5 +161,11 @@ public class JMe80Frame
     final PropertyChangeEvent pce = new PropertyChangeEvent (this, propertyName, oldValue, newValue);
     fire (pce);
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // END OF FILE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 }

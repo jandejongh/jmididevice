@@ -1,3 +1,19 @@
+/* 
+ * Copyright 2019 Jan de Jongh <jfcmdejongh@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Color;
@@ -17,18 +33,29 @@ import org.javajdj.jservice.Service;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.DefaultMouseListener;
 
-/**
+/**A {@link JPanel} for monitoring and controlling a {@link MidiDevice}.
  *
- * @author Jan de Jongh <jfcmdejongh@gmail.com>
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
+ * 
  */
 public class JMe80Panel_Device
   extends JPanel
 {
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // LOGGING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   private static final Logger LOG = Logger.getLogger (JMe80Panel_Device.class.getName ());
   
-  final MidiDevice midiDevice;
-
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // CONSTRUCTORS / FACTORIES / CLONING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   public JMe80Panel_Device (final MidiDevice midiDevice)
   {
     super ();
@@ -58,7 +85,6 @@ public class JMe80Panel_Device
     add (this.jDeviceFamilyNumber);
     add (new JLabel ("Software Revision Level: "));
     add (this.jSoftwareRevisionLevel);
-    // this.watchdog.start ();
     if (this.midiDevice != null)
     {
       this.midiDevice.addStatusListener (this.midiDeviceStatusListener);
@@ -66,23 +92,103 @@ public class JMe80Panel_Device
     }
   }
   
-  private final JColorCheckBox.JBoolean enabledCheckBox;
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final JColorCheckBox.JBoolean watchdogCheckBox;
+  final MidiDevice midiDevice;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE STATUS LISTENER
+  //
+  // ENABLED CHECKBOX
+  // ENABLED MOUSE LISTENER
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final Service.StatusListener midiDeviceStatusListener = new Service.StatusListener ()
+  {
+    @Override
+    public void onStatusChange (Service service, Service.Status oldStatus, Service.Status newStatus)
+    {
+      if (! SwingUtilities.isEventDispatchThread ())
+      {
+        SwingUtilities.invokeLater (() -> onStatusChange (service, oldStatus, newStatus));
+        return;
+      }
+      // Now on Swing EDT.
+      final boolean newStatusBoolean = newStatus == Service.Status.ACTIVE;
+      JMe80Panel_Device.this.enabledCheckBox.setDisplayedValue (newStatusBoolean);
+      if (! newStatusBoolean)
+        JMe80Panel_Device.this.setGuiValues (false);
+    }
+  };
+
+  private final JColorCheckBox.JBoolean enabledCheckBox;
   
   private class JEnabledMouseListener
     extends DefaultMouseListener
   {
-    
-      @Override
-      public final void mouseClicked (MouseEvent e)
-      {
-        final MidiDevice midiDevice = JMe80Panel_Device.this.midiDevice;
-        if (midiDevice != null)
-          midiDevice.toggleService ();
-      }
-
+    @Override
+    public final void mouseClicked (MouseEvent e)
+    {
+      final MidiDevice midiDevice = JMe80Panel_Device.this.midiDevice;
+      if (midiDevice != null)
+        midiDevice.toggleService ();
+    }
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE [WATCHDOG] LISTENER
+  //
+  // WATCHDOG CHECKBOX
+  //
+  // DEVICE ID
+  // DEVICE FAMILY CODE
+  // DEVICE FAMILY NUMBER
+  // SOFTWARE REVISION LEVEL
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final class MidiDeviceListener_Me80Watchdog
+    extends DefaultMidiDeviceListener
+    implements MidiDevice_Me80.MidiDeviceWatchdogListener
+  {
+    
+    @Override
+    public void watchdogStart ()
+    {
+      JMe80Panel_Device.this.setGuiValues (false);      
+    }
+
+    @Override
+    public void watchdogStop ()
+    {
+      JMe80Panel_Device.this.setGuiValues (false);      
+    }
+
+    @Override
+    public void watchdogFail ()
+    {
+      JMe80Panel_Device.this.setGuiValues (false);
+    }
+
+    @Override
+    public void watchdogSuccess
+      (final byte deviceId, final byte[] deviceFamilyCode, final byte[] deviceFamilyNumber, final byte[] softwareRevisionLevel)
+    {
+      JMe80Panel_Device.this.setGuiValues (deviceId, deviceFamilyCode, deviceFamilyNumber, softwareRevisionLevel);
+    }
+    
+  };
+  
+  private final MidiDeviceListener_Me80Watchdog midiDeviceListener = new MidiDeviceListener_Me80Watchdog ();
+  
+  private final JColorCheckBox.JBoolean watchdogCheckBox;
   
   private final JLabel jDeviceId = new JLabel ("unknown");
   private final JLabel jDeviceFamilyCode = new JLabel ("unknown");
@@ -122,64 +228,10 @@ public class JMe80Panel_Device
     }
   }
   
-  private final class MidiDeviceListener_Me80Watchdog
-    extends DefaultMidiDeviceListener
-    implements MidiDevice_Me80.MidiDeviceWatchdogListener
-  {
-    
-    // XXX REMOVE
-//    @Override
-//    public void midiRxSysExIdReply
-//      (byte deviceId, byte[] deviceFamilyCode, byte[] deviceFamilyNumber, byte[] softwareRevisionLevel)
-//    {
-//      setGuiValues (deviceId, deviceFamilyCode, deviceFamilyNumber, softwareRevisionLevel);
-//    }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // END OF FILE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void watchdogStart ()
-    {
-      JMe80Panel_Device.this.setGuiValues (false);      
-    }
-
-    @Override
-    public void watchdogStop ()
-    {
-      JMe80Panel_Device.this.setGuiValues (false);      
-    }
-
-    @Override
-    public void watchdogFail ()
-    {
-      JMe80Panel_Device.this.setGuiValues (false);
-    }
-
-    @Override
-    public void watchdogSuccess
-      (final byte deviceId, final byte[] deviceFamilyCode, final byte[] deviceFamilyNumber, final byte[] softwareRevisionLevel)
-    {
-      JMe80Panel_Device.this.setGuiValues (deviceId, deviceFamilyCode, deviceFamilyNumber, softwareRevisionLevel);
-    }
-    
-  };
-  
-  private final MidiDeviceListener_Me80Watchdog midiDeviceListener = new MidiDeviceListener_Me80Watchdog ();
-  
-  private final Service.StatusListener midiDeviceStatusListener = new Service.StatusListener ()
-  {
-    @Override
-    public void onStatusChange (Service service, Service.Status oldStatus, Service.Status newStatus)
-    {
-      if (! SwingUtilities.isEventDispatchThread ())
-      {
-        SwingUtilities.invokeLater (() -> onStatusChange (service, oldStatus, newStatus));
-        return;
-      }
-      // Now on Swing EDT.
-      final boolean newStatusBoolean = newStatus == Service.Status.ACTIVE;
-      JMe80Panel_Device.this.enabledCheckBox.setDisplayedValue (newStatusBoolean);
-      if (! newStatusBoolean)
-        JMe80Panel_Device.this.setGuiValues (false);
-    }
-  };
-    
 }

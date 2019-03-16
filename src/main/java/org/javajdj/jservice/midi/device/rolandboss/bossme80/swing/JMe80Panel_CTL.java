@@ -1,3 +1,19 @@
+/* 
+ * Copyright 2019 Jan de Jongh <jfcmdejongh@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Color;
@@ -17,13 +33,23 @@ import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.swing.JColorCheckBox;
 
-/**
+/** A {@link JPanel} for controlling and monitoring the CTL section of a patch.
  *
- * @author Jan de Jongh <jfcmdejongh@gmail.com>
+ * <p>
+ * Subordinate to {@link JMe80Panel}.
+ * 
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
+ * 
  */
 public class JMe80Panel_CTL
   extends JPanel
 {
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // CONSTRUCTORS / FACTORIES / CLONING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public JMe80Panel_CTL (final MidiDevice midiDevice)
   {

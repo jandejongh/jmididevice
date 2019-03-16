@@ -1,3 +1,19 @@
+/* 
+ * Copyright 2019 Jan de Jongh <jfcmdejongh@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import org.javajdj.swing.DefaultMouseListener;
@@ -22,15 +38,33 @@ import org.javajdj.jservice.midi.device.DefaultMidiDeviceListener;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.JColorCheckBox;
 
-/**
- *
- * @author Jan de Jongh <jfcmdejongh@gmail.com>
+/** A {@link JPanel} for selecting the current patch on a Boss ME-80,
+ *  switch between manual and banks,
+ *  and showing/setting the patch name.
+ * 
+ * <p>
+ * Subordinate to {@link JMe80Panel}.
+ * 
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
+ * 
  */
 public class JMe80Panel_PatchSelector
   extends JPanel
 {
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // LOGGING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   private static final Logger LOG = Logger.getLogger (JMe80Panel_PatchSelector.class.getName ());
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // CONSTRUCTORS / FACTORIES / CLONING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public JMe80Panel_PatchSelector (final MidiDevice midiDevice)
   {
@@ -72,8 +106,9 @@ public class JMe80Panel_PatchSelector
     
     final JPanel namePanel = new JPanel ();
     namePanel.setLayout (new GridLayout (1, 1, 1, 1));
-    final JTextField jName = new JTextField ();
+    final JTextField jName = new JTextField ("                ");
     jName.setOpaque (false);
+    jName.setEnabled (false); // Read-Only for now. XXX
     namePanel.add (jName);
     final Border nameLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
     final TitledBorder nameBorder = BorderFactory.createTitledBorder (nameLineBorder, "Name");
@@ -124,6 +159,70 @@ public class JMe80Panel_PatchSelector
     
   }
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE
+  //
+  // UPDATE FROM/TO BOSS ME-80
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final MidiDevice midiDevice;
+  
+  private void updateFromMe80 (final Integer me80Patch)
+  {
+    final ME80_BANK bank = me80Patch != null ? bankFromMidiProgram (me80Patch) : null;
+    final ME80_PATCH_IN_BANK patch = me80Patch != null ? patchInBankFromMidiProgram (me80Patch): null;
+    synchronized (this)
+    {
+      this.selectedBank = bank;
+      this.selectedPatch = patch;
+    }
+    updateManualPanel ();
+    updateBankPanel ();
+    updatePatchPanel ();
+  }
+  
+  private void updateToMe80 ()
+  {
+    final ME80_BANK bank;
+    final ME80_PATCH_IN_BANK patch;
+    synchronized (this)
+    {
+      bank = this.selectedBank;
+      patch = this.selectedPatch;
+    }
+    if (bank != null && patch != null)
+      this.midiDevice.put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, (int) toMidiProgram (bank, patch));
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MANUAL
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final JColorCheckBox.JBoolean jManual;
+  
+  private void updateManualPanel ()
+  {
+    if (! SwingUtilities.isEventDispatchThread ())
+    {
+      SwingUtilities.invokeLater (() -> JMe80Panel_PatchSelector.this.updateManualPanel ());
+      return;
+    }
+    final ME80_BANK selectedBank = this.selectedBank;
+    final ME80_PATCH_IN_BANK selectedPatch = this.selectedPatch;
+    this.jManual.setDisplayedValue (selectedBank == null && selectedPatch == null);
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // BANK
+  // PATCH IN BANK
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   public enum ME80_BANK
   {
     U1,
@@ -168,37 +267,37 @@ public class JMe80Panel_PatchSelector
     
   }
   
+  public static byte toMidiProgram (final ME80_BANK bank, final ME80_PATCH_IN_BANK patch)
+  {
+    return (byte) (4 * bank.ordinal () + patch.ordinal ());
+  }
+  
+  public static ME80_BANK bankFromMidiProgram (final int midiProgram)
+  {
+    if (midiProgram < 0 || midiProgram > 71)
+      return null;
+    else
+      return ME80_BANK.values ()[midiProgram / 4];    
+  }
+  
+  public static ME80_PATCH_IN_BANK patchInBankFromMidiProgram (final int midiProgram)
+  {
+    if (midiProgram < 0 || midiProgram > 71)
+      return null;
+    else
+      return ME80_PATCH_IN_BANK.values ()[midiProgram % 4];
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // BANK MAP
+  // PATCH MAP
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   private final EnumMap<ME80_BANK, JColorCheckBox<Boolean>> bankMap = new EnumMap<> (ME80_BANK.class);
   
   private final EnumMap<ME80_PATCH_IN_BANK, JColorCheckBox<Boolean>> patchMap = new EnumMap<> (ME80_PATCH_IN_BANK.class);
-  
-  private volatile ME80_BANK selectedBank = null;
-  
-  public final ME80_BANK getSelectedBank ()
-  {
-    return this.selectedBank;
-  }
-  
-  public final void setSelectedBank (final ME80_BANK selectedBank)
-  {
-    this.selectedBank = selectedBank;
-    updateBankPanel ();
-    updateToMe80 ();
-  }
-
-  private final JColorCheckBox.JBoolean jManual;
-  
-  private void updateManualPanel ()
-  {
-    if (! SwingUtilities.isEventDispatchThread ())
-    {
-      SwingUtilities.invokeLater (() -> JMe80Panel_PatchSelector.this.updateManualPanel ());
-      return;
-    }
-    final ME80_BANK selectedBank = this.selectedBank;
-    final ME80_PATCH_IN_BANK selectedPatch = this.selectedPatch;
-    this.jManual.setDisplayedValue (selectedBank == null && selectedPatch == null);
-  }
   
   private void updateBankPanel ()
   {
@@ -224,55 +323,31 @@ public class JMe80Panel_PatchSelector
       entry.getValue ().setDisplayedValue (entry.getKey () == selectedPatch);
   }
   
-  public static byte toMidiProgram (final ME80_BANK bank, final ME80_PATCH_IN_BANK patch)
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // SELECTED BANK
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private volatile ME80_BANK selectedBank = null;
+  
+  public final ME80_BANK getSelectedBank ()
   {
-    return (byte) (4 * bank.ordinal () + patch.ordinal ());
+    return this.selectedBank;
   }
   
-  public static ME80_BANK bankFromMidiProgram (final int midiProgram)
+  public final void setSelectedBank (final ME80_BANK selectedBank)
   {
-    if (midiProgram < 0 || midiProgram > 71)
-      return null;
-    else
-      return ME80_BANK.values ()[midiProgram / 4];    
-  }
-  
-  public static ME80_PATCH_IN_BANK patchInBankFromMidiProgram (final int midiProgram)
-  {
-    if (midiProgram < 0 || midiProgram > 71)
-      return null;
-    else
-      return ME80_PATCH_IN_BANK.values ()[midiProgram % 4];
-  }
-  
-  private void updateToMe80 ()
-  {
-    final ME80_BANK bank;
-    final ME80_PATCH_IN_BANK patch;
-    synchronized (this)
-    {
-      bank = this.selectedBank;
-      patch = this.selectedPatch;
-    }
-    if (bank != null && patch != null)
-      this.midiDevice.put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, (int) toMidiProgram (bank, patch));
-  }
-  
-  private void updateFromMe80 (final Integer me80Patch)
-  {
-    final ME80_BANK bank = me80Patch != null ? bankFromMidiProgram (me80Patch) : null;
-    final ME80_PATCH_IN_BANK patch = me80Patch != null ? patchInBankFromMidiProgram (me80Patch): null;
-    synchronized (this)
-    {
-      this.selectedBank = bank;
-      this.selectedPatch = patch;
-    }
-    updateManualPanel ();
+    this.selectedBank = selectedBank;
     updateBankPanel ();
-    updatePatchPanel ();
+    updateToMe80 ();
   }
-  
-  private final MidiDevice midiDevice;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // BANK JCOMPONENT
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public final static Map<Boolean, Color> COLOR_MAP = new HashMap<> ();
   {
@@ -304,7 +379,8 @@ public class JMe80Panel_PatchSelector
   private class JBankSelectorMouseListener
     extends DefaultMouseListener
   {
-      private final ME80_BANK me80_bank;
+
+    private final ME80_BANK me80_bank;
 
     public JBankSelectorMouseListener (final ME80_BANK me80_bank)
     {
@@ -313,16 +389,22 @@ public class JMe80Panel_PatchSelector
       this.me80_bank = me80_bank;
     }
       
-      @Override
-      public final void mouseClicked (MouseEvent e)
-      {
-        if (getSelectedBank () == this.me80_bank)
-          setSelectedBank (null);
-        else
-          setSelectedBank (this.me80_bank);
-      }
+    @Override
+    public final void mouseClicked (MouseEvent e)
+    {
+      if (getSelectedBank () == this.me80_bank)
+        setSelectedBank (null);
+      else
+        setSelectedBank (this.me80_bank);
+    }
 
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // SELECTED PATCH
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   private volatile ME80_PATCH_IN_BANK selectedPatch = null;
   
@@ -337,6 +419,12 @@ public class JMe80Panel_PatchSelector
     updatePatchPanel ();
     updateToMe80 ();
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // PATCH JCOMPONENT
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   protected class JMe80Patch
     extends JPanel

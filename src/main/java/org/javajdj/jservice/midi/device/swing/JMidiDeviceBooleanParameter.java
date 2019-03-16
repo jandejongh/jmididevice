@@ -1,3 +1,19 @@
+/* 
+ * Copyright 2019 Jan de Jongh <jfcmdejongh@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 package org.javajdj.jservice.midi.device.swing;
 
 import org.javajdj.swing.DefaultMouseListener;
@@ -9,10 +25,21 @@ import javax.swing.SwingUtilities;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.JColorCheckBox;
 
+/** A {@link JMidiDeviceParameter} for a {@link Boolean}-valued parameter.
+ * 
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
+ * 
+ */
 public class JMidiDeviceBooleanParameter
   extends JMidiDeviceParameter<Boolean>
 {
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // CONSTRUCTORS / FACTORIES / CLONING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   private static JColorCheckBox.JBoolean createValueComponent ()
   {
     final Map<Boolean, Color> colorMap = new HashMap<> ();
@@ -21,17 +48,24 @@ public class JMidiDeviceBooleanParameter
     return new JColorCheckBox.JBoolean (colorMap);
   }
 
-  protected final JColorCheckBox.JBoolean getCheckBox ()
-  {
-    return (JColorCheckBox.JBoolean) getValueComponent ();
-  }
-  
   public JMidiDeviceBooleanParameter (final MidiDevice midiDevice,
                                       final String displayName,
                                       final String key)
   {
     super (midiDevice, displayName, key, createValueComponent ());
     getCheckBox ().addMouseListener (new ValueMouseListener ());
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // VALUE COMPONENT
+  // VALUE COMPONENT LISTENER
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  protected final JColorCheckBox.JBoolean getCheckBox ()
+  {
+    return (JColorCheckBox.JBoolean) getValueComponent ();
   }
   
   private class ValueMouseListener
@@ -48,6 +82,12 @@ public class JMidiDeviceBooleanParameter
 
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // DATA VALUE CHANGED [SUPER-CLASS: MIDI DEVICE LISTENER]
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   @Override
   protected void dataValueChanged (final Boolean newDataValue)
   {
@@ -62,5 +102,11 @@ public class JMidiDeviceBooleanParameter
     else
       getCheckBox ().setDisplayedValue (active);
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // END OF FILE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 }

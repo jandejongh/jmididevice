@@ -29,11 +29,14 @@ import org.javajdj.util.hex.HexUtils;
  * 
  * <p>
  * Setting the parameter on the device is supported though
- * MIDI Program Change message, Control Change Message,
+ * MIDI Program Change Message, MIDI Control Change Message,
  * and through Roland-Boss-specific SysEx protocols (RQ1/DT1).
  * Currently, the implementation of the latter is restricted to
  * 4-byte addresses and 4-byte length/size specifications.
  *
+ * <p>
+ * XXX This class is massively underdocumented.
+ * 
  * @param <E> The type of the parameter value (in {@link MidiDevice}).
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
@@ -532,6 +535,12 @@ public class ParameterDescriptor_RolandBoss<E>
          + ((((int) lengthBytes[3]) & 0xFF));
   }
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // PARENT KEY
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      
   private final String parentKey;
   
   public final String getParentKey ()
