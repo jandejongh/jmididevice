@@ -72,9 +72,58 @@ in order to activate the device.
 Rest assured, these are the only two buttons you have to press in order to get started.
 
 The watchdog rectange should turn green, and the device's identification data should become visible
-(as in the screenshot).
+(as in the screenshot). Beware that pressing the Watchdog button has no effect.
 
 If both MIDI and ME-80 \[Device\] are activated, the appearance of the screen should
 change dramatically: All panels are updated to reflect the state of the ME-80.
 The application continuously monitors the ME-80 by sending requests for patch and system data.
 As a result, there will be some heavy traffic (well, heavy in MIDI context).
+
+### ME-80 \[System\]
+
+This panel monitors and controls the ME-80 system (global) settings.
+All parameters as decribed in the manual are supported, also for writing.
+Please beware that changing the MIDI channel on the ME-80 to an other value than MIDI Channel 1,
+will likely disable certain features (Volume/Expression pedal; Patch/Program changes) in the software.
+This is to be fixed in future releases.
+
+### ME-80 \[Lib\]
+
+This panel is reserved for a future patch librarian.
+
+### ME-80 \[Spare\]
+
+This is a spare panel for future extensions / settings.
+
+### ME-80 \[Patch\]
+
+This panel allows to switch between Manual mode and one of the 72 memory patches.
+Just click on the Manual button to switch.
+In Memory mode, you can select the patch by clicking the bank and patch number.
+
+The current patch name is visible in the upper right part of the panel.
+In the present release, the name is read-only, unfortunately.
+
+### ME-80 Effect Groups: COMP - OD/DS - AMP - PEDAL FX - NS - FOOT VOLUME - MOD - EQ/FX2 - DELAY - REVERB
+
+These panels control the various effect settings of the current patch.
+All parameters shown are functional, both for reading and writing.
+
+Note: The current release only writes data to the 'current patch',
+it does not feature writing patch data into the U/P Memory patches.
+In part, this is on purpose, as I still do not fully understand the ME-80 memory model
+with respect to patches.
+And I do not want to ruin your saved patches.
+
+### ME-80 CTL
+
+Finally, the lower right panel monitors the CTL settings of the current patch.
+All parameters are support but are read-only at the present time.
+I will probably fix this in a future release, but it may take a while,
+given the excessive ratio between CTL-related programming time (several days)
+and my personal use of this feature (i.e., never).
+
+### Contact
+
+Correspondence related to the Boss ME-80 Patch Editor is welcome,
+preferrably through opening an Issue on github.
