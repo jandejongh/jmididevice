@@ -14,3 +14,7 @@ However, work on the Alesis Quadraverb (GT) and some AKAI MIDI controllers is un
 The remainder of this README describes the Boss ME-80 Patch Editor (the library's Main class at the present time).
 
 ## Boss ME-80 Patch Editor
+
+### Screenshot
+
+![](resources/images/Screenshot_JMe80_v0.1.0_Full.png)
