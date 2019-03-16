@@ -50,3 +50,31 @@ You're all prepared now.
 Upon starting the main method in jmididevice, the following screen (well, more or less) will pop up.
 
 ![](resources/images/Screenshot_JMe80_v0.1.0_Full.png)
+
+As you can see, the interface is Spartan at best, and still work in progress.
+ME-80 owners likely recognize the various effect groups of the device, and their parameters.
+The next sections describe the different panels on the application main screen, from top-left to bottom-right.
+
+### MIDI
+
+The top-left panel controls the interface to the MIDI. Clicking the small rectangle will toggle the status of
+the interface: If the rectangle is filled red, it is active.
+Note that the application does not activate MIDI upon startup.
+
+The panel also has Tx and Rx indicators (at the MIDI level).
+If you switch patches on the ME-80 (or have other MIDI traffic around), the Rx indicator should lite up.
+
+### ME-80 \[Device\]
+
+The second panel controls the MidiDevice service in the software.
+As with the MIDI panel, this panel features a rectangular activation switch that you need to click
+in order to activate the device.
+Rest assured, these are the only two buttons you have to press in order to get started.
+
+The watchdog rectange should turn green, and the device's identification data should become visible
+(as in the screenshot).
+
+If both MIDI and ME-80 \[Device\] are activated, the appearance of the screen should
+change dramatically: All panels are updated to reflect the state of the ME-80.
+The application continuously monitors the ME-80 by sending requests for patch and system data.
+As a result, there will be some heavy traffic (well, heavy in MIDI context).
