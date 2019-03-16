@@ -11,12 +11,24 @@ import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.rolandboss.AbstractMidiDevice_RolandBoss;
 import org.javajdj.jservice.midi.device.rolandboss.ParameterDescriptor_RolandBoss;
 import org.javajdj.jservice.midi.MidiService;
-import org.javajdj.util.hex.HexUtils;
+import org.javajdj.jservice.midi.device.MidiDevice;
 
-/** A {@link VirtualITSStationHandler} for its On-Board Unit (OBU).
+/** A {@link MidiDevice} implementation (base part) for the Roland-Boss ME-80.
  * 
- * @author Ramon Schwartz, TNO.
- * @author Jan de Jongh, TNO.
+ * <p>
+ * The base part registers only three parameters:
+ * The current patch number,
+ * the system setting, and
+ * the temporary patch.
+ * These three parameters are periodically requested from the device
+ * through RQ1 messages.
+ * 
+ * <p>
+ * The three parameters are subdivided into more
+ * detailed (sub-)parameters in
+ * {@link MidiDevice_Me80}.
+ * 
+ * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
 public class MidiDevice_Me80_Base
