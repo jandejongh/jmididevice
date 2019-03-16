@@ -1,6 +1,8 @@
 # jmididevice
 A Java library holding a few MIDI device (incl. Boss ME-80) implementations, some with Swing components.
 
+This README applies to r0.1.0.
+
 ## Introduction
 
 The jservice library introduces (among others) the Service, MidiService, and MidiDevice interfaces.
@@ -10,6 +12,10 @@ these devices.
 
 Currently (v0.1.0), the library features only a single implementation for the Boss ME-80.
 However, work on the Alesis Quadraverb (GT) and some AKAI MIDI controllers is underway.
+
+## License
+
+Apache License, Version 2.0
 
 ## Organization and Dependencies
 
@@ -27,6 +33,13 @@ Then do the usual 'java -jar <jmididevice...with-dependencies...jar>'.
 The remainder of this README describes the Boss ME-80 Patch Editor (the library's Main class at the present time).
 
 ## Boss ME-80 Patch Editor
+
+### Resources
+
+As far as I know, Roland/Boss has not released an official MIDI Implementation document for the ME-80.
+However, documentation on the MIDI implementation is available in the Boss Tone Studio
+distribution.
+In addition, the MIDI implementation appears to follow Roland "standards".
 
 ### Preparing the Boss ME-80
 
@@ -118,7 +131,7 @@ And I do not want to ruin your saved patches.
 ### ME-80 CTL
 
 Finally, the lower right panel monitors the CTL settings of the current patch.
-All parameters are support but are read-only at the present time.
+All parameters are supported but are read-only at the present time, and not well-tested.
 I will probably fix this in a future release, but it may take a while,
 given the excessive ratio between CTL-related programming time (several days)
 and my personal use of this feature (i.e., never).
