@@ -1,7 +1,7 @@
 # jmididevice
 A Java library holding a few MIDI device (incl. Boss ME-80) implementations, some with Swing components.
 
-This README applies to r0.1.0.
+This README applies to v0.1.0.
 
 ## Introduction
 
