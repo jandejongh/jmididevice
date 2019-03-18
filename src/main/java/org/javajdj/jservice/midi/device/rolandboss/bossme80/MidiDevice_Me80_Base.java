@@ -236,59 +236,56 @@ public class MidiDevice_Me80_Base
     LOG.log (Level.INFO, "Terminated Watchdog on BOSS ME-80.");
   };
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI SERVICE [AbstractMidiDevice]
+  // RX HANDLING
+  //
+  // PARAMETER READ FROM DEVICE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   @Override
-  protected void onParameterReadFromDevice (final String name, final byte[] value)
+  protected void onParameterReadFromDevice (final String key, final byte[] value)
   {
-    // super.onParameterReadFromDevice (name, value);
+    super.onParameterReadFromDevice (key, value);
     if (value == null)
       throw new RuntimeException ();
-    switch (name)
+    switch (key)
     {
       case CURRENT_PATCH_NO_RAW_NAME:
       case SYSTEM_NAME:
       case TEMPORARY_PATCH_NAME:
-        // LOG.log (Level.INFO, "From device: {0}: {1}.", new Object[]{name, HexUtils.bytesToHex (value)});
+        // LOG.log (Level.INFO, "From device: {0}: {1}.", new Object[]{key, HexUtils.bytesToHex (value)});
         break;
       default:
         return;
     }
-    synchronized (this)
+    switch (key)
     {
-      final byte[] oldValue = (byte[]) get (name);
-      if (oldValue != null)
-      {
-        if (value.length != oldValue.length)
-          throw new RuntimeException ();
-        if (Arrays.equals (value, oldValue))
-          return;
-      }
-      updateParameterFromDevice (name, value);
-      switch (name)
-      {
-        case CURRENT_PATCH_NO_RAW_NAME:
-          newPatchNoFromDevice (value);
-          break;
-        case SYSTEM_NAME:
-          newSystemSettingsFromDevice (value);
-          break;
-        case TEMPORARY_PATCH_NAME:
-          newTemporaryPatchFromDevice (value);
-          break;
-        default:
-          throw new RuntimeException ();
-      }
-    }    
+      case CURRENT_PATCH_NO_RAW_NAME:
+        updatePatchNoFromDevice (value);
+        break;
+      case SYSTEM_NAME:
+        updateSystemSettingsFromDevice (value);
+        break;
+      case TEMPORARY_PATCH_NAME:
+        updateTemporaryPatchFromDevice (value);
+        break;
+      default:
+        throw new RuntimeException ();
+    }
   }
   
-  protected void newPatchNoFromDevice (final byte[] value)
+  protected void updatePatchNoFromDevice (final byte[] value)
   {
   }
   
-  protected void newSystemSettingsFromDevice (final byte[] value)
+  protected void updateSystemSettingsFromDevice (final byte[] value)
   {
   }
   
-  protected void newTemporaryPatchFromDevice (final byte[] value)
+  protected void updateTemporaryPatchFromDevice (final byte[] value)
   {
   }
   
