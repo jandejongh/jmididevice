@@ -21,9 +21,9 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.SwingUtilities;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.JColorCheckBox;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JMidiDeviceParameter} for a {@link Boolean}-valued parameter.
  * 
@@ -54,6 +54,9 @@ public class JMidiDeviceBooleanParameter
   {
     super (midiDevice, displayName, key, createValueComponent ());
     getCheckBox ().addMouseListener (new ValueMouseListener ());
+    final Boolean value = (Boolean) midiDevice.get (key);
+    getCheckBox ().setDisplayedValue (value);
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants (this, value != null));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,17 +95,9 @@ public class JMidiDeviceBooleanParameter
   protected void dataValueChanged (final Boolean newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    setValueOnGui (newDataValue);
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> getCheckBox ().setDisplayedValue (newDataValue));
   }
     
-  private void setValueOnGui (final boolean active)
-  {
-    if (! SwingUtilities.isEventDispatchThread ())
-      SwingUtilities.invokeLater (() -> setValueOnGui (active));
-    else
-      getCheckBox ().setDisplayedValue (active);
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE

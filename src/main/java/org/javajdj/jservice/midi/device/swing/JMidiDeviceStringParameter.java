@@ -16,24 +16,20 @@
  */
 package org.javajdj.jservice.midi.device.swing;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.JComboBox;
-import javax.swing.SwingUtilities;
+import javax.swing.JTextField;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.swing.SwingUtilsJdJ;
 
-/** A {@link JMidiDeviceParameter} for an {@link Enum}-valued parameter.
+/** A {@link JMidiDeviceParameter} for an {@link String}-valued parameter.
  * 
  * <p>
- * The value is shown in a {@link JComboBox}.
- * 
- * @param <E> The enum (generic) type.
+ * The value is shown in a {@link JTextField}.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
-public class JMidiDeviceEnumParameter<E extends Enum<E>>
-  extends JMidiDeviceParameter<E>
+public class JMidiDeviceStringParameter
+  extends JMidiDeviceParameter<String>
 {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,14 +38,23 @@ public class JMidiDeviceEnumParameter<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public JMidiDeviceEnumParameter (final MidiDevice midiDevice,
-                                   final String displayName,
-                                   final String key,
-                                   final Class<E> clazz)
+  public JMidiDeviceStringParameter (final MidiDevice midiDevice,
+                                     final String displayName,
+                                     final String key,
+                                     final Integer columns)
   {
-    super (midiDevice, displayName, key, new JComboBox<> (clazz.getEnumConstants ()));
-    getComboBox ().addItemListener (new ValueItemListener ());
-    setValueOnGui ((E) midiDevice.get (key));
+    super (midiDevice, displayName, key, columns != null ? new JTextField (columns) : new JTextField ());
+    getTextField ().setOpaque (false);
+    // XXX
+    // getTextField ().addItemListener (new ValueItemListener ());
+    getTextField ().setText ((String) midiDevice.get (key));
+  }
+  
+  public JMidiDeviceStringParameter (final MidiDevice midiDevice,
+                                     final String displayName,
+                                     final String key)
+  {
+    this (midiDevice, displayName, key, null);
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,28 +64,9 @@ public class JMidiDeviceEnumParameter<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  protected final JComboBox<E> getComboBox ()
+  public final JTextField getTextField ()
   {
-    return (JComboBox<E>) getValueComponent ();
-  }
-  
-  private class ValueItemListener
-    implements ItemListener
-  {
-
-    @Override
-    public void itemStateChanged (ItemEvent ie)
-    {
-      if (ie.getStateChange () == ItemEvent.SELECTED)
-      {
-        E item = (E) ie.getItem ();
-        if (item == null)
-          // This should be fixed, should the exception be thrown :-).
-          throw new IllegalStateException ();
-        JMidiDeviceEnumParameter.this.setDataValue (item);
-      }
-    }
-      
+    return (JTextField) getValueComponent ();
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,23 +76,37 @@ public class JMidiDeviceEnumParameter<E extends Enum<E>>
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   @Override
-  protected void dataValueChanged (E newDataValue)
+  protected void dataValueChanged (final String newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    setValueOnGui (newDataValue);
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
+    {
+      getTextField ().setText (newDataValue);
+      if (isReadOnly ())
+      {
+        getTextField ().setEnabled (false);
+        getTextField ().setEditable (false);
+      }
+    });
   }
     
-  private void setValueOnGui (final E newDataValue)
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // READ ONLY
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  @Override
+  public synchronized void setReadOnly (final boolean readOnly)
   {
-    if (! SwingUtilities.isEventDispatchThread ())
-    {
-      SwingUtilities.invokeLater (() -> setValueOnGui (newDataValue));
-    }
-    else
-    {
-      getComboBox ().setSelectedItem (newDataValue);
-      getComboBox ().setEnabled (newDataValue != null);
-    }
+    super.setReadOnly (readOnly);
+    if (! isReadOnly ())
+      SwingUtilsJdJ.invokeOnSwingEDT (() ->
+      {
+        setEnabled (false);
+        getTextField ().setEnabled (false);
+        getTextField ().setEditable (false);
+      });
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

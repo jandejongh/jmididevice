@@ -23,8 +23,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JPanel} holding the name and value of a (simple) MIDI-Device parameter.
+ * 
+ * <p>
+ * Both name and value component are optional.
+ * This allows sub-classes to merely use the basic MIDI-device registry
+ * functions of this component.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
@@ -48,19 +54,22 @@ public class JMidiDeviceParameter<C>
      final JComponent jValueComponent)
   {
     super ();
-    if (midiDevice == null)
-      throw new IllegalArgumentException ();
-    if (jValueComponent == null)
+    if (midiDevice == null || key == null || ! midiDevice.containsKey (key))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
     this.displayName = displayName;
     this.key = key;
     this.jValueComponent = jValueComponent;
-    // this.jValueComponent.addItemListener (new ValueItemListener ());
-    getMidiDevice ().addMidiDeviceListener (new SettingsListener ());
-    setLayout (new GridLayout (1, 2, 5, 5));
-    add (new JLabel (getDisplayName ()));
-    add (this.jValueComponent);
+    getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
+    if (this.displayName != null || this.jValueComponent != null)
+    {
+      final int nrOfComponents = (this.displayName != null && this.jValueComponent != null ? 2 : 1);
+      setLayout (new GridLayout (1, nrOfComponents, 5, 5));
+      if (this.displayName != null)
+        add (new JLabel (getDisplayName ()));
+      if (this.jValueComponent != null)
+        add (this.jValueComponent);
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,32 +94,26 @@ public class JMidiDeviceParameter<C>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private class SettingsListener
-    implements MidiDeviceListener
+  private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
   {
-
-    @Override
-    public void notifyParameterChanged (final Map<String, Object> changes)
+    if (changes == null || changes.isEmpty ())
+      throw new RuntimeException ();
+    if (! changes.containsKey (getKey ()))
+      return;
+    final C value = (C) changes.get (getKey ());
+    dataValueChanged (value);
+    SwingUtilsJdJ.invokeOnSwingEDT (()->
     {
-      if (changes == null || changes.isEmpty ())
-        throw new RuntimeException ();
-      for (final Map.Entry<String, Object> entry : changes.entrySet ())
-      {
-        final String name = entry.getKey ();
-        final C value = (C) entry.getValue ();
-        if (name.equals (getKey ()))
-          dataValueChanged (value);
-      }
-    }
-
-  }
+      SwingUtilsJdJ.enableComponentAndDescendants (this, (! JMidiDeviceParameter.this.readOnly) && value != null);
+    });
+  };
   
   protected void setDataValue (final C newDataValue)
   {
     getMidiDevice ().put (getKey (), newDataValue);
   }
   
-  protected void dataValueChanged (C newDataValue)
+  protected void dataValueChanged (final C newDataValue)
   {
   }
   
@@ -151,6 +154,28 @@ public class JMidiDeviceParameter<C>
   protected final JComponent getValueComponent ()
   {
     return this.jValueComponent;
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // READ ONLY
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private volatile boolean readOnly = false;
+  
+  public final boolean isReadOnly ()
+  {
+    return this.readOnly;
+  }
+  
+  public synchronized void setReadOnly (final boolean readOnly)
+  {
+    if (readOnly != this.readOnly)
+    {
+      this.readOnly = readOnly;
+      SwingUtilsJdJ.invokeOnSwingEDT (() -> setEnabled (! readOnly));
+    }
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

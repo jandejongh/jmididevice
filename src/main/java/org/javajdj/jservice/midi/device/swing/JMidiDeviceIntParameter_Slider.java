@@ -56,6 +56,7 @@ public class JMidiDeviceIntParameter_Slider
     // getSlider ().setPaintTicks (true);
     getSlider ().setPaintLabels (true);
     getSlider ().addChangeListener (new ValueChangeListener ());
+    setValueOnGui ((Integer) midiDevice.get (key));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +103,7 @@ public class JMidiDeviceIntParameter_Slider
     setValueOnGui (newDataValue);
   }
     
-  private void setValueOnGui (final int value)
+  private void setValueOnGui (final Integer value)
   {
     if (! SwingUtilities.isEventDispatchThread ())
     {
@@ -110,7 +111,11 @@ public class JMidiDeviceIntParameter_Slider
     }
     else
     {
-      if (value >= getSlider ().getMinimum () && value <= getSlider ().getMaximum ())
+      if (value == null)
+      {
+        getSlider ().setEnabled (false);
+      }
+      else if (value >= getSlider ().getMinimum () && value <= getSlider ().getMaximum ())
       {
         getSlider ().setEnabled (true);
         getSlider ().setValue (value);
