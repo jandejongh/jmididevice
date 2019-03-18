@@ -35,7 +35,7 @@ import org.javajdj.util.hex.HexUtils;
  * 4-byte addresses and 4-byte length/size specifications.
  *
  * <p>
- * XXX This class is massively underdocumented.
+ * XXX This class is massively under-documented.
  * 
  * @param <E> The type of the parameter value (in {@link MidiDevice}).
  * 
@@ -86,7 +86,7 @@ public class ParameterDescriptor_RolandBoss<E>
       {
         this.controller = (byte) -1;
         this.address = null;
-        this.length = null;
+        this.length = new byte[]{0x00, 0x00, 0x00, 0x01};
         this.parentKey = null;
         break;
       }
@@ -96,7 +96,7 @@ public class ParameterDescriptor_RolandBoss<E>
           throw new IllegalArgumentException ();
         this.controller = controller;
         this.address = null;
-        this.length = null;
+        this.length = new byte[]{0x00, 0x00, 0x00, 0x01};
         this.parentKey = null;
         break;
       }
@@ -509,18 +509,12 @@ public class ParameterDescriptor_RolandBoss<E>
 
   public final int getLength ()
   {
-    if (this.parameterType_RolandBoss == ParameterType_RolandBoss.MidiSysExRolandBoss_RQ1_DT1)
-      return ParameterDescriptor_RolandBoss.lengthToInt (this.length);
-    else
-      return 0;
+    return ParameterDescriptor_RolandBoss.lengthToInt (this.length);
   }
     
   public final byte[] getLengthAsBytes ()
   {
-    if (this.parameterType_RolandBoss == ParameterType_RolandBoss.MidiSysExRolandBoss_RQ1_DT1)
-      return this.length.clone ();
-    else
-      return null;
+    return this.length.clone ();
   }
     
   private static int lengthToInt (final byte[] lengthBytes)
