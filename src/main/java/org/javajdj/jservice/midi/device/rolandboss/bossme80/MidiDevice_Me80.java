@@ -989,11 +989,7 @@ public final class MidiDevice_Me80
       {
         return false;
       }
-      if (! Objects.equals (this.ctlEffectsCustom, other.ctlEffectsCustom))
-      {
-        return false;
-      }
-      return true;
+      return Objects.equals (this.ctlEffectsCustom, other.ctlEffectsCustom);
     }
     
   }
@@ -1253,12 +1249,12 @@ public final class MidiDevice_Me80
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   @Override
-  protected void newPatchNoFromDevice (final byte[] value)
+  protected void updatePatchNoFromDevice (final byte[] value)
   {
     // LOG.log (Level.INFO, "New patch no: {0}.", HexUtils.bytesToHex (value));
     synchronized (this)
     {
-      super.newPatchNoFromDevice (value);
+      super.updatePatchNoFromDevice (value);
       for (final String key : CURRENT_PATCH_NO_RAW_SUB_KEYS)
       {
         final ParameterDescriptor_RolandBoss pd = getParameterDescriptor (key);
@@ -1272,12 +1268,12 @@ public final class MidiDevice_Me80
   }
 
   @Override
-  protected void newSystemSettingsFromDevice (final byte[] value)
+  protected void updateSystemSettingsFromDevice (final byte[] value)
   {
     // LOG.log (Level.INFO, "New system settings: {0}.", HexUtils.bytesToHex (value));
     synchronized (this)
     {
-      super.newSystemSettingsFromDevice (value);
+      super.updateSystemSettingsFromDevice (value);
       for (final String key : SYSTEM_SUB_KEYS)
       {
         final ParameterDescriptor_RolandBoss pd = getParameterDescriptor (key);
@@ -1291,12 +1287,12 @@ public final class MidiDevice_Me80
   }
 
   @Override
-  protected void newTemporaryPatchFromDevice (final byte[] value)
+  protected void updateTemporaryPatchFromDevice (final byte[] value)
   {
     // LOG.log (Level.INFO, "New temporary patch: {0}.", HexUtils.bytesToHex (value));
     synchronized (this)
     {
-      super.newTemporaryPatchFromDevice (value);
+      super.updateTemporaryPatchFromDevice (value);
       for (final String key : TEMPORARY_PATCH_SUB_KEYS)
       {
         final ParameterDescriptor_RolandBoss pd = getParameterDescriptor (key);
@@ -1309,26 +1305,6 @@ public final class MidiDevice_Me80
     }
   }
 
-  @Override
-  protected void onParameterReadFromDevice (final String name, final byte[] value)
-  {
-    if (name == null)
-      throw new IllegalArgumentException ();
-    super.onParameterReadFromDevice (name, value);
-    if (ME80_BASE_PARAMETERS.contains (name))
-      return;
-    synchronized (this)
-    {
-      final ParameterDescriptor_RolandBoss pd = getParameterDescriptor (name);
-      final Object oldValue = get (name);
-      final Object newValue = pd.convertFromDevice (value);
-      if (newValue == null)
-        throw new RuntimeException ();
-      if (oldValue == null || ! (newValue.equals (oldValue)))
-        updateParameterFromDevice (name, newValue);
-    }
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
