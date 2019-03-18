@@ -18,6 +18,8 @@ package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +34,7 @@ import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.swing.JColorCheckBox;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JPanel} for controlling and monitoring the CTL section of a patch.
  *
@@ -110,6 +113,9 @@ public class JMe80Panel_CTL
     add (new JPanel ());
     //
     this.midiDevice.addMidiDeviceListener (this.midiDeviceListener);
+    //
+    updateFromDevice (
+      (MidiDevice_Me80.CtlTargetAndKnobValueCustom) this.midiDevice.get (MidiDevice_Me80.TP_CTL_TARGET_CUSTOM_NAME));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,6 +148,24 @@ public class JMe80Panel_CTL
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   private final JComboBox<MidiDevice_Me80.CtlTargetCustom> jTarget;
+  
+  private final ItemListener jTargetItemListener = (final ItemEvent ie) ->
+  {
+    if (ie == null)
+      return;
+    if (ie.getStateChange() == ItemEvent.SELECTED)
+    {
+      final Object item = ie.getItem ();
+      if (item == null)
+        return;
+      final MidiDevice_Me80.CtlTargetAndKnobValueCustom oldValue = (MidiDevice_Me80.CtlTargetAndKnobValueCustom)
+        JMe80Panel_CTL.this.midiDevice.get (MidiDevice_Me80.TP_CTL_TARGET_CUSTOM_NAME);
+      if (oldValue == null)
+        return;
+      final MidiDevice_Me80.CtlTargetAndKnobValueCustom newValue = oldValue.withTarget ((MidiDevice_Me80.CtlTargetCustom) item);
+      JMe80Panel_CTL.this.midiDevice.put (MidiDevice_Me80.TP_CTL_TARGET_CUSTOM_NAME, newValue);
+    }
+  };
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -178,30 +202,33 @@ public class JMe80Panel_CTL
       if (ctlTargetAndKnobValueCustom == null)
       {
         this.jTarget.setSelectedItem (null);
-        this.jTarget.setEnabled (false);
-        this.effectsValuePanel.setEnabled (false);
         for (final JColorCheckBox.JBoolean checkBox : this.jEffects.values ())
           checkBox.setDisplayedValue (null);
+        SwingUtilsJdJ.enableComponentAndDescendants (this.jTarget, false);
+        SwingUtilsJdJ.enableComponentAndDescendants (this.effectsValuePanel, false);
+        SwingUtilsJdJ.enableComponentAndDescendants (this.jKnobValue, false);
       }
       else
       {
+        // XXX Read-only FOR NOW XXX
+        //
         this.jTarget.setSelectedItem (ctlTargetAndKnobValueCustom.getTarget ());
-        this.jTarget.setEnabled (true);
+        // SwingUtilsJdJ.enableComponentAndDescendants (this.jTarget, true);
         if (ctlTargetAndKnobValueCustom.getTarget () == MidiDevice_Me80.CtlTargetCustom.EFFECTS)
         {
-          this.effectsValuePanel.setEnabled (true);
+          // SwingUtilsJdJ.enableComponentAndDescendants (this.effectsValuePanel, true);
           final Set<MidiDevice_Me80.CtlEffectsCustom> effectsSet = ctlTargetAndKnobValueCustom.getCtlEffectsCustom ();
           for (final Map.Entry<MidiDevice_Me80.CtlEffectsCustom, JColorCheckBox.JBoolean> entry : this.jEffects.entrySet ())
             entry.getValue ().setDisplayedValue (effectsSet.contains (entry.getKey ()));
-          this.jKnobValue.setEnabled (false);
+          SwingUtilsJdJ.enableComponentAndDescendants (this.jKnobValue, false);
         }
         else
         {
-          this.effectsValuePanel.setEnabled (false);
+          SwingUtilsJdJ.enableComponentAndDescendants (this.effectsValuePanel, false);
           for (final JColorCheckBox.JBoolean checkBox : this.jEffects.values ())
             checkBox.setDisplayedValue (null);
           this.jKnobValue.setValue (ctlTargetAndKnobValueCustom.getKnobValue ());
-          this.jKnobValue.setEnabled (true);
+          // SwingUtilsJdJ.enableComponentAndDescendants (this.jKnobValue, true);
         }
       }
     }
