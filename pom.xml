@@ -7,7 +7,7 @@
   
   <groupId>org.javajdj</groupId>
   <artifactId>jmididevice</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <description>A Java library holding a few MIDI device implementations, some with Swing components.</description>
   <url>https://github.com/jandejongh/jmididevice</url>
   
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>jservice</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
   </dependencies>
     
