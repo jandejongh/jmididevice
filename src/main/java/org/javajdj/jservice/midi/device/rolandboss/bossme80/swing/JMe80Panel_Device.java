@@ -18,9 +18,9 @@ package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,9 +29,9 @@ import org.javajdj.util.hex.HexUtils;
 import org.javajdj.jservice.midi.device.DefaultMidiDeviceListener;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.swing.JColorCheckBox;
-import org.javajdj.jservice.Service;
 import org.javajdj.jservice.midi.device.MidiDevice;
-import org.javajdj.swing.DefaultMouseListener;
+import org.javajdj.jservice.midi.swing.JRawMidiService;
+import org.javajdj.jservice.swing.JServiceControl;
 
 /**A {@link JPanel} for monitoring and controlling a {@link MidiDevice}.
  *
@@ -65,10 +65,7 @@ public class JMe80Panel_Device
     final Map<Boolean, Color> enableColorMap = new HashMap<> ();
     enableColorMap.put (false, null);
     enableColorMap.put (true, Color.red);
-    this.enabledCheckBox = new JColorCheckBox.JBoolean (enableColorMap);
-    this.enabledCheckBox.setDisplayedValue (this.midiDevice != null
-                                           && this.midiDevice.getStatus () == Service.Status.ACTIVE);
-    this.enabledCheckBox.addMouseListener (new JEnabledMouseListener ());
+    this.enabledCheckBox = new JServiceControl (midiDevice, JRawMidiService.DEFAULT_STATUS_COLOR_FUNCTION);
     add (this.enabledCheckBox);
     add (new JLabel ("Watchdog"));
     final Map<Boolean, Color> watchDogColorMap = new HashMap<> ();
@@ -77,19 +74,16 @@ public class JMe80Panel_Device
     this.watchdogCheckBox = new JColorCheckBox.JBoolean (watchDogColorMap);
     this.watchdogCheckBox.setDisplayedValue (false);
     add (this.watchdogCheckBox);
-    add (new JLabel ("Device ID: "));
+    add (new JLabel ("Dev ID: "));
     add (this.jDeviceId);
-    add (new JLabel ("Device Family Code: "));
+    add (new JLabel ("Dev Fam Code: "));
     add (this.jDeviceFamilyCode);
-    add (new JLabel ("Device Family Number: "));
+    add (new JLabel ("Dev Fam Nr: "));
     add (this.jDeviceFamilyNumber);
-    add (new JLabel ("Software Revision Level: "));
+    add (new JLabel ("Sw Rev Level: "));
     add (this.jSoftwareRevisionLevel);
     if (this.midiDevice != null)
-    {
-      this.midiDevice.addStatusListener (this.midiDeviceStatusListener);
       this.midiDevice.addMidiDeviceListener (this.midiDeviceListener);
-    }
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,41 +99,11 @@ public class JMe80Panel_Device
   // MIDI DEVICE STATUS LISTENER
   //
   // ENABLED CHECKBOX
-  // ENABLED MOUSE LISTENER
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final Service.StatusListener midiDeviceStatusListener = new Service.StatusListener ()
-  {
-    @Override
-    public void onStatusChange (Service service, Service.Status oldStatus, Service.Status newStatus)
-    {
-      if (! SwingUtilities.isEventDispatchThread ())
-      {
-        SwingUtilities.invokeLater (() -> onStatusChange (service, oldStatus, newStatus));
-        return;
-      }
-      // Now on Swing EDT.
-      final boolean newStatusBoolean = newStatus == Service.Status.ACTIVE;
-      JMe80Panel_Device.this.enabledCheckBox.setDisplayedValue (newStatusBoolean);
-      if (! newStatusBoolean)
-        JMe80Panel_Device.this.setGuiValues (false);
-    }
-  };
 
-  private final JColorCheckBox.JBoolean enabledCheckBox;
-  
-  private class JEnabledMouseListener
-    extends DefaultMouseListener
-  {
-    @Override
-    public final void mouseClicked (MouseEvent e)
-    {
-      final MidiDevice midiDevice = JMe80Panel_Device.this.midiDevice;
-      if (midiDevice != null)
-        midiDevice.toggleService ();
-    }
-  }
+  private final JServiceControl enabledCheckBox;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -202,6 +166,7 @@ public class JMe80Panel_Device
       SwingUtilities.invokeLater (() -> setGuiValues (newWatchdogValue));
     else
     {
+      // LOG.log (Level.INFO, "Setting displayed value on watchdow to {0}.", newWatchdogValue);
       this.watchdogCheckBox.setDisplayedValue (newWatchdogValue);
       if (! newWatchdogValue)
       {
@@ -220,6 +185,7 @@ public class JMe80Panel_Device
       SwingUtilities.invokeLater (() -> setGuiValues (deviceId, deviceFamilyCode, deviceFamilyNumber, softwareRevisionLevel));
     else
     {
+      // LOG.log (Level.INFO, "Setting displayed value on watchdow to true.");
       this.watchdogCheckBox.setDisplayedValue (true);
       this.jDeviceId.setText ("0x" + HexUtils.bytesToHex (new byte[] {deviceId}));
       this.jDeviceFamilyCode.setText ("0x" + HexUtils.bytesToHex (deviceFamilyCode));
