@@ -941,6 +941,20 @@ public final class MidiDevice_Me80
       return this.ctlTargetCustom;
     }
     
+    public final CtlTargetAndKnobValueCustom withTarget (final CtlTargetCustom ctlTargetCustom)
+    {
+      if (ctlTargetCustom == null)
+        throw new IllegalArgumentException ();
+      if (this.ctlTargetCustom == ctlTargetCustom)
+        return new CtlTargetAndKnobValueCustom (this.ctlTargetCustom, this.ctlKnobValueCustom, this.ctlEffectsCustom);
+      else if (ctlTargetCustom == CtlTargetCustom.EFFECTS)
+        return new CtlTargetAndKnobValueCustom (CtlTargetCustom.EFFECTS, null, Collections.EMPTY_SET);
+      else if (this.ctlTargetCustom == CtlTargetCustom.EFFECTS)
+        return new CtlTargetAndKnobValueCustom (ctlTargetCustom, 0x32, null);
+      else
+        return new CtlTargetAndKnobValueCustom (ctlTargetCustom, getKnobValue (), null);        
+    }
+    
     private final Integer ctlKnobValueCustom;
     
     public final Integer getKnobValue ()
@@ -1244,7 +1258,8 @@ public final class MidiDevice_Me80
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // END OF FILE
+  // UPDATE FROM [MIDI] DEVICE
+  // FROM SUPER CLASS
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
