@@ -70,11 +70,11 @@ public abstract class AbstractMidiDevice_RolandBoss<D extends ParameterDescripto
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private final Map<Long, Set<ParameterDescriptor_RolandBoss>> addresses = new TreeMap<> ();
-  
   private final Set<ParameterDescriptor_RolandBoss> patchParameters = new LinkedHashSet<> ();
   
   private final Map<Byte, Set<ParameterDescriptor_RolandBoss>> controllers = new TreeMap<> ();
+  
+  private final Map<Long, Set<ParameterDescriptor_RolandBoss>> addresses = new TreeMap<> ();
   
   @Override
   protected void registerParameter (final D parameterDescriptor)
@@ -193,6 +193,9 @@ public abstract class AbstractMidiDevice_RolandBoss<D extends ParameterDescripto
   {
     super.onMidiRxProgramChange (midiChannel, patch);
     for (final ParameterDescriptor_RolandBoss parameterDescriptor_RolandBoss : this.patchParameters)
+      // XXX NOT GOOD... THIS BYPASSES ANY VALUE CONVERSION AND ASSUMES THE VALUE IS ALWAYS A SINGLE BYTE... XXX
+      // SUGGESTION: AbstractMidiDevice_RolandBoss.this.onParameterReadFromDevice
+      //  (parameterDescriptor_RolandBoss.getParameterName (), new byte[]{(byte) patch});
       super.updateParameterFromDevice (parameterDescriptor_RolandBoss.getParameterName (), Byte.valueOf ((byte) patch));
   }
 
@@ -200,6 +203,14 @@ public abstract class AbstractMidiDevice_RolandBoss<D extends ParameterDescripto
   protected void onMidiRxControlChange (final int midiChannel, final int controller, final int value)
   {
     super.onMidiRxControlChange (midiChannel, controller, value);
+    if (controller < 0 || controller > 127)
+      throw new RuntimeException ();
+    if (value < 0 || value > 127)
+      throw new RuntimeException ();
+    final Set<ParameterDescriptor_RolandBoss> parameters = this.controllers.get ((byte) controller);
+    if (parameters != null)
+      for (final ParameterDescriptor_RolandBoss parameter : parameters)
+        onParameterReadFromDevice (parameter.getParameterName (), new byte[]{(byte) value});        
   }
   
   @Override
@@ -266,7 +277,33 @@ public abstract class AbstractMidiDevice_RolandBoss<D extends ParameterDescripto
     // fireMidiDeviceSysExIdReply (deviceId, deviceFamilyCode, deviceFamilyNumber, softwareRevisionLevel);
   }
 
-  protected abstract void onParameterReadFromDevice (String name, byte[] value);
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI SERVICE [AbstractMidiDevice]
+  // RX HANDLING
+  //
+  // PARAMETER READ FROM DEVICE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  protected void onParameterReadFromDevice (final String key, final byte[] value)
+  {
+    
+    if (key == null || ! keySet ().contains (key))
+      throw new IllegalArgumentException ();
+    final ParameterDescriptor_RolandBoss parameterDescriptor_RolandBoss = getParameterDescriptor (key);
+    if (parameterDescriptor_RolandBoss == null)
+      throw new IllegalArgumentException ();
+    if (value == null || value.length != parameterDescriptor_RolandBoss.getLength ())
+      throw new IllegalArgumentException ();
+    
+    final Object oValue = parameterDescriptor_RolandBoss.convertFromDevice (value);
+    if (oValue == null)
+      throw new RuntimeException ();
+    
+    updateParameterFromDevice (key, oValue);
+    
+  }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
