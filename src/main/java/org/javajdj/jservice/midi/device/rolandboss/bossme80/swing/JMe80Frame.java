@@ -65,7 +65,7 @@ public class JMe80Frame
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public final static String RELEASE_STRING = "0.1.0";
+  public final static String RELEASE_STRING = "0.1.1";
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -89,7 +89,8 @@ public class JMe80Frame
     final JMenuItem helpAboutItem = new JMenuItem ("About");
     helpAboutItem.addActionListener ((ActionEvent) ->
     {
-      JOptionPane.showMessageDialog (JMe80Frame.this, "JMe80 was designed and realized by \n\n" +
+      JOptionPane.showMessageDialog (JMe80Frame.this,
+        "JMe80 was designed and realized by \n\n" +
         "Jan de Jongh\n\n"
         + "Copyright (c) 2019 Jan de Jongh");
     });
