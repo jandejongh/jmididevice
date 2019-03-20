@@ -30,7 +30,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
-public class JMidiDeviceBooleanParameter
+public class JMidiDeviceParameter_Boolean
   extends JMidiDeviceParameter<Boolean>
 {
 
@@ -48,7 +48,7 @@ public class JMidiDeviceBooleanParameter
     return new JColorCheckBox.JBoolean (colorMap);
   }
 
-  public JMidiDeviceBooleanParameter (final MidiDevice midiDevice,
+  public JMidiDeviceParameter_Boolean (final MidiDevice midiDevice,
                                       final String displayName,
                                       final String key)
   {
@@ -78,9 +78,9 @@ public class JMidiDeviceBooleanParameter
     @Override
     public final void mouseClicked (MouseEvent e)
     {
-      final Boolean currentValue = JMidiDeviceBooleanParameter.this.getCheckBox ().getDisplayedValue ();
+      final Boolean currentValue = JMidiDeviceParameter_Boolean.this.getCheckBox ().getDisplayedValue ();
       final boolean newValue = currentValue != null ? (! currentValue) : true;
-      JMidiDeviceBooleanParameter.this.setDataValue (newValue);
+      JMidiDeviceParameter_Boolean.this.setDataValue (newValue);
     }
 
   }

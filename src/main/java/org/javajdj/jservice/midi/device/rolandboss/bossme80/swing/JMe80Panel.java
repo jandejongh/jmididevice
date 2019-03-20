@@ -27,9 +27,9 @@ import javax.swing.border.Border;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceBooleanParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceEnumParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceIntParameter_Slider;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Boolean;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Integer_Slider;
 import org.javajdj.jservice.midi.swing.JMidiService;
 import org.javajdj.jservice.midi.swing.JRawMidiService;
 
@@ -228,29 +228,29 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (10, 1, 2, 2));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Knob Mode", MidiDevice_Me80.SY_KNOB_MODE_NAME, MidiDevice_Me80.KnobMode.class));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Auto Off", MidiDevice_Me80.SY_AUTO_OFF_SWITCH_NAME));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Output While Tuning", MidiDevice_Me80.SY_TUNER_MUTE_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Bank Change Mode", MidiDevice_Me80.SY_PATCH_CHANGE_MODE_NAME, MidiDevice_Me80.BankChangeMode.class));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Manual Control Ops", MidiDevice_Me80.SY_MANUAL_CHANGE_MODE_NAME, MidiDevice_Me80.ManualControlOps.class));
-      final JMidiDeviceIntParameter_Slider jUsbOutputLevel
-        = new JMidiDeviceIntParameter_Slider (midiDevice,
+      final JMidiDeviceParameter_Integer_Slider jUsbOutputLevel
+        = new JMidiDeviceParameter_Integer_Slider (midiDevice,
           "USB Output Level", MidiDevice_Me80.SY_USB_OUTPUT_LEVEL_NAME, 0, 9);
       jUsbOutputLevel.getSlider ().setPaintTicks (false);
       jUsbOutputLevel.getSlider ().setPaintLabels (false);
       add (jUsbOutputLevel);
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "USB Loopback", MidiDevice_Me80.SY_USB_LOOPBACK_NAME));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "USB Dry Rec", MidiDevice_Me80.SY_USB_DRY_REC_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "MIDI Channel", MidiDevice_Me80.SY_USB_MIDI_CH_NAME, MidiDevice_Me80.MidiChannel.class));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Tuner Pitch", MidiDevice_Me80.SY_TUNER_PITCH_NAME, MidiDevice_Me80.TunerPitch.class));
     }
 
@@ -328,16 +328,16 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (6, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_COMP_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_COMP_TYPE_NAME, MidiDevice_Me80.CompEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Sus/Sens/-1Oct/Freq/Low", MidiDevice_Me80.TP_COMP_1_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Att/Tone/-2Oct/[D.]Lvl/High", MidiDevice_Me80.TP_COMP_2_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Lvl/Peak/Dir/[E.]Lvl", MidiDevice_Me80.TP_COMP_3_NAME, 0, 99));
     }
 
@@ -357,16 +357,16 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (6, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_OD_DS_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_OD_DS_TYPE_NAME, MidiDevice_Me80.OdDsEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Drive", MidiDevice_Me80.TP_OD_DS_1_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Tone", MidiDevice_Me80.TP_OD_DS_2_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Level", MidiDevice_Me80.TP_OD_DS_3_NAME, 0, 99));
     }
 
@@ -386,15 +386,15 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (8, 1, 5, 0));
-      add (new JMidiDeviceBooleanParameter (midiDevice, "Active", MidiDevice_Me80.TP_AMP_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice, "Active", MidiDevice_Me80.TP_AMP_SW_NAME));
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_AMP_TYPE_NAME, MidiDevice_Me80.AmpEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice, "Gain", MidiDevice_Me80.TP_AMP_1_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice, "Bass", MidiDevice_Me80.TP_AMP_2_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice, "Middle", MidiDevice_Me80.TP_AMP_3_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice, "Treble", MidiDevice_Me80.TP_AMP_4_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice, "Level", MidiDevice_Me80.TP_AMP_5_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Gain", MidiDevice_Me80.TP_AMP_1_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Bass", MidiDevice_Me80.TP_AMP_2_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Middle", MidiDevice_Me80.TP_AMP_3_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Treble", MidiDevice_Me80.TP_AMP_4_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Level", MidiDevice_Me80.TP_AMP_5_NAME, 0, 99));
     }
 
   }
@@ -413,9 +413,9 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (2, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_PEDAL_FX_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_PEDAL_FX_TYPE_NAME, MidiDevice_Me80.PedalFxType.class));
     }
 
@@ -435,7 +435,7 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (1, 1, 5, 5));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Threshold", MidiDevice_Me80.TP_NS_THRESH_NAME, 0, 35));
     }
 
@@ -455,7 +455,7 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (1, 1, 5, 5));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice, "Vol/Exp", MidiDevice_Me80.FOOT_VOLUME_NAME, 0, 127));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Vol/Exp", MidiDevice_Me80.FOOT_VOLUME_NAME, 0, 127));
     }
 
   }
@@ -474,16 +474,16 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (6, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_MOD_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_MOD_TYPE_NAME, MidiDevice_Me80.ModEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Rate/Pitch/Key/Time/Upr", MidiDevice_Me80.TP_MOD_1_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Depth/D.Lvl/Harm/FB/Lwr", MidiDevice_Me80.TP_MOD_2_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Reso/E.Level/D.Level", MidiDevice_Me80.TP_MOD_3_NAME, 0, 99));
     }
 
@@ -503,18 +503,18 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (7, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_EQ_FX2_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_EQ_FX2_TYPE_NAME, MidiDevice_Me80.EqFx2Type.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Bass", MidiDevice_Me80.TP_EQ_FX2_1_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Rate/Drive/Time/Middle", MidiDevice_Me80.TP_EQ_FX2_2_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Depth/Tone/FB/Treble", MidiDevice_Me80.TP_EQ_FX2_3_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Level", MidiDevice_Me80.TP_EQ_FX2_4_NAME, 0, 99));
     }
 
@@ -534,16 +534,16 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (6, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_DELAY_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_DELAY_TYPE_NAME, MidiDevice_Me80.DelayEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Time/Tempo", MidiDevice_Me80.TP_DELAY_1_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Feedback", MidiDevice_Me80.TP_DELAY_2_NAME, 0, 99));
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "E.Level", MidiDevice_Me80.TP_DELAY_3_NAME, 0, 99));
     }
 
@@ -563,12 +563,12 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (6, 1, 5, 5));
-      add (new JMidiDeviceBooleanParameter (midiDevice,
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_REVERB_SW_NAME));
-      add (new JMidiDeviceEnumParameter (midiDevice,
+      add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_REVERB_TYPE_NAME, MidiDevice_Me80.ReverbEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceIntParameter_Slider (midiDevice,
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
         "Reverb", MidiDevice_Me80.TP_REVERB_REV_NAME, 0, 49));
     }
 

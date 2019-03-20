@@ -35,7 +35,7 @@ import javax.swing.border.TitledBorder;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceStringParameter;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_String;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
 
@@ -104,7 +104,7 @@ public class JMe80Panel_PatchSelector
     manualPanel.add (this.jManual);
     manualPanel.setBorder (manualBorder);
     manualNamePanel.add (manualPanel);
-    this.jName = new JMidiDeviceStringParameter (midiDevice, null, MidiDevice_Me80.TP_NAME_NAME, 16);
+    this.jName = new JMidiDeviceParameter_String (midiDevice, null, MidiDevice_Me80.TP_NAME_NAME, 16);
     final Border nameLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
     final TitledBorder nameBorder = BorderFactory.createTitledBorder (nameLineBorder, "Name");
     this.jName.setBorder (nameBorder);
@@ -250,7 +250,7 @@ public class JMe80Panel_PatchSelector
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final JMidiDeviceStringParameter jName;
+  private final JMidiDeviceParameter_String jName;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //

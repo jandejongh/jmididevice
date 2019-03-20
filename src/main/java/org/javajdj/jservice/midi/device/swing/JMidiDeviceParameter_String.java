@@ -30,7 +30,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
-public class JMidiDeviceStringParameter
+public class JMidiDeviceParameter_String
   extends JMidiDeviceParameter<String>
 {
 
@@ -40,7 +40,7 @@ public class JMidiDeviceStringParameter
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private static final Logger LOG = Logger.getLogger (JMidiDeviceStringParameter.class.getName ());
+  private static final Logger LOG = Logger.getLogger (JMidiDeviceParameter_String.class.getName ());
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -48,7 +48,7 @@ public class JMidiDeviceStringParameter
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public JMidiDeviceStringParameter (final MidiDevice midiDevice,
+  public JMidiDeviceParameter_String (final MidiDevice midiDevice,
                                      final String displayName,
                                      final String key,
                                      final Integer columns)
@@ -59,7 +59,7 @@ public class JMidiDeviceStringParameter
     getTextField ().setText ((String) midiDevice.get (key));
   }
   
-  public JMidiDeviceStringParameter (final MidiDevice midiDevice,
+  public JMidiDeviceParameter_String (final MidiDevice midiDevice,
                                      final String displayName,
                                      final String key)
   {
@@ -83,9 +83,9 @@ public class JMidiDeviceStringParameter
     @Override
     public void actionPerformed ()
     {
-      final String newValue = JMidiDeviceStringParameter.this.getTextField ().getText ();
+      final String newValue = JMidiDeviceParameter_String.this.getTextField ().getText ();
       // LOG.log (Level.INFO, "New value: {0}.", newValue);
-      JMidiDeviceStringParameter.this.getMidiDevice ().put (JMidiDeviceStringParameter.this.getKey (), newValue);
+      JMidiDeviceParameter_String.this.getMidiDevice ().put (JMidiDeviceParameter_String.this.getKey (), newValue);
     }
   };
   

@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceEnumParameter;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
@@ -106,7 +106,7 @@ public class JMe80Panel_CTL
     knobValuePanel.add (this.jKnobValue);
     add (knobValuePanel);
     //
-    add (new JMidiDeviceEnumParameter (midiDevice,
+    add (new JMidiDeviceParameter_Enum (midiDevice,
       "Ctl Mode", MidiDevice_Me80.TP_CTL_MODE_NAME, MidiDevice_Me80.CtlMode.class));
     //
     add (new JPanel ());

@@ -16,24 +16,22 @@
  */
 package org.javajdj.jservice.midi.device.swing;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.JComboBox;
+import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.javajdj.jservice.midi.device.MidiDevice;
 
-/** A {@link JMidiDeviceParameter} for an {@link Enum}-valued parameter.
+/** A {@link JMidiDeviceParameter} for an {@link Integer}-valued parameter.
  * 
  * <p>
- * The value is shown in a {@link JComboBox}.
- * 
- * @param <E> The enum (generic) type.
+ * The value is shown in a {@link JSlider}.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
  */
-public class JMidiDeviceEnumParameter<E extends Enum<E>>
-  extends JMidiDeviceParameter<E>
+public class JMidiDeviceParameter_Integer_Slider
+  extends JMidiDeviceParameter<Integer>
 {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,14 +40,23 @@ public class JMidiDeviceEnumParameter<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public JMidiDeviceEnumParameter (final MidiDevice midiDevice,
-                                   final String displayName,
-                                   final String key,
-                                   final Class<E> clazz)
+  private static JSlider createValueComponent (final int minValue, final int maxValue)
   {
-    super (midiDevice, displayName, key, new JComboBox<> (clazz.getEnumConstants ()));
-    getComboBox ().addItemListener (new ValueItemListener ());
-    setValueOnGui ((E) midiDevice.get (key));
+    return new JSlider (minValue, maxValue);
+  }
+
+  public JMidiDeviceParameter_Integer_Slider (final MidiDevice midiDevice,
+                                         final String displayName,
+                                         final String key,
+                                         final int minValue,
+                                         final int maxValue)
+  {
+    super (midiDevice, displayName, key, createValueComponent (minValue, maxValue));
+    getSlider ().setMajorTickSpacing (maxValue - minValue);
+    // getSlider ().setPaintTicks (true);
+    getSlider ().setPaintLabels (true);
+    getSlider ().addChangeListener (new ValueChangeListener ());
+    setValueOnGui ((Integer) midiDevice.get (key));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,28 +66,28 @@ public class JMidiDeviceEnumParameter<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  protected final JComboBox<E> getComboBox ()
+  public final JSlider getSlider ()
   {
-    return (JComboBox<E>) getValueComponent ();
+    return (JSlider) getValueComponent ();
   }
   
-  private class ValueItemListener
-    implements ItemListener
+  private class ValueChangeListener
+    implements ChangeListener
   {
 
     @Override
-    public void itemStateChanged (ItemEvent ie)
+    public void stateChanged (ChangeEvent ce)
     {
-      if (ie.getStateChange () == ItemEvent.SELECTED)
+      if (ce.getSource () == JMidiDeviceParameter_Integer_Slider.this.getSlider ())
       {
-        E item = (E) ie.getItem ();
-        if (item == null)
-          // This should be fixed, should the exception be thrown :-).
-          throw new IllegalStateException ();
-        JMidiDeviceEnumParameter.this.setDataValue (item);
+        if (! JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValueIsAdjusting ())
+        {
+          final int newValue = JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValue ();
+          JMidiDeviceParameter_Integer_Slider.this.getSlider ().setToolTipText (Integer.toString (newValue));
+          JMidiDeviceParameter_Integer_Slider.this.setDataValue (newValue);
+        }
       }
     }
-      
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,22 +97,33 @@ public class JMidiDeviceEnumParameter<E extends Enum<E>>
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   @Override
-  protected void dataValueChanged (E newDataValue)
+  protected void dataValueChanged (final Integer newDataValue)
   {
     super.dataValueChanged (newDataValue);
     setValueOnGui (newDataValue);
   }
     
-  private void setValueOnGui (final E newDataValue)
+  private void setValueOnGui (final Integer value)
   {
     if (! SwingUtilities.isEventDispatchThread ())
     {
-      SwingUtilities.invokeLater (() -> setValueOnGui (newDataValue));
+      SwingUtilities.invokeLater (() -> setValueOnGui (value));
     }
     else
     {
-      getComboBox ().setSelectedItem (newDataValue);
-      getComboBox ().setEnabled (newDataValue != null);
+      if (value == null)
+      {
+        getSlider ().setEnabled (false);
+      }
+      else if (value >= getSlider ().getMinimum () && value <= getSlider ().getMaximum ())
+      {
+        getSlider ().setEnabled (true);
+        getSlider ().setValue (value);
+      }
+      else
+      {
+        getSlider ().setEnabled (false);
+      }
     }
   }
   
