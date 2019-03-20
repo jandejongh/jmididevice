@@ -50,7 +50,6 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * 
  */
 public class JMe80Panel_PatchSelector
-  // extends JPanel
   extends JMidiDeviceParameter<Integer>
 {
 
@@ -71,7 +70,6 @@ public class JMe80Panel_PatchSelector
   public JMe80Panel_PatchSelector (final MidiDevice midiDevice)
   {
     
-    // super ();
     super (midiDevice, null, MidiDevice_Me80.CURRENT_PATCH_NO_NAME, null);
     
     if (midiDevice == null)
@@ -110,8 +108,6 @@ public class JMe80Panel_PatchSelector
     final Border nameLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
     final TitledBorder nameBorder = BorderFactory.createTitledBorder (nameLineBorder, "Name");
     this.jName.setBorder (nameBorder);
-    this.jName.setEnabled (false); // XXX FOR NOW
-    this.jName.setReadOnly (true); // XXX FOR NOW
     manualNamePanel.add (this.jName);
     add (manualNamePanel);
     
@@ -212,9 +208,6 @@ public class JMe80Panel_PatchSelector
       SwingUtilities.invokeLater (() -> setEnabledCustom (enable));
     else
     {
-//      super.setEnabled (enable);
-//      this.jManual.setEnabled (enable);
-//      SwingUtilsJdJ.enableComponentAndDescendants (this, enable);
       SwingUtilsJdJ.enableComponentAndDescendants (this.jManual, enable);
       SwingUtilsJdJ.enableComponentAndDescendants (this.jBank, enable);
       SwingUtilsJdJ.enableComponentAndDescendants (this.jPatch, enable);
@@ -228,9 +221,6 @@ public class JMe80Panel_PatchSelector
         c.setDisplayedValue (null);
         SwingUtilsJdJ.enableComponentAndDescendants (c, enable);
       }
-//      this.jName.setEnabled (false); // XXX FOR NOW
-//      this.jName.getTextField ().setEnabled (false); // XXX FOR NOW
-//      this.jName.getTextField ().setEditable (false); // XXX FOR NOW
     }
   }
   
