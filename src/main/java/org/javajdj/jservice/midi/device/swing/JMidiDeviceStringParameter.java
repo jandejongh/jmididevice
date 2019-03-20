@@ -16,8 +16,10 @@
  */
 package org.javajdj.jservice.midi.device.swing;
 
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.swing.JTextFieldListener;
 import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JMidiDeviceParameter} for an {@link String}-valued parameter.
@@ -34,6 +36,14 @@ public class JMidiDeviceStringParameter
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
+  // LOGGING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private static final Logger LOG = Logger.getLogger (JMidiDeviceStringParameter.class.getName ());
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
   // CONSTRUCTORS / FACTORIES / CLONING
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,8 +55,7 @@ public class JMidiDeviceStringParameter
   {
     super (midiDevice, displayName, key, columns != null ? new JTextField (columns) : new JTextField ());
     getTextField ().setOpaque (false);
-    // XXX
-    // getTextField ().addItemListener (new ValueItemListener ());
+    JTextFieldListener.addJTextFieldListener (getTextField (), this.valueComponentListener);
     getTextField ().setText ((String) midiDevice.get (key));
   }
   
@@ -68,6 +77,17 @@ public class JMidiDeviceStringParameter
   {
     return (JTextField) getValueComponent ();
   }
+  
+  private final JTextFieldListener valueComponentListener = new JTextFieldListener ()
+  {
+    @Override
+    public void actionPerformed ()
+    {
+      final String newValue = JMidiDeviceStringParameter.this.getTextField ().getText ();
+      // LOG.log (Level.INFO, "New value: {0}.", newValue);
+      JMidiDeviceStringParameter.this.getMidiDevice ().put (JMidiDeviceStringParameter.this.getKey (), newValue);
+    }
+  };
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
