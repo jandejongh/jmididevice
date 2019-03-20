@@ -395,7 +395,7 @@ public class ParameterDescriptor_RolandBoss<E>
         final byte[] stringValue;
         try
         {
-          stringValue = ((String) value).getBytes ("US_ASCII");
+          stringValue = ((String) value).getBytes ("US-ASCII");
         }
         catch (UnsupportedEncodingException uee)
         {
