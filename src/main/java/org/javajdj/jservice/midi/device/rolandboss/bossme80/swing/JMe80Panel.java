@@ -390,13 +390,13 @@ public class JMe80Panel
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_AMP_TYPE_NAME, MidiDevice_Me80.AmpEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Gain", MidiDevice_Me80.TP_AMP_1_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Bass", MidiDevice_Me80.TP_AMP_2_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Gain",   MidiDevice_Me80.TP_AMP_1_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Bass",   MidiDevice_Me80.TP_AMP_2_NAME, 0, 99));
       add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Middle", MidiDevice_Me80.TP_AMP_3_NAME, 0, 99));
       add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Treble", MidiDevice_Me80.TP_AMP_4_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Level", MidiDevice_Me80.TP_AMP_5_NAME, 0, 99));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Level",  MidiDevice_Me80.TP_AMP_5_NAME, 0, 99));
     }
-
+    
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
