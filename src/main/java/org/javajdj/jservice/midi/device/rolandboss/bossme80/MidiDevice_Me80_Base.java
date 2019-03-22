@@ -77,6 +77,8 @@ public class MidiDevice_Me80_Base
   public final static String SYSTEM_NAME               = "system";
   public final static String TEMPORARY_PATCH_NAME      = "temporary_patch";
   
+  public final static byte TEMPORARY_PATCH_SIZE = (byte) 0x47;
+  
   protected final Set<String> ME80_BASE_PARAMETERS = new LinkedHashSet<> (Arrays.asList (new String[]
   {
     CURRENT_PATCH_NO_RAW_NAME,
@@ -97,7 +99,7 @@ public class MidiDevice_Me80_Base
         
     registerParameter (new ParameterDescriptor_RolandBoss (TEMPORARY_PATCH_NAME, byte[].class,
       ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.NONE,
-      new byte[]{0x20, 0x00, 0x00, 0x00}, new byte[]{0x00, 0x00, 0x00, 0x47}, null));
+      new byte[]{0x20, 0x00, 0x00, 0x00}, new byte[]{0x00, 0x00, 0x00, TEMPORARY_PATCH_SIZE}, null));
     
   }
   
