@@ -58,15 +58,16 @@ public class JMidiDeviceParameter<C>
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
     this.displayName = displayName;
+    this.jDisplayNameComponent = (this.displayName != null ? new JLabel (this.displayName) : null);
     this.key = key;
     this.jValueComponent = jValueComponent;
     getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
-    if (this.displayName != null || this.jValueComponent != null)
+    if (this.jDisplayNameComponent != null || this.jValueComponent != null)
     {
-      final int nrOfComponents = (this.displayName != null && this.jValueComponent != null ? 2 : 1);
+      final int nrOfComponents = (this.jDisplayNameComponent != null && this.jValueComponent != null ? 2 : 1);
       setLayout (new GridLayout (1, nrOfComponents, 5, 5));
-      if (this.displayName != null)
-        add (new JLabel (getDisplayName ()));
+      if (this.jDisplayNameComponent != null)
+        add (this.jDisplayNameComponent);
       if (this.jValueComponent != null)
         add (this.jValueComponent);
     }
@@ -120,14 +121,29 @@ public class JMidiDeviceParameter<C>
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // DISPLAY NAME
+  // DISPLAY NAME COMPONENT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final String displayName;
+  private volatile String displayName;
+  
+  private final JLabel jDisplayNameComponent;
   
   public final String getDisplayName ()
   {
     return this.displayName;
+  }
+  
+  public final void setDisplayName (final String displayName)
+  {
+    if (displayName == null || displayName.trim ().isEmpty ())
+      throw new IllegalArgumentException ();
+    if (this.displayName == null && displayName != null)
+      throw new IllegalArgumentException ();
+    if (this.displayName == null || displayName.equals (this.displayName))
+      return;
+    this.displayName = displayName;
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> this.jDisplayNameComponent.setText (displayName));
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
