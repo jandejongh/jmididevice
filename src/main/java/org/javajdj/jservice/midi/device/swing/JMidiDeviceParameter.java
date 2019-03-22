@@ -138,7 +138,7 @@ public class JMidiDeviceParameter<C>
   {
     if (displayName == null || displayName.trim ().isEmpty ())
       throw new IllegalArgumentException ();
-    if (this.displayName == null && displayName != null)
+    if (this.displayName == null)
       throw new IllegalArgumentException ();
     if (this.displayName == null || displayName.equals (this.displayName))
       return;
