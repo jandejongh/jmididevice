@@ -18,6 +18,7 @@ package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -26,12 +27,14 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Boolean;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Integer_Slider;
 import org.javajdj.jservice.midi.swing.JMidiService;
 import org.javajdj.jservice.midi.swing.JRawMidiService;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JPanel} for controlling and monitoring a Boss ME-80.
  *
@@ -41,14 +44,6 @@ import org.javajdj.jservice.midi.swing.JRawMidiService;
 public class JMe80Panel
   extends JPanel
 {
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // SERIALIZATION
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private static final long serialVersionUID = -2670414054463543149L;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -333,12 +328,85 @@ public class JMe80Panel
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_COMP_TYPE_NAME, MidiDevice_Me80.CompEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Sus/Sens/-1Oct/Freq/Low", MidiDevice_Me80.TP_COMP_1_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Att/Tone/-2Oct/[D.]Lvl/High", MidiDevice_Me80.TP_COMP_2_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Lvl/Peak/Dir/[E.]Lvl", MidiDevice_Me80.TP_COMP_3_NAME, 0, 99));
+      this.jComp1 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Sus/Sens/-1Oct/Freq/Low", MidiDevice_Me80.TP_COMP_1_NAME, 0, 99);
+      this.jComp2 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Att/Tone/-2Oct/[D.]Lvl/High", MidiDevice_Me80.TP_COMP_2_NAME, 0, 99);
+      this.jComp3 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Lvl/Peak/Dir/[E.]Lvl", MidiDevice_Me80.TP_COMP_3_NAME, 0, 99);
+      add (this.jComp1);
+      add (this.jComp2);
+      add (this.jComp3);
+      setLabels ((MidiDevice_Me80.CompEffectType) midiDevice.get (MidiDevice_Me80.TP_COMP_TYPE_NAME));
+      getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
+    }
+    
+    private final JMidiDeviceParameter_Integer_Slider jComp1, jComp2, jComp3;
+    
+    private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
+    {
+      if (changes == null)
+        throw new RuntimeException ();
+      if (! changes.containsKey (MidiDevice_Me80.TP_COMP_TYPE_NAME))
+        return;
+      SwingUtilsJdJ.invokeOnSwingEDT (()->
+      {
+        JMe80Panel_COMP.this.setLabels ((MidiDevice_Me80.CompEffectType) changes.get (MidiDevice_Me80.TP_COMP_TYPE_NAME));
+      });
+    };
+    
+    private void setLabels (final MidiDevice_Me80.CompEffectType compEffectType)
+    {
+      if (compEffectType == null)
+      {
+        this.jComp1.setDisplayName ("-");
+        this.jComp2.setDisplayName ("-");
+        this.jComp3.setDisplayName ("-");
+      }
+      else switch (compEffectType)
+      {
+        case COMP:
+          this.jComp1.setDisplayName ("Sustain");
+          this.jComp2.setDisplayName ("Attack");
+          this.jComp3.setDisplayName ("Level");
+          break;
+        case T_WAH_UP:
+        case T_WAH_DOWN:
+          this.jComp1.setDisplayName ("Sensitivity");
+          this.jComp2.setDisplayName ("Tone");
+          this.jComp3.setDisplayName ("Peak");
+          break;
+        case OCTAVE:
+          this.jComp1.setDisplayName ("-1 Octave Level");
+          this.jComp2.setDisplayName ("-2 Octaves Level");
+          this.jComp3.setDisplayName ("Direct Level");
+          break;
+        case SLOW_GEAR:
+          this.jComp1.setDisplayName ("Sensitivity");
+          this.jComp2.setDisplayName ("Attack");
+          this.jComp3.setDisplayName ("Level");
+          break;
+        case DEFRETTER:
+          this.jComp1.setDisplayName ("Sensitivity");
+          this.jComp2.setDisplayName ("Tone");
+          this.jComp3.setDisplayName ("Level");
+          break;
+        case RING_MOD:
+          this.jComp1.setDisplayName ("Frequency");
+          this.jComp2.setDisplayName ("Direct Level");
+          this.jComp3.setDisplayName ("Effect Level");
+          break;
+        case AC_SIM:
+        case SINGLE_2_HUM:
+        case HUM_2_SINGLE:
+        case SOLO:
+          this.jComp1.setDisplayName ("Low");
+          this.jComp2.setDisplayName ("High");
+          this.jComp3.setDisplayName ("Level");
+          break;
+        default:
+          throw new RuntimeException ();        
+      }
     }
 
   }
@@ -412,11 +480,12 @@ public class JMe80Panel
     public JMe80Panel_PEDAL_FX (final MidiDevice midiDevice)
     {
       super ();
-      setLayout (new GridLayout (2, 1, 5, 5));
+      setLayout (new GridLayout (3, 1, 5, 5));
       add (new JMidiDeviceParameter_Boolean (midiDevice,
         "Active", MidiDevice_Me80.TP_PEDAL_FX_SW_NAME));
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_PEDAL_FX_TYPE_NAME, MidiDevice_Me80.PedalFxType.class));
+      add (new JLabel ());
     }
 
   }
@@ -455,7 +524,7 @@ public class JMe80Panel
     {
       super ();
       setLayout (new GridLayout (1, 1, 5, 5));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Vol/Exp", MidiDevice_Me80.FOOT_VOLUME_NAME, 0, 127));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice, "Volume / Expression", MidiDevice_Me80.FOOT_VOLUME_NAME, 0, 127));
     }
 
   }
@@ -479,12 +548,85 @@ public class JMe80Panel
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_MOD_TYPE_NAME, MidiDevice_Me80.ModEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Rate/Pitch/Key/Time/Upr", MidiDevice_Me80.TP_MOD_1_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Depth/D.Lvl/Harm/FB/Lwr", MidiDevice_Me80.TP_MOD_2_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Reso/E.Level/D.Level", MidiDevice_Me80.TP_MOD_3_NAME, 0, 99));
+      this.jMod1 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Rate/Pitch/Key/Time/Upr", MidiDevice_Me80.TP_MOD_1_NAME, 0, 99);
+      this.jMod2 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Depth/D.Lvl/Harm/FB/Lwr", MidiDevice_Me80.TP_MOD_2_NAME, 0, 99);
+      this.jMod3 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Reso/E.Level/D.Level", MidiDevice_Me80.TP_MOD_3_NAME, 0, 99);
+      add (this.jMod1);
+      add (this.jMod2);
+      add (this.jMod3);
+      setLabels ((MidiDevice_Me80.ModEffectType) midiDevice.get (MidiDevice_Me80.TP_MOD_TYPE_NAME));
+      getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
+    }
+
+    private final JMidiDeviceParameter_Integer_Slider jMod1, jMod2, jMod3;
+    
+    private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
+    {
+      if (changes == null)
+        throw new RuntimeException ();
+      if (! changes.containsKey (MidiDevice_Me80.TP_MOD_TYPE_NAME))
+        return;
+      SwingUtilsJdJ.invokeOnSwingEDT (()->
+      {
+        JMe80Panel_MOD.this.setLabels ((MidiDevice_Me80.ModEffectType) changes.get (MidiDevice_Me80.TP_MOD_TYPE_NAME));
+      });
+    };
+    
+    private void setLabels (final MidiDevice_Me80.ModEffectType modEffectType)
+    {
+      if (modEffectType == null)
+      {
+        this.jMod1.setDisplayName ("-");
+        this.jMod2.setDisplayName ("-");
+        this.jMod3.setDisplayName ("-");
+      }
+      else switch (modEffectType)
+      {
+        case PHASER:
+        case FLANGER:
+          this.jMod1.setDisplayName ("Rate");
+          this.jMod2.setDisplayName ("Depth");
+          this.jMod3.setDisplayName ("Resonance");
+          break;
+        case TREMOLO:
+        case CHORUS:
+        case VIBRATO:
+          this.jMod1.setDisplayName ("Rate");
+          this.jMod2.setDisplayName ("Depth");
+          this.jMod3.setDisplayName ("Effect Level");
+          break;
+        case PITCH_SHIFT:
+          this.jMod1.setDisplayName ("Pitch");
+          this.jMod2.setDisplayName ("Direct Level");
+          this.jMod3.setDisplayName ("Effect Level");
+          break;
+        case HARMONIST:
+          this.jMod1.setDisplayName ("Key");
+          this.jMod2.setDisplayName ("Harmony");
+          this.jMod3.setDisplayName ("Effect Level");
+          break;
+        case ROTARY:
+        case UNI_V:
+          this.jMod1.setDisplayName ("Rate");
+          this.jMod2.setDisplayName ("Depth");
+          this.jMod3.setDisplayName ("Effect Level");
+          break;
+        case DELAY:
+          this.jMod1.setDisplayName ("Time");
+          this.jMod2.setDisplayName ("Feedback");
+          this.jMod3.setDisplayName ("Effect Level");
+          break;
+        case OVERTONE:
+          this.jMod1.setDisplayName ("+1 Octave Level");
+          this.jMod2.setDisplayName ("-1 Octave Level");
+          this.jMod3.setDisplayName ("Direct Level");
+          break;
+        default:
+          throw new RuntimeException ();        
+      }
     }
 
   }
@@ -508,16 +650,83 @@ public class JMe80Panel
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_EQ_FX2_TYPE_NAME, MidiDevice_Me80.EqFx2Type.class));
       add (new JLabel ());
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Bass", MidiDevice_Me80.TP_EQ_FX2_1_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Rate/Drive/Time/Middle", MidiDevice_Me80.TP_EQ_FX2_2_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Depth/Tone/FB/Treble", MidiDevice_Me80.TP_EQ_FX2_3_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Level", MidiDevice_Me80.TP_EQ_FX2_4_NAME, 0, 99));
+      this.jEqFx2_1 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Bass", MidiDevice_Me80.TP_EQ_FX2_1_NAME, 0, 99);
+      this.jEqFx2_2 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Rate/Drive/Time/Middle", MidiDevice_Me80.TP_EQ_FX2_2_NAME, 0, 99);
+      this.jEqFx2_3 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Depth/Tone/FB/Treble", MidiDevice_Me80.TP_EQ_FX2_3_NAME, 0, 99);
+      this.jEqFx2_4 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Level", MidiDevice_Me80.TP_EQ_FX2_4_NAME, 0, 99);
+      add (this.jEqFx2_1);
+      add (this.jEqFx2_2);
+      add (this.jEqFx2_3);
+      add (this.jEqFx2_4);
+      setLabels ((MidiDevice_Me80.EqFx2Type) midiDevice.get (MidiDevice_Me80.TP_EQ_FX2_TYPE_NAME));
+      getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
     }
+    
+    private final JMidiDeviceParameter_Integer_Slider jEqFx2_1, jEqFx2_2, jEqFx2_3, jEqFx2_4;
 
+    private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
+    {
+      if (changes == null)
+        throw new RuntimeException ();
+      if (! changes.containsKey (MidiDevice_Me80.TP_EQ_FX2_TYPE_NAME))
+        return;
+      SwingUtilsJdJ.invokeOnSwingEDT (()->
+      {
+        JMe80Panel_EQ_FX2.this.setLabels ((MidiDevice_Me80.EqFx2Type) changes.get (MidiDevice_Me80.TP_EQ_FX2_TYPE_NAME));
+      });
+    };
+    
+    private void setLabels (final MidiDevice_Me80.EqFx2Type eqFx2Type)
+    {
+      if (eqFx2Type == null)
+      {
+        this.jEqFx2_1.setDisplayName ("-");
+        this.jEqFx2_2.setDisplayName ("-");
+        this.jEqFx2_3.setDisplayName ("-");
+        this.jEqFx2_4.setDisplayName ("-");
+      }
+      else switch (eqFx2Type)
+      {
+        case PHASER:
+        case TREMOLO:
+          this.jEqFx2_1.setDisplayName ("-");
+          this.jEqFx2_2.setDisplayName ("Rate");
+          this.jEqFx2_3.setDisplayName ("Depth");
+          this.jEqFx2_4.setDisplayName ("Level");
+          break;          
+        case BOOST:
+          this.jEqFx2_1.setDisplayName ("-");
+          this.jEqFx2_2.setDisplayName ("Drive");
+          this.jEqFx2_3.setDisplayName ("Tone");
+          this.jEqFx2_4.setDisplayName ("Level");
+          break;
+        case DELAY:
+          this.jEqFx2_1.setDisplayName ("-");
+          this.jEqFx2_2.setDisplayName ("Time");
+          this.jEqFx2_3.setDisplayName ("Feedback");
+          this.jEqFx2_4.setDisplayName ("Level");
+          break;
+        case CHORUS:
+          this.jEqFx2_1.setDisplayName ("-");
+          this.jEqFx2_2.setDisplayName ("Rate");
+          this.jEqFx2_3.setDisplayName ("Depth");
+          this.jEqFx2_4.setDisplayName ("Level");
+          break;          
+        case EQ:
+          this.jEqFx2_1.setDisplayName ("Bass");
+          this.jEqFx2_2.setDisplayName ("Middle");
+          this.jEqFx2_3.setDisplayName ("Treble");
+          this.jEqFx2_4.setDisplayName ("Level");
+          break;
+        default:
+          throw new RuntimeException ();        
+      }
+    }
+    
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -539,14 +748,75 @@ public class JMe80Panel
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Type", MidiDevice_Me80.TP_DELAY_TYPE_NAME, MidiDevice_Me80.DelayEffectType.class));
       add (new JLabel ());
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Time/Tempo", MidiDevice_Me80.TP_DELAY_1_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "Feedback", MidiDevice_Me80.TP_DELAY_2_NAME, 0, 99));
-      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-        "E.Level", MidiDevice_Me80.TP_DELAY_3_NAME, 0, 99));
+      this.jDelay1 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Time/Tempo", MidiDevice_Me80.TP_DELAY_1_NAME, 0, 99);
+      this.jDelay2 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "Feedback", MidiDevice_Me80.TP_DELAY_2_NAME, 0, 99);
+      this.jDelay3 = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "E.Level", MidiDevice_Me80.TP_DELAY_3_NAME, 0, 99);
+      add (this.jDelay1);
+      add (this.jDelay2);
+      add (this.jDelay3);
+      setLabels ((MidiDevice_Me80.DelayEffectType) midiDevice.get (MidiDevice_Me80.TP_DELAY_TYPE_NAME));
+      getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
     }
 
+    private final JMidiDeviceParameter_Integer_Slider jDelay1, jDelay2, jDelay3;
+    
+    private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
+    {
+      if (changes == null)
+        throw new RuntimeException ();
+      if (! changes.containsKey (MidiDevice_Me80.TP_DELAY_TYPE_NAME))
+        return;
+      SwingUtilsJdJ.invokeOnSwingEDT (()->
+      {
+        JMe80Panel_DELAY.this.setLabels ((MidiDevice_Me80.DelayEffectType) changes.get (MidiDevice_Me80.TP_DELAY_TYPE_NAME));
+      });
+    };
+    
+    private void setLabels (final MidiDevice_Me80.DelayEffectType delayEffectType)
+    {
+      if (delayEffectType == null)
+      {
+        this.jDelay1.setDisplayName ("-");
+        this.jDelay2.setDisplayName ("-");
+        this.jDelay3.setDisplayName ("-");
+      }
+      else switch (delayEffectType)
+      {
+        case DELAY_1_99_MS:
+        case DELAY_100_600_MS:
+        case DELAY_500_6000_MS:
+        case ANALOG:
+        case TAPE:
+        case MODULATE:
+        case REVERSE:
+        case ECHO_DELAY:
+          this.jDelay1.setDisplayName ("Time");
+          this.jDelay2.setDisplayName ("Feedback");
+          this.jDelay3.setDisplayName ("Effect Level");
+          break;
+        case TEMPO:
+          this.jDelay1.setDisplayName ("Beat");
+          this.jDelay2.setDisplayName ("Feedback");
+          this.jDelay3.setDisplayName ("Effect Level");
+          break;
+        case TERA_ECHO:
+          this.jDelay1.setDisplayName ("Time");
+          this.jDelay2.setDisplayName ("Feedback");
+          this.jDelay3.setDisplayName ("Effect Level");
+          break;
+        case PHRASE_LOOP:
+          this.jDelay1.setDisplayName ("-");
+          this.jDelay2.setDisplayName ("-");
+          this.jDelay3.setDisplayName ("Effect Level");
+          break;
+        default:
+          throw new RuntimeException ();        
+      }
+    }
+    
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
