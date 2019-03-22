@@ -72,10 +72,6 @@ public class JMe80Panel_PatchSelector
     
     super (midiDevice, null, MidiDevice_Me80.CURRENT_PATCH_NO_NAME, null);
     
-    if (midiDevice == null)
-      throw new IllegalArgumentException ();
-    this.midiDevice = midiDevice;
-    
     setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
     
     final JPanel manualNamePanel = new JPanel ();
@@ -91,10 +87,10 @@ public class JMe80Panel_PatchSelector
         final Boolean displayedValue = JMe80Panel_PatchSelector.this.jManual.getDisplayedValue ();
         final boolean newValue = (displayedValue != null ? ! displayedValue : true);
         if (newValue)
-          midiDevice.put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, 0x48);
+          JMe80Panel_PatchSelector.this.getMidiDevice ().put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, 0x48);
         else
           // XXX We should really store the old patch? But what if there was none? How do we know for sure?
-          midiDevice.put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, 0x00);
+          JMe80Panel_PatchSelector.this.getMidiDevice ().put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, 0x00);
       }
     });
     final Border manualLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
@@ -104,7 +100,7 @@ public class JMe80Panel_PatchSelector
     manualPanel.add (this.jManual);
     manualPanel.setBorder (manualBorder);
     manualNamePanel.add (manualPanel);
-    this.jName = new JMidiDeviceParameter_String (midiDevice, null, MidiDevice_Me80.TP_NAME_NAME, 16);
+    this.jName = new JMidiDeviceParameter_String (getMidiDevice (), null, MidiDevice_Me80.TP_NAME_NAME, 16);
     final Border nameLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
     final TitledBorder nameBorder = BorderFactory.createTitledBorder (nameLineBorder, "Name");
     this.jName.setBorder (nameBorder);
@@ -121,6 +117,7 @@ public class JMe80Panel_PatchSelector
     final TitledBorder bankBorder = BorderFactory.createTitledBorder (bankLineBorder, "Bank");
     this.jBank.setBorder (bankBorder);
     add (this.jBank);
+    
     this.jPatch = new JPanel ();
     this.jPatch.setLayout (new GridLayout (1, 4, 1, 1));
     for (final ME80_PATCH_IN_BANK me80_patch : ME80_PATCH_IN_BANK.values ())
@@ -153,13 +150,9 @@ public class JMe80Panel_PatchSelector
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // MIDI DEVICE
-  //
   // UPDATE FROM/TO BOSS ME-80
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private final MidiDevice midiDevice;
   
   private void updateFromMe80 (final Integer me80Patch)
   {
@@ -193,7 +186,7 @@ public class JMe80Panel_PatchSelector
       patch = this.selectedPatch;
     }
     if (bank != null && patch != null)
-      this.midiDevice.put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, (int) toMidiProgram (bank, patch));
+      getMidiDevice ().put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, (int) toMidiProgram (bank, patch));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,6 +383,8 @@ public class JMe80Panel_PatchSelector
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public final static Map<Boolean, Color> COLOR_MAP = new HashMap<> ();
+  
+  static
   {
     COLOR_MAP.put (Boolean.FALSE, null);
     COLOR_MAP.put (Boolean.TRUE, Color.RED);
