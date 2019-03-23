@@ -18,22 +18,32 @@ package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
+import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80_Base;
+import org.javajdj.jservice.midi.device.rolandboss.bossme80.Patch_Me80;
+import org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.dialog.JTargetPatchSelectorDialog_Me80;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Boolean;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Integer_Slider;
 import org.javajdj.jservice.midi.swing.JMidiService;
 import org.javajdj.jservice.midi.swing.JRawMidiService;
+import org.javajdj.swing.DefaultMouseListener;
+import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JPanel} for controlling and monitoring a Boss ME-80.
@@ -90,13 +100,13 @@ public class JMe80Panel
     addBorderSYSGroup (jMe80JPanel_SYS, "ME-80 [System]");
     add (jMe80JPanel_SYS);
 
-    final JPanel jMe80LibrarianPanel = new JMe80Panel_LIB (midiDevice);
-    addBorderLIBGroup (jMe80LibrarianPanel, "ME-80 [Lib]");
-    add (jMe80LibrarianPanel);
+    final JPanel jMe80SysUsbAudioPanel = new JMe80Panel_SYS_USB_AUDIO (midiDevice);
+    addBorderSYSGroup (jMe80SysUsbAudioPanel, "ME-80 [System::USB Audio]");
+    add (jMe80SysUsbAudioPanel);
     
-    final JPanel jMe80SparePanel = new JMe80Panel_SPARE (midiDevice);
-    addBorderLIBGroup (jMe80SparePanel, "ME-80 [Spare]");
-    add (jMe80SparePanel);
+    final JPanel jMe80PatchIOPanel = new JMe80Panel_PatchIO (midiDevice);
+    addBorderLIBGroup (jMe80PatchIOPanel, "ME-80 [Patch I/O]");
+    add (jMe80PatchIOPanel);
     
     final JPanel jMe80PatchPanel = new JMe80Panel_PatchSelector (midiDevice);
     addBorderSYSGroup (jMe80PatchPanel, "ME-80 [Patch]");
@@ -222,7 +232,7 @@ public class JMe80Panel
     public JMe80Panel_SYS (final MidiDevice midiDevice)
     {
       super ();
-      setLayout (new GridLayout (10, 1, 2, 2));
+      setLayout (new GridLayout (8, 1, 2, 2));
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Knob Mode", MidiDevice_Me80.SY_KNOB_MODE_NAME, MidiDevice_Me80.KnobMode.class));
       add (new JMidiDeviceParameter_Boolean (midiDevice,
@@ -233,6 +243,29 @@ public class JMe80Panel
         "Bank Change Mode", MidiDevice_Me80.SY_PATCH_CHANGE_MODE_NAME, MidiDevice_Me80.BankChangeMode.class));
       add (new JMidiDeviceParameter_Enum (midiDevice,
         "Manual Control Ops", MidiDevice_Me80.SY_MANUAL_CHANGE_MODE_NAME, MidiDevice_Me80.ManualControlOps.class));
+      add (new JMidiDeviceParameter_Enum (midiDevice,
+        "MIDI Channel", MidiDevice_Me80.SY_USB_MIDI_CH_NAME, MidiDevice_Me80.MidiChannel.class));
+      add (new JMidiDeviceParameter_Enum (midiDevice,
+        "Tuner Pitch", MidiDevice_Me80.SY_TUNER_PITCH_NAME, MidiDevice_Me80.TunerPitch.class));
+      add (new JLabel ());
+    }
+
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // SYS_USB_AUDIO
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  protected class JMe80Panel_SYS_USB_AUDIO
+    extends JPanel
+  {
+
+    public JMe80Panel_SYS_USB_AUDIO (final MidiDevice midiDevice)
+    {
+      super ();
+      setLayout (new GridLayout (8, 1, 2, 2));
       final JMidiDeviceParameter_Integer_Slider jUsbOutputLevel
         = new JMidiDeviceParameter_Integer_Slider (midiDevice,
           "USB Output Level", MidiDevice_Me80.SY_USB_OUTPUT_LEVEL_NAME, 0, 9);
@@ -243,33 +276,10 @@ public class JMe80Panel
         "USB Loopback", MidiDevice_Me80.SY_USB_LOOPBACK_NAME));
       add (new JMidiDeviceParameter_Boolean (midiDevice,
         "USB Dry Rec", MidiDevice_Me80.SY_USB_DRY_REC_NAME));
-      add (new JMidiDeviceParameter_Enum (midiDevice,
-        "MIDI Channel", MidiDevice_Me80.SY_USB_MIDI_CH_NAME, MidiDevice_Me80.MidiChannel.class));
-      add (new JMidiDeviceParameter_Enum (midiDevice,
-        "Tuner Pitch", MidiDevice_Me80.SY_TUNER_PITCH_NAME, MidiDevice_Me80.TunerPitch.class));
-    }
-
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // LIB
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  protected class JMe80Panel_LIB
-    extends JPanel
-  {
-
-    public JMe80Panel_LIB (final MidiDevice midiDevice)
-    {
-      super ();
-      setLayout (new GridLayout (8, 1, 5, 5));
-      add (new JLabel ());
-      add (new JLabel ());
-      add (new JLabel ());
-      add (new JLabel ("     File I/O and Patch Operations"));
-      add (new JLabel ("     are planned for Release 2"));
+      add (new JMidiDeviceParameter_Boolean (midiDevice,
+        "USB Direct Mon", MidiDevice_Me80.COMMAND_USB_DIRECT_MON_NAME));
+      add (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "USB In/Out Mode", MidiDevice_Me80.COMMAND_USB_IN_OUT_MODE_NAME, 0, 127));
       add (new JLabel ());
       add (new JLabel ());
       add (new JLabel ());
@@ -279,28 +289,129 @@ public class JMe80Panel
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // SPARE
+  // PATCH I/O
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  protected class JMe80Panel_SPARE
-    extends JPanel
+  protected class JMe80Panel_PatchIO
+    extends JMidiDeviceParameter<byte[]>
   {
 
-    public JMe80Panel_SPARE (final MidiDevice midiDevice)
+    public JMe80Panel_PatchIO (final MidiDevice midiDevice)
     {
-      super ();
-      setLayout (new GridLayout (8, 1, 5, 5));
+      
+      super (midiDevice, null, MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME, null);
+      
+      setLayout (new GridLayout (10, 2, 2, 2));
+      
+      add (new JLabel ("Write Patch > ME-80"));
+      final JComponent jWrite = new JColorCheckBox ((final Object o) -> Color.blue.darker ());
+      jWrite.addMouseListener (new DefaultMouseListener ()
+      {
+        @Override
+        public void mouseClicked (final MouseEvent me)
+        {
+          final Patch_Me80 patch; 
+          final String initialName;
+          final Integer currentPatchNo = (Integer) getMidiDevice ().get (MidiDevice_Me80.CURRENT_PATCH_NO_NAME);
+          final JMe80Panel_PatchSelector.ME80_BANK initialBank;
+          final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK initialPatchInBank;
+          if (currentPatchNo != null)
+          {
+            final JMe80Panel_PatchSelector.ME80_BANK currentBank = JMe80Panel_PatchSelector.bankFromMidiProgram (currentPatchNo);
+            if (currentBank != null && currentBank.isUserBank ())
+              initialBank = currentBank;
+            else
+              initialBank = null;
+          }
+          else
+            initialBank = null;
+          if (initialBank != null)
+            initialPatchInBank = JMe80Panel_PatchSelector.patchInBankFromMidiProgram (currentPatchNo);
+          else
+            initialPatchInBank = null;
+          synchronized (JMe80Panel_PatchIO.this.temporaryPatchLock)
+          {
+            patch = JMe80Panel_PatchIO.this.temporaryPatch;
+            initialName = JMe80Panel_PatchIO.this.temporaryPatch != null ? JMe80Panel_PatchIO.this.temporaryPatch.getName () : null;
+          }
+          if (patch == null)
+          {
+            JOptionPane.showMessageDialog (null,
+            "No patch data!",
+            "Problem",
+            JOptionPane.ERROR_MESSAGE);
+            return;
+          }
+          final JTargetPatchSelectorDialog_Me80 dialog
+            = new JTargetPatchSelectorDialog_Me80 (null, initialName, initialBank, initialPatchInBank);
+          dialog.setLocationRelativeTo (null);
+          dialog.setVisible (true);
+          if (dialog.isOk ())
+          {
+            final String patchName = dialog.getPatchName ();
+            final JMe80Panel_PatchSelector.ME80_BANK bank = dialog.getBank ();
+            final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK patchInBank = dialog.getPatchInBank ();
+            ((MidiDevice_Me80) getMidiDevice ()).writePatchToDevice (patch.withName (patchName).getBytes (), bank, patchInBank);
+            JOptionPane.showMessageDialog (null,
+            "Saved Patch!",
+            "Message",
+            JOptionPane.INFORMATION_MESSAGE);
+          }
+        }
+      });
+      add (jWrite);
+      
       add (new JLabel ());
       add (new JLabel ());
+      
+      add (new JLabel ("Load Patch"));
+      add (new JColorCheckBox ((final Object o) -> Color.blue.darker ()));
+      
+      add (new JLabel ("Patch File"));
+      final JTextField jPatchFile = new JTextField ();
+      jPatchFile.setOpaque (false);
+      jPatchFile.setEditable (false);
+      add (jPatchFile);
+      
+      add (new JLabel ("Save Patch"));
+      add (new JColorCheckBox ((final Object o) -> Color.blue.darker ()));
+      
+      add (new JLabel ("Save Patch As"));
+      add (new JColorCheckBox ((final Object o) -> Color.blue.darker ()));
+      
       add (new JLabel ());
-      add (new JLabel ("     Spare Panel"));
+      add (new JLabel ());
+      
       add (new JLabel ());
       add (new JLabel ());
+      
       add (new JLabel ());
       add (new JLabel ());
+      
+      add (new JLabel ());
+      add (new JLabel ());
+      
+      setDataValue ((byte[]) getMidiDevice ().get (MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME));
+      
+    }
+    
+    private volatile Patch_Me80 temporaryPatch = null;
+    
+    private final Object temporaryPatchLock = new Object ();
+
+    @Override
+    protected final void dataValueChanged (final byte[] newDataValue)
+    {
+      super.dataValueChanged (newDataValue);
+      synchronized (this.temporaryPatchLock)
+      {
+        this.temporaryPatch = newDataValue != null ? Patch_Me80.fromBytes (newDataValue) : null;
+        // LOG.log (Level.INFO, "New Temporary Patch: {0}", newDataValue != null ? HexUtils.bytesToHex (newDataValue) : "null");
+      }
     }
 
+    
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
