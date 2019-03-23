@@ -190,7 +190,7 @@ public class JMidiDeviceParameter<C>
     if (readOnly != this.readOnly)
     {
       this.readOnly = readOnly;
-      SwingUtilsJdJ.invokeOnSwingEDT (() -> setEnabled (! readOnly));
+      SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants (this, ! readOnly));
     }
   }
   
