@@ -65,6 +65,8 @@ public final class MidiDevice_Me80
     registerParameters_Me80_System ();
     registerParameters_Me80_TemporaryPatch ();
     registerParameters_Me80_FootVolume ();
+    registerParameters_Me80_Commands ();
+    registerParameters_Me80_TODO ();
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,7 +310,6 @@ public final class MidiDevice_Me80
     registerParameters_Me80_TemporaryPatch_CTL ();
     registerParameters_Me80_TemporaryPatch_PedalFx ();
     registerParameters_Me80_TemporaryPatch_Ns ();
-    registerParameters_Me80_TemporaryPatch_TODO ();
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1138,11 +1139,27 @@ public final class MidiDevice_Me80
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // TEMPORARY-PATCH PARAMETERS - TODO
+  // PARAMETERS - COMMANDS
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public final static String COMMAND_PATCH_WRITE_NAME = "command.patch_write";
   
-  private void registerParameters_Me80_TemporaryPatch_TODO ()
+  private void registerParameters_Me80_Commands ()
+  {
+    
+    registerParameter (new ParameterDescriptor_RolandBoss (COMMAND_PATCH_WRITE_NAME, byte[].class,
+      new byte[]{0x7F, 0x00, 0x01, 0x04}, new byte[]{0x00, 0x00, 0x00, 0x02}, null));
+    
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // PARAMETERS - TODO
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  private void registerParameters_Me80_TODO ()
   {
         
 //    
