@@ -258,24 +258,37 @@ public class JMe80Panel_PatchSelector
   
   public enum ME80_BANK
   {
-    U1,
-    U2,
-    U3,
-    U4,
-    U5,
-    U6,
-    U7,
-    U8,
-    U9,
-    P1,
-    P2,
-    P3,
-    P4,
-    P5,
-    P6,
-    P7,
-    P8,
-    P9;
+    U1 (true),
+    U2 (true),
+    U3 (true),
+    U4 (true),
+    U5 (true),
+    U6 (true),
+    U7 (true),
+    U8 (true),
+    U9 (true),
+    P1 (false),
+    P2 (false),
+    P3 (false),
+    P4 (false),
+    P5 (false),
+    P6 (false),
+    P7 (false),
+    P8 (false),
+    P9 (false);
+    
+    private ME80_BANK (final boolean isUserBank)
+    {
+      this.isUserBank = isUserBank;
+    }
+    
+    private final boolean isUserBank;
+    
+    public final boolean isUserBank ()
+    {
+      return this.isUserBank;
+    }
+    
   }
 
   public enum ME80_PATCH_IN_BANK
