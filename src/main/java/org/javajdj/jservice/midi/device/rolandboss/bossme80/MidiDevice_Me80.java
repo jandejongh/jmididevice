@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import org.javajdj.jservice.midi.device.rolandboss.ParameterDescriptor_RolandBoss;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80Panel_PatchSelector;
 
 /** A {@link MidiDevice} implementation for the Roland-Boss ME-80.
  * 
@@ -65,6 +66,7 @@ public final class MidiDevice_Me80
     registerParameters_Me80_System ();
     registerParameters_Me80_TemporaryPatch ();
     registerParameters_Me80_FootVolume ();
+    registerParameters_Me80_Patches ();
     registerParameters_Me80_Commands ();
     registerParameters_Me80_TODO ();
   }
@@ -1139,17 +1141,67 @@ public final class MidiDevice_Me80
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
+  // PARAMETERS - [USER/PRESET] PATCHES
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  private void registerParameters_Me80_Patches ()
+  {   
+    byte patchCounter = 1; // Start with 1, hence with 0x20010000 for U1.1; note that 0x20000000 is the temporary patch.
+    for (final JMe80Panel_PatchSelector.ME80_BANK me80_bank : JMe80Panel_PatchSelector.ME80_BANK.values ())
+      for (final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK me80_patch_in_bank :
+        JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK.values ())
+      {
+        registerParameter (new ParameterDescriptor_RolandBoss (
+          toParameterName (me80_bank, me80_patch_in_bank),
+          byte[].class,
+          new byte[]{0x20, patchCounter++, 0x00, 0x00},
+          new byte[]{0x00, 0x00, 0x00, PATCH_SIZE},
+          null));
+      }
+  }
+  
+  /** Returns the parameter name of a specific patch in the ME'80's patch bank.
+   * 
+   * @param me80_bank          The bank, non-{@code null}.
+   * @param me80_patch_in_bank The patch in the specified bank, non-{@code null}.
+   * 
+   * @return The parameter name (in the {@link #keySet} of this device) of the specified patch in the ME-80's patch bank.
+   * 
+   */
+  public static String toParameterName
+  (final JMe80Panel_PatchSelector.ME80_BANK me80_bank,
+   final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK me80_patch_in_bank)
+  {
+    return "patch." + me80_bank.name ().trim ().toLowerCase () + "." + me80_patch_in_bank.name ().trim ().toLowerCase ();
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
   // PARAMETERS - COMMANDS
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  public final static String COMMAND_PATCH_WRITE_NAME = "command.patch_write";
+  public final static String COMMAND_PATCH_WRITE_NAME     = "command.patch_write";
+  public final static String COMMAND_USB_DIRECT_MON_NAME  = "command.usb_direct_mon";
+  public final static String COMMAND_USB_IN_OUT_MODE_NAME = "command.usb_in_out_mode";
   
   private void registerParameters_Me80_Commands ()
   {
     
+    // I do not think we really need this 'command' since we can directly write the patch banks...
     registerParameter (new ParameterDescriptor_RolandBoss (COMMAND_PATCH_WRITE_NAME, byte[].class,
+      ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.NONE,
       new byte[]{0x7F, 0x00, 0x01, 0x04}, new byte[]{0x00, 0x00, 0x00, 0x02}, null));
+    registerParameter (new ParameterDescriptor_RolandBoss (COMMAND_USB_DIRECT_MON_NAME, Boolean.class,
+      ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.BOOLEAN_IN_BYTE,
+      new byte[]{0x7F, 0x00, 0x06, 0x00}, new byte[]{0x00, 0x00, 0x00, 0x01}, null));
+    addRQ1Request (COMMAND_USB_DIRECT_MON_NAME);
+    // I do not know what this parameter does... But i'd like to try...
+    registerParameter (new ParameterDescriptor_RolandBoss (COMMAND_USB_IN_OUT_MODE_NAME, Integer.class,
+      ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.INT_IN_BYTE,
+      new byte[]{0x7F, 0x00, 0x06, 0x01}, new byte[]{0x00, 0x00, 0x00, 0x01}, null));
+    addRQ1Request (COMMAND_USB_IN_OUT_MODE_NAME);
     
   }
   
@@ -1337,6 +1389,40 @@ public final class MidiDevice_Me80
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // WRITE PATCH TO DEVICE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /** Writes a patch to a specific user patch bank on the ME-80.
+   * 
+   * @param patch             The patch, non-{@code null} and of proper size.
+   * @param targetBank        The bank to which to write, must be non-{@code null} and a user bank (U1 through U9).
+   * @param targetPatchInBank The patch to write (in the specific bank), non-{@code null}.
+   * 
+   * @throws IllegalArgumentException If any argument is {@code null}.
+   *                                  the byte array is not of the right size,
+   *                                  or a preset bank has been supplied.
+   * 
+   * @see MidiDevice_Me80_Base#PATCH_SIZE
+   * 
+   */
+  public final void writePatchToDevice
+  ( final byte[] patch,
+    final JMe80Panel_PatchSelector.ME80_BANK targetBank,
+    final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK targetPatchInBank)
+  {
+    if (patch == null || patch.length != MidiDevice_Me80_Base.PATCH_SIZE)
+      throw new IllegalArgumentException ();
+    if (targetBank == null || ! targetBank.isUserBank ())
+      throw new IllegalArgumentException ();
+    if (targetPatchInBank == null)
+      throw new IllegalArgumentException ();
+    // LOG.log (Level.INFO, "Writing {0} to {1}.{2}.", new Object[]{HexUtils.bytesToHex (patch), targetBank, targetPatchInBank});
+    put (toParameterName (targetBank, targetPatchInBank), patch);
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
