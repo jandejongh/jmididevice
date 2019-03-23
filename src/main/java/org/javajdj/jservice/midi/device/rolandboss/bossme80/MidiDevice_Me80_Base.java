@@ -18,8 +18,10 @@ package org.javajdj.jservice.midi.device.rolandboss.bossme80;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +40,8 @@ import org.javajdj.jservice.midi.device.MidiDevice;
  * the temporary patch.
  * These three parameters are periodically requested from the device
  * through RQ1 messages.
+ * Sub-classes may request, within reason, the periodic RQ1 request for
+ * additional parameters, see {@link #addRQ1Request}.
  * 
  * <p>
  * The three parameters are subdivided into more
@@ -111,21 +115,56 @@ public class MidiDevice_Me80_Base
   
   private final long ME80_MAIN_REQUEST_LOOP_PERIOD_MS = 500L;
   
+  private final List<String> RQ1_REQUESTS = new ArrayList<> (Arrays.asList
+  (
+    MidiDevice_Me80_Base.CURRENT_PATCH_NO_RAW_NAME,
+    MidiDevice_Me80_Base.SYSTEM_NAME,
+    MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME
+  ));
+    
+  /** Adds a parameter (by name) to the list of periodic RQ1 requests to the device.
+   * 
+   * <p>
+   * Adding (or removing) parameters through this method is only allowed if this device
+   * is in {@link Status#STOPPED} state.
+   * 
+   * @param parameterName The parameter, must be in the {@link #keySet} of this device.
+   * 
+   * @throws IllegalArgumentException If the parameter name is {@code null} or
+   *                                  the parameter is not in the {@link #keySet} of this device.
+   * @throws RuntimeException If this device is not {@link Status#STOPPED}.
+   * 
+   */
+  protected final synchronized void addRQ1Request (final String parameterName)
+  {
+    if (parameterName == null || ! keySet ().contains (parameterName))
+      throw new IllegalArgumentException ();
+    if (getStatus () != Status.STOPPED)
+      throw new RuntimeException ();
+    this.RQ1_REQUESTS.add (parameterName);
+  }
+  
   private final Runnable me80MainRequestLoop = () ->
   {
     LOG.log (Level.INFO, "Starting Main Request Loop on BOSS ME-80.");
+    if (MidiDevice_Me80_Base.this.RQ1_REQUESTS.size () > 12)
+    {
+      LOG.log (Level.SEVERE, "Too many aggregated RQ1 requests (at most 12 are supported); exiting!");
+      throw new RuntimeException ();
+    }
     try
     {
+      final long PAUSE_BETWEEN_RQ1S_MS = 25L;
       while (! Thread.interrupted ())
       {
         MidiDevice_Me80_Base.this.sendMidiIdReq ();
-        Thread.sleep (50L);
-        MidiDevice_Me80_Base.this.sendMidiSysExMessage_RolandBoss_RQ1 (MidiDevice_Me80_Base.CURRENT_PATCH_NO_RAW_NAME);
-        Thread.sleep (50L);
-        MidiDevice_Me80_Base.this.sendMidiSysExMessage_RolandBoss_RQ1 (MidiDevice_Me80_Base.SYSTEM_NAME);
-        Thread.sleep (100L);
-        MidiDevice_Me80_Base.this.sendMidiSysExMessage_RolandBoss_RQ1 (MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME);
-        Thread.sleep (MidiDevice_Me80_Base.this.ME80_MAIN_REQUEST_LOOP_PERIOD_MS - 200L);
+        for (final String parameter : MidiDevice_Me80_Base.this.RQ1_REQUESTS)
+        {
+          Thread.sleep (PAUSE_BETWEEN_RQ1S_MS);
+          MidiDevice_Me80_Base.this.sendMidiSysExMessage_RolandBoss_RQ1 (parameter);
+        }
+        Thread.sleep (MidiDevice_Me80_Base.this.ME80_MAIN_REQUEST_LOOP_PERIOD_MS
+          - MidiDevice_Me80_Base.this.RQ1_REQUESTS.size () * PAUSE_BETWEEN_RQ1S_MS);
       }
     }
     catch (InterruptedException ie)
