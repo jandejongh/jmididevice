@@ -56,7 +56,7 @@ public class JMidiDeviceParameter_String
     super (midiDevice, displayName, key, columns != null ? new JTextField (columns) : new JTextField ());
     getTextField ().setOpaque (false);
     JTextFieldListener.addJTextFieldListener (getTextField (), this.valueComponentListener);
-    getTextField ().setText ((String) midiDevice.get (key));
+    setValueOnGui ((String) midiDevice.get (key));
   }
   
   public JMidiDeviceParameter_String (final MidiDevice midiDevice,
@@ -83,6 +83,8 @@ public class JMidiDeviceParameter_String
     @Override
     public void actionPerformed ()
     {
+      if (isReadOnly ())
+        return;
       final String newValue = JMidiDeviceParameter_String.this.getTextField ().getText ();
       // LOG.log (Level.INFO, "New value: {0}.", newValue);
       JMidiDeviceParameter_String.this.getMidiDevice ().put (JMidiDeviceParameter_String.this.getKey (), newValue);
@@ -99,17 +101,19 @@ public class JMidiDeviceParameter_String
   protected void dataValueChanged (final String newDataValue)
   {
     super.dataValueChanged (newDataValue);
+    setValueOnGui (newDataValue);
+  }
+    
+  private void setValueOnGui (final String newDataValue)
+  {
     SwingUtilsJdJ.invokeOnSwingEDT (() ->
     {
       getTextField ().setText (newDataValue);
-      if (isReadOnly ())
-      {
-        getTextField ().setEnabled (false);
-        getTextField ().setEditable (false);
-      }
+      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
+      getTextField ().setEditable (newDataValue != null && ! isReadOnly ());
     });
   }
-    
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // READ ONLY

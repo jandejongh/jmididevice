@@ -17,10 +17,10 @@
 package org.javajdj.jservice.midi.device.swing;
 
 import javax.swing.JSlider;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JMidiDeviceParameter} for an {@link Integer}-valued parameter.
  * 
@@ -78,6 +78,8 @@ public class JMidiDeviceParameter_Integer_Slider
     @Override
     public void stateChanged (ChangeEvent ce)
     {
+      if (isReadOnly ())
+        return;
       if (ce.getSource () == JMidiDeviceParameter_Integer_Slider.this.getSlider ())
       {
         if (! JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValueIsAdjusting ())
@@ -103,28 +105,14 @@ public class JMidiDeviceParameter_Integer_Slider
     setValueOnGui (newDataValue);
   }
     
-  private void setValueOnGui (final Integer value)
+  private void setValueOnGui (final Integer newDataValue)
   {
-    if (! SwingUtilities.isEventDispatchThread ())
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
     {
-      SwingUtilities.invokeLater (() -> setValueOnGui (value));
-    }
-    else
-    {
-      if (value == null)
-      {
-        getSlider ().setEnabled (false);
-      }
-      else if (value >= getSlider ().getMinimum () && value <= getSlider ().getMaximum ())
-      {
-        getSlider ().setEnabled (true);
-        getSlider ().setValue (value);
-      }
-      else
-      {
-        getSlider ().setEnabled (false);
-      }
-    }
+      if (newDataValue != null)
+        getSlider ().setValue (newDataValue);
+      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
+    });
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

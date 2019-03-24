@@ -19,8 +19,8 @@ package org.javajdj.jservice.midi.device.swing;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
-import javax.swing.SwingUtilities;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JMidiDeviceParameter} for an {@link Enum}-valued parameter.
  * 
@@ -48,6 +48,7 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
                                    final Class<E> clazz)
   {
     super (midiDevice, displayName, key, new JComboBox<> (clazz.getEnumConstants ()));
+    getComboBox ().setEditable (false); // User is not allowed to modify the entries.
     getComboBox ().addItemListener (new ValueItemListener ());
     setValueOnGui ((E) midiDevice.get (key));
   }
@@ -71,6 +72,8 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
     @Override
     public void itemStateChanged (ItemEvent ie)
     {
+      if (isReadOnly ())
+        return;
       if (ie.getStateChange () == ItemEvent.SELECTED)
       {
         E item = (E) ie.getItem ();
@@ -90,7 +93,7 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   @Override
-  protected void dataValueChanged (E newDataValue)
+  protected void dataValueChanged (final E newDataValue)
   {
     super.dataValueChanged (newDataValue);
     setValueOnGui (newDataValue);
@@ -98,15 +101,11 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
     
   private void setValueOnGui (final E newDataValue)
   {
-    if (! SwingUtilities.isEventDispatchThread ())
-    {
-      SwingUtilities.invokeLater (() -> setValueOnGui (newDataValue));
-    }
-    else
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
     {
       getComboBox ().setSelectedItem (newDataValue);
-      getComboBox ().setEnabled (newDataValue != null);
-    }
+      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
+    });
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

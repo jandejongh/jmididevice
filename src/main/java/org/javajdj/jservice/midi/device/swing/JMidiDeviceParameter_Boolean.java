@@ -54,9 +54,7 @@ public class JMidiDeviceParameter_Boolean
   {
     super (midiDevice, displayName, key, createValueComponent ());
     getCheckBox ().addMouseListener (new ValueMouseListener ());
-    final Boolean value = (Boolean) midiDevice.get (key);
-    getCheckBox ().setDisplayedValue (value);
-    SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants (this, value != null));
+    setValueOnGui ((Boolean) midiDevice.get (key));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +76,8 @@ public class JMidiDeviceParameter_Boolean
     @Override
     public final void mouseClicked (MouseEvent e)
     {
+      if (isReadOnly ())
+        return;
       final Boolean currentValue = JMidiDeviceParameter_Boolean.this.getCheckBox ().getDisplayedValue ();
       final boolean newValue = currentValue != null ? (! currentValue) : true;
       JMidiDeviceParameter_Boolean.this.setDataValue (newValue);
@@ -95,9 +95,18 @@ public class JMidiDeviceParameter_Boolean
   protected void dataValueChanged (final Boolean newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    SwingUtilsJdJ.invokeOnSwingEDT (() -> getCheckBox ().setDisplayedValue (newDataValue));
+    setValueOnGui (newDataValue);
   }
     
+  private void setValueOnGui (final Boolean newDataValue)
+  {
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
+    {
+      getCheckBox ().setDisplayedValue (newDataValue);
+      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
+    });
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE

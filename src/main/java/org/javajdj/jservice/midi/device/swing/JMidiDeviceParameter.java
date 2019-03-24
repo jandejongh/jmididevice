@@ -105,15 +105,30 @@ public class JMidiDeviceParameter<C>
     dataValueChanged (value);
     SwingUtilsJdJ.invokeOnSwingEDT (()->
     {
+      // XXX Many of our sub-classes already do this in #dataValueChanged...
       SwingUtilsJdJ.enableComponentAndDescendants (this, (! JMidiDeviceParameter.this.readOnly) && value != null);
     });
   };
   
   protected void setDataValue (final C newDataValue)
   {
-    getMidiDevice ().put (getKey (), newDataValue);
+    if (! this.readOnly)
+      getMidiDevice ().put (getKey (), newDataValue);
   }
   
+  /** Notification method for sub-classes indicating that a new data value was received from the MIDI device.
+   * 
+   * <p>
+   * Implementations must adapt their GUI component(s) to reflect the new value.
+   * Beware that this method is most likely invoked from a {@link Thread}
+   * <i>other</i> than the Swing EDT.
+   * 
+   * <p>
+   * The default implementation does nothing.
+   * 
+   * @param newDataValue The new value; may be {@code null}.
+   * 
+   */
   protected void dataValueChanged (final C newDataValue)
   {
   }
@@ -143,7 +158,7 @@ public class JMidiDeviceParameter<C>
     if (this.displayName == null || displayName.equals (this.displayName))
       return;
     this.displayName = displayName;
-    SwingUtilsJdJ.invokeOnSwingEDT (() -> this.jDisplayNameComponent.setText (displayName));
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> JMidiDeviceParameter.this.jDisplayNameComponent.setText (displayName));
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +205,7 @@ public class JMidiDeviceParameter<C>
     if (readOnly != this.readOnly)
     {
       this.readOnly = readOnly;
-      SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants (this, ! readOnly));
+      SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants (JMidiDeviceParameter.this, ! readOnly));
     }
   }
   
