@@ -447,7 +447,16 @@ public class JMe80Panel
                   JOptionPane.ERROR_MESSAGE);
                 return;
               }
-              getMidiDevice ().put (MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME, Patch_Me80.fromTlsJsonMap (params).getBytes ());
+              final Patch_Me80 newPatch = Patch_Me80.fromTlsJsonMap (params);
+              if (newPatch == null)
+              {
+                  JOptionPane.showMessageDialog (null,
+                    "Parse Error [JSON parameter map]: " + selectedFile.getAbsolutePath (),
+                    "Problem",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+              }
+              getMidiDevice ().put (MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME, newPatch.getBytes ());
               JMe80Panel_PatchIO.this.jPatchFile.setText (selectedFile.getName ());
               JOptionPane.showMessageDialog (null,
                 "Loaded Patch from " + selectedFile.getAbsolutePath (),
