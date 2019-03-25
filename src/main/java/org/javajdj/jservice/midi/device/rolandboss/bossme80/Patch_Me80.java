@@ -244,8 +244,8 @@ public final class Patch_Me80
     map.put ("comp_sw",   Integer.toString (this.bytes[0x10]));
     map.put ("comp_type", Integer.toString (this.bytes[0x18]));
     map.put ("comp1",     Integer.toString (this.bytes[0x20]));
-    map.put ("comp1",     Integer.toString (this.bytes[0x21]));
-    map.put ("comp1",     Integer.toString (this.bytes[0x22]));
+    map.put ("comp2",     Integer.toString (this.bytes[0x21]));
+    map.put ("comp3",     Integer.toString (this.bytes[0x22]));
     // OD/DS
     map.put ("odds_sw",   Integer.toString (this.bytes[0x11]));
     map.put ("odds_type", Integer.toString (this.bytes[0x19]));
