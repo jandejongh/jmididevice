@@ -16,6 +16,11 @@
  */
 package org.javajdj.jservice.midi.device.rolandboss;
 
+import java.util.List;
+import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 /** MIDI utility class specific to Roland (and Boss) devices.
  *
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
@@ -102,6 +107,32 @@ public class MidiUtils_RolandBoss
     return (remainder == 0) ? ((byte) 0) : (byte) (128 - remainder);
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // PATCH [LIB] FILE I/O [ROLAND-BOSS - TSL]
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public static JSONObject constructTslJsonObject_ME80 (final List<Map<String, Object>> patchMaps)
+  {
+    if (patchMaps == null)
+      throw new IllegalArgumentException ();
+    final JSONObject jsonObject = new JSONObject ();
+    jsonObject.put ("device", "ME-80");
+    jsonObject.put ("version", "1.0.0");
+    final JSONArray jsonPatchList = new JSONArray ();
+    for (final Map<String, Object> patchMap : patchMaps)
+    {
+      final JSONObject jsonPatch = new JSONObject ();
+      jsonPatch.put ("note", null);
+      final JSONObject jsonPatchParams = new JSONObject (patchMap);
+      jsonPatch.put ("params", jsonPatchParams);
+      jsonPatchList.add (jsonPatch);
+    }
+    jsonObject.put ("patchList", jsonPatchList);
+    return jsonObject;
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
