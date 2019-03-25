@@ -255,7 +255,7 @@ public abstract class AbstractMidiDevice_RolandBoss<D extends ParameterDescripto
           final byte[] data = new byte[length];
           System.arraycopy (rawMidiMessage, 12, data, 0, length);
           // LOG.log (Level.INFO, "onMidiRxSysEx, key={0}", pd.getParameterName ());
-          AbstractMidiDevice_RolandBoss.this.onParameterReadFromDevice (pd.getParameterName (), data);
+          onParameterReadFromDevice (pd.getParameterName (), data);
         }
       }
     }
