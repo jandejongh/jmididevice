@@ -138,9 +138,9 @@ public final class Patch_Me80
    * 
    * @param jsonMap The map, non-{@code null}.
    * 
-   * @return The patch.
+   * @return The patch, {@code null} if the map argument is invalid (for the ME-80).
    *
-   * @throws IllegalArgumentException If {@code jsonMap == null} or has invalid structure (in JSON or TLS sense).
+   * @throws IllegalArgumentException If {@code jsonMap == null}.
    * 
    */
   public static Patch_Me80 fromTlsJsonMap (final Map<String, Object> jsonMap)
@@ -148,80 +148,96 @@ public final class Patch_Me80
     if (jsonMap == null)
       throw new IllegalArgumentException ();
     final byte[] bytes = new byte[MidiDevice_Me80_Base.PATCH_SIZE];
-    // Name
-    final String patchName = (String) jsonMap.get ("patchname");
-    if (patchName == null)
-      throw new IllegalArgumentException ();
-    // COMP
-    bytes[0x10] = (byte) Integer.parseInt ((String) jsonMap.get ("comp_sw"));
-    bytes[0x18] = (byte) Integer.parseInt ((String) jsonMap.get ("comp_type"));
-    bytes[0x20] = (byte) Integer.parseInt ((String) jsonMap.get ("comp1"));
-    bytes[0x21] = (byte) Integer.parseInt ((String) jsonMap.get ("comp2"));
-    bytes[0x22] = (byte) Integer.parseInt ((String) jsonMap.get ("comp3"));
-    // OD/DS
-    bytes[0x11] = (byte) Integer.parseInt ((String) jsonMap.get ("odds_sw"));
-    bytes[0x19] = (byte) Integer.parseInt ((String) jsonMap.get ("odds_type"));
-    bytes[0x23] = (byte) Integer.parseInt ((String) jsonMap.get ("odds1"));
-    bytes[0x24] = (byte) Integer.parseInt ((String) jsonMap.get ("odds2"));
-    bytes[0x25] = (byte) Integer.parseInt ((String) jsonMap.get ("odds3"));
-    // MOD
-    bytes[0x12] = (byte) Integer.parseInt ((String) jsonMap.get ("mod_sw"));
-    bytes[0x1A] = (byte) Integer.parseInt ((String) jsonMap.get ("mod_type"));
-    bytes[0x26] = (byte) Integer.parseInt ((String) jsonMap.get ("mod1"));
-    bytes[0x27] = (byte) Integer.parseInt ((String) jsonMap.get ("mod2"));
-    bytes[0x28] = (byte) Integer.parseInt ((String) jsonMap.get ("mod3"));
-    // DELAY
-    bytes[0x13] = (byte) Integer.parseInt ((String) jsonMap.get ("dly_sw"));
-    bytes[0x1B] = (byte) Integer.parseInt ((String) jsonMap.get ("dly_type"));
-    bytes[0x29] = (byte) Integer.parseInt ((String) jsonMap.get ("dly1"));
-    bytes[0x2A] = (byte) Integer.parseInt ((String) jsonMap.get ("dly2"));
-    bytes[0x2B] = (byte) Integer.parseInt ((String) jsonMap.get ("dly3"));
-    // AMP
-    bytes[0x14] = (byte) Integer.parseInt ((String) jsonMap.get ("amp_sw"));
-    bytes[0x1C] = (byte) Integer.parseInt ((String) jsonMap.get ("amp_type"));
-    bytes[0x2C] = (byte) Integer.parseInt ((String) jsonMap.get ("amp1"));
-    bytes[0x2D] = (byte) Integer.parseInt ((String) jsonMap.get ("amp2"));
-    bytes[0x2E] = (byte) Integer.parseInt ((String) jsonMap.get ("amp3"));
-    bytes[0x2F] = (byte) Integer.parseInt ((String) jsonMap.get ("amp4"));
-    bytes[0x30] = (byte) Integer.parseInt ((String) jsonMap.get ("amp5"));
-    // EQ/FX2
-    bytes[0x15] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_sw"));
-    bytes[0x1D] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_type"));
-    bytes[0x31] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_1"));
-    bytes[0x32] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_2"));
-    bytes[0x33] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_3"));
-    bytes[0x34] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_4"));
-    // REVERB
-    bytes[0x16] = (byte) Integer.parseInt ((String) jsonMap.get ("rev_sw"));
-    bytes[0x1F] = (byte) Integer.parseInt ((String) jsonMap.get ("rev_type"));
-    bytes[0x3A] = (byte) Integer.parseInt ((String) jsonMap.get ("rev"));
-    // PEDAL/FX
-    bytes[0x17] = (byte) Integer.parseInt ((String) jsonMap.get ("pdlfx_sw"));
-    bytes[0x1E] = (byte) Integer.parseInt ((String) jsonMap.get ("pdlfx_type"));
-    // NS
-    bytes[0x39] = (byte) Integer.parseInt ((String) jsonMap.get ("ns_thresh"));
-    // CTL
-    bytes[0x35] = (byte) Integer.parseInt ((String) jsonMap.get ("ctl_target_h"));
-    bytes[0x36] = (byte) Integer.parseInt ((String) jsonMap.get ("ctl_target_l"));
-    bytes[0x37] = (byte) Integer.parseInt ((String) jsonMap.get ("ctrl_knob_value"));
-    bytes[0x38] = (byte) Integer.parseInt ((String) jsonMap.get ("ctl_mode"));
-    // BPM
-    final int modulationBpm = Integer.parseInt ((String) jsonMap.get ("modulation_bpm"));
-    bytes[0x3B] = (byte) ((modulationBpm & 0xff00) >>> 8);
-    bytes[0x3C] = (byte) (modulationBpm & 0xff);
-    final int delayBpm = Integer.parseInt ((String) jsonMap.get ("delay_bpm"));
-    bytes[0x3D] = (byte) ((delayBpm & 0xff00) >>> 8);
-    bytes[0x3E] = (byte) (delayBpm & 0xff);
-    // DUMMY
-    // bytes[0x3F] value_dummy_1[h] value_dummy_1_h
-    // bytes[0x40] value_dummy_1[l] value_dummy_1_l
-    // bytes[0x41] value_dummy_2[h] value_dummy_2_h
-    // bytes[0x42] value_dummy_2[l] value_dummy_2_l
-    // bytes[0x43] value_dummy_3[h] value_dummy_3_h
-    // bytes[0x44] value_dummy_3[l] value_dummy_3_l
-    // bytes[0x45] value_dummy_4[h] value_dummy_4_h
-    // bytes[0x46] value_dummy_4[l] value_dummy_4_l
-    return new Patch_Me80 (bytes).withName (patchName);
+    try
+    {
+      // Name
+      final String patchName = (String) jsonMap.get ("patchname");
+      if (patchName == null)
+      {
+        LOG.log (Level.WARNING, "No patchname key.");
+        return null;        
+      }
+      // COMP
+      bytes[0x10] = (byte) Integer.parseInt ((String) jsonMap.get ("comp_sw"));
+      bytes[0x18] = (byte) Integer.parseInt ((String) jsonMap.get ("comp_type"));
+      bytes[0x20] = (byte) Integer.parseInt ((String) jsonMap.get ("comp1"));
+      bytes[0x21] = (byte) Integer.parseInt ((String) jsonMap.get ("comp2"));
+      bytes[0x22] = (byte) Integer.parseInt ((String) jsonMap.get ("comp3"));
+      // OD/DS
+      bytes[0x11] = (byte) Integer.parseInt ((String) jsonMap.get ("odds_sw"));
+      bytes[0x19] = (byte) Integer.parseInt ((String) jsonMap.get ("odds_type"));
+      bytes[0x23] = (byte) Integer.parseInt ((String) jsonMap.get ("odds1"));
+      bytes[0x24] = (byte) Integer.parseInt ((String) jsonMap.get ("odds2"));
+      bytes[0x25] = (byte) Integer.parseInt ((String) jsonMap.get ("odds3"));
+      // MOD
+      bytes[0x12] = (byte) Integer.parseInt ((String) jsonMap.get ("mod_sw"));
+      bytes[0x1A] = (byte) Integer.parseInt ((String) jsonMap.get ("mod_type"));
+      bytes[0x26] = (byte) Integer.parseInt ((String) jsonMap.get ("mod1"));
+      bytes[0x27] = (byte) Integer.parseInt ((String) jsonMap.get ("mod2"));
+      bytes[0x28] = (byte) Integer.parseInt ((String) jsonMap.get ("mod3"));
+      // DELAY
+      bytes[0x13] = (byte) Integer.parseInt ((String) jsonMap.get ("dly_sw"));
+      bytes[0x1B] = (byte) Integer.parseInt ((String) jsonMap.get ("dly_type"));
+      bytes[0x29] = (byte) Integer.parseInt ((String) jsonMap.get ("dly1"));
+      bytes[0x2A] = (byte) Integer.parseInt ((String) jsonMap.get ("dly2"));
+      bytes[0x2B] = (byte) Integer.parseInt ((String) jsonMap.get ("dly3"));
+      // AMP
+      bytes[0x14] = (byte) Integer.parseInt ((String) jsonMap.get ("amp_sw"));
+      bytes[0x1C] = (byte) Integer.parseInt ((String) jsonMap.get ("amp_type"));
+      bytes[0x2C] = (byte) Integer.parseInt ((String) jsonMap.get ("amp1"));
+      bytes[0x2D] = (byte) Integer.parseInt ((String) jsonMap.get ("amp2"));
+      bytes[0x2E] = (byte) Integer.parseInt ((String) jsonMap.get ("amp3"));
+      bytes[0x2F] = (byte) Integer.parseInt ((String) jsonMap.get ("amp4"));
+      bytes[0x30] = (byte) Integer.parseInt ((String) jsonMap.get ("amp5"));
+      // EQ/FX2
+      bytes[0x15] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_sw"));
+      bytes[0x1D] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_type"));
+      bytes[0x31] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_1"));
+      bytes[0x32] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_2"));
+      bytes[0x33] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_3"));
+      bytes[0x34] = (byte) Integer.parseInt ((String) jsonMap.get ("fx2_4"));
+      // REVERB
+      bytes[0x16] = (byte) Integer.parseInt ((String) jsonMap.get ("rev_sw"));
+      bytes[0x1F] = (byte) Integer.parseInt ((String) jsonMap.get ("rev_type"));
+      bytes[0x3A] = (byte) Integer.parseInt ((String) jsonMap.get ("rev"));
+      // PEDAL/FX
+      bytes[0x17] = (byte) Integer.parseInt ((String) jsonMap.get ("pdlfx_sw"));
+      bytes[0x1E] = (byte) Integer.parseInt ((String) jsonMap.get ("pdlfx_type"));
+      // NS
+      bytes[0x39] = (byte) Integer.parseInt ((String) jsonMap.get ("ns_thresh"));
+      // CTL
+      bytes[0x35] = (byte) Integer.parseInt ((String) jsonMap.get ("ctl_target_h"));
+      bytes[0x36] = (byte) Integer.parseInt ((String) jsonMap.get ("ctl_target_l"));
+      bytes[0x37] = (byte) Integer.parseInt ((String) jsonMap.get ("ctrl_knob_value"));
+      bytes[0x38] = (byte) Integer.parseInt ((String) jsonMap.get ("ctl_mode"));
+      // BPM
+      final int modulationBpm = Integer.parseInt ((String) jsonMap.get ("modulation_bpm"));
+      bytes[0x3B] = (byte) ((modulationBpm & 0xff00) >>> 8);
+      bytes[0x3C] = (byte) (modulationBpm & 0xff);
+      final int delayBpm = Integer.parseInt ((String) jsonMap.get ("delay_bpm"));
+      bytes[0x3D] = (byte) ((delayBpm & 0xff00) >>> 8);
+      bytes[0x3E] = (byte) (delayBpm & 0xff);
+      // DUMMY
+      // bytes[0x3F] value_dummy_1[h] value_dummy_1_h
+      // bytes[0x40] value_dummy_1[l] value_dummy_1_l
+      // bytes[0x41] value_dummy_2[h] value_dummy_2_h
+      // bytes[0x42] value_dummy_2[l] value_dummy_2_l
+      // bytes[0x43] value_dummy_3[h] value_dummy_3_h
+      // bytes[0x44] value_dummy_3[l] value_dummy_3_l
+      // bytes[0x45] value_dummy_4[h] value_dummy_4_h
+      // bytes[0x46] value_dummy_4[l] value_dummy_4_l
+      return new Patch_Me80 (bytes).withName (patchName);
+    }
+    catch (NumberFormatException nfe)
+    {
+      LOG.log (Level.WARNING, "NumberFormatException: Map argument probably invalid; misses keys?.");
+      return null;
+    }
+    catch (ClassCastException cce)
+    {
+      LOG.log (Level.WARNING, "ClassCastException: Map argument probably invalid; value(s) of wrong type?.");
+      return null;
+    }
   }
 
   /** Returns a map (for further JSON/TSL-format processing) describing this patch.
