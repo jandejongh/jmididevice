@@ -71,7 +71,7 @@ public class JTargetPatchSelectorDialog_Me80
     final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK initialPatchInBank)
   {
     
-    super (frame, "Select Target Patch", true);
+    super (frame, "Select Target Patch on ME-80", true);
     
     getContentPane ().setLayout (new BoxLayout (getContentPane (), BoxLayout.Y_AXIS));
     
