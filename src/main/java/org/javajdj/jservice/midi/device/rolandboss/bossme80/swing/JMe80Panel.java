@@ -19,19 +19,30 @@ package org.javajdj.jservice.midi.device.rolandboss.bossme80.swing;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileSystemView;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
+import org.javajdj.jservice.midi.device.rolandboss.MidiUtils_RolandBoss;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80_Base;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.Patch_Me80;
@@ -45,6 +56,10 @@ import org.javajdj.jservice.midi.swing.JRawMidiService;
 import org.javajdj.swing.DefaultMouseListener;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /** A {@link JPanel} for controlling and monitoring a Boss ME-80.
  *
@@ -221,6 +236,22 @@ public class JMe80Panel
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
+  // MIDI
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  // See JMidiService and/or JRawMidiService in separate files.
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // ME80 [Device]
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  // See JMe80Panel_Device in separate file.
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
   // SYS
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,6 +328,8 @@ public class JMe80Panel
     extends JMidiDeviceParameter<byte[]>
   {
 
+    private final Function<Object, Color> BUTTON_COLOR_FUNCTION = (final Object t) -> Color.blue.darker ();
+      
     public JMe80Panel_PatchIO (final MidiDevice midiDevice)
     {
       
@@ -305,7 +338,7 @@ public class JMe80Panel
       setLayout (new GridLayout (10, 2, 2, 2));
       
       add (new JLabel ("Write Patch > ME-80"));
-      final JComponent jWrite = new JColorCheckBox ((final Object o) -> Color.blue.darker ());
+      final JComponent jWrite = new JColorCheckBox (BUTTON_COLOR_FUNCTION);
       jWrite.addMouseListener (new DefaultMouseListener ()
       {
         @Override
@@ -333,15 +366,17 @@ public class JMe80Panel
           synchronized (JMe80Panel_PatchIO.this.temporaryPatchLock)
           {
             patch = JMe80Panel_PatchIO.this.temporaryPatch;
-            initialName = JMe80Panel_PatchIO.this.temporaryPatch != null ? JMe80Panel_PatchIO.this.temporaryPatch.getName () : null;
+            initialName = JMe80Panel_PatchIO.this.temporaryPatch != null
+              ? JMe80Panel_PatchIO.this.temporaryPatch.getName ()
+              : null;
           }
           if (patch == null)
           {
             JOptionPane.showMessageDialog (null,
-            "No patch data!",
-            "Problem",
-            JOptionPane.ERROR_MESSAGE);
-            return;
+              "No patch data!",
+              "Problem",
+              JOptionPane.ERROR_MESSAGE);
+              return;
           }
           final JTargetPatchSelectorDialog_Me80 dialog
             = new JTargetPatchSelectorDialog_Me80 (null, initialName, initialBank, initialPatchInBank);
@@ -354,9 +389,9 @@ public class JMe80Panel
             final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK patchInBank = dialog.getPatchInBank ();
             ((MidiDevice_Me80) getMidiDevice ()).writePatchToDevice (patch.withName (patchName).getBytes (), bank, patchInBank);
             JOptionPane.showMessageDialog (null,
-            "Saved Patch!",
-            "Message",
-            JOptionPane.INFORMATION_MESSAGE);
+              "Saved Patch to ME-80::" + bank + "." + patchInBank + "!",
+              "Message",
+              JOptionPane.INFORMATION_MESSAGE);
           }
         }
       });
@@ -366,19 +401,143 @@ public class JMe80Panel
       add (new JLabel ());
       
       add (new JLabel ("Load Patch"));
-      add (new JColorCheckBox ((final Object o) -> Color.blue.darker ()));
-      
-      add (new JLabel ("Patch File"));
-      final JTextField jPatchFile = new JTextField ();
-      jPatchFile.setOpaque (false);
-      jPatchFile.setEditable (false);
-      add (jPatchFile);
+      final JComponent jLoadPatch = new JColorCheckBox (BUTTON_COLOR_FUNCTION);
+      jLoadPatch.addMouseListener (new DefaultMouseListener ()
+      {
+        @Override
+        public void mouseClicked (final MouseEvent me)
+        {
+          final JFileChooser jfc = new JFileChooser (FileSystemView.getFileSystemView ().getHomeDirectory ());
+          jfc.setDialogTitle ("Load Patch");
+          final int returnValue = jfc.showOpenDialog (null);
+          if (returnValue == JFileChooser.APPROVE_OPTION)
+          {
+            final File selectedFile = jfc.getSelectedFile ();
+            final JSONParser parser = new JSONParser ();
+            try
+            {
+              final FileReader fileReader = new FileReader (selectedFile);
+              final JSONObject jsonObject = (JSONObject) parser.parse (fileReader);
+              final String device = (String) jsonObject.get ("device");
+              if (device == null || ! device.equals ("ME-80"))
+              {
+                JOptionPane.showMessageDialog (null,
+                  "Parse Error [not a patch file for ME-80?]: " + selectedFile.getAbsolutePath (),
+                  "Problem",
+                  JOptionPane.ERROR_MESSAGE);
+                return;
+                
+              }
+              final JSONArray patchList = (JSONArray) jsonObject.get ("patchList");
+              if (patchList == null || patchList.size () != 1)
+              {
+                JOptionPane.showMessageDialog (null,
+                  "Parse Error [zero or multiple patch lists]: " + selectedFile.getAbsolutePath (),
+                  "Problem",
+                  JOptionPane.ERROR_MESSAGE);
+                return;
+              }
+              final JSONObject patch = (JSONObject) patchList.get (0);
+              final JSONObject params = (JSONObject) patch.get ("params");
+              if (params == null)
+              {
+                JOptionPane.showMessageDialog (null,
+                  "Parse Error [zero or multiple patch lists]: " + selectedFile.getAbsolutePath (),
+                  "Problem",
+                  JOptionPane.ERROR_MESSAGE);
+                return;
+              }
+              getMidiDevice ().put (MidiDevice_Me80_Base.TEMPORARY_PATCH_NAME, Patch_Me80.fromTlsJsonMap (params).getBytes ());
+              JMe80Panel_PatchIO.this.jPatchFile.setText (selectedFile.getName ());
+              JOptionPane.showMessageDialog (null,
+                "Loaded Patch from " + selectedFile.getAbsolutePath (),
+                "Message",
+                JOptionPane.INFORMATION_MESSAGE);            
+            }
+            catch (FileNotFoundException fnfe)
+            {
+              JOptionPane.showMessageDialog (null,
+                "File Not Found: " + selectedFile.getAbsolutePath (),
+                "Problem",
+                JOptionPane.ERROR_MESSAGE);
+            }
+            catch (IOException ioe)
+            {
+              JOptionPane.showMessageDialog (null,
+                "I/O Error: " + selectedFile.getAbsolutePath (),
+                "Problem",
+                JOptionPane.ERROR_MESSAGE);
+            }
+            catch (ParseException pe)
+            {
+              JOptionPane.showMessageDialog (null,
+                "Parse Error: " + selectedFile.getAbsolutePath (),
+                "Problem",
+                JOptionPane.ERROR_MESSAGE);              
+            }
+          }
+        }
+      });
+      add (jLoadPatch);
       
       add (new JLabel ("Save Patch"));
-      add (new JColorCheckBox ((final Object o) -> Color.blue.darker ()));
+      final JComponent jSavePatch = new JColorCheckBox (BUTTON_COLOR_FUNCTION);
+      jSavePatch.addMouseListener (new DefaultMouseListener ()
+      {
+        @Override
+        public void mouseClicked (final MouseEvent me)
+        {
+          final Patch_Me80 patch;
+          synchronized (JMe80Panel_PatchIO.this.temporaryPatchLock)
+          {
+            patch = JMe80Panel_PatchIO.this.temporaryPatch;
+          }
+          if (patch == null)
+          {
+            JOptionPane.showMessageDialog (null,
+              "No patch data!",
+              "Problem",
+              JOptionPane.ERROR_MESSAGE);
+              return;
+          }
+          final JFileChooser jfc = new JFileChooser (FileSystemView.getFileSystemView ().getHomeDirectory ());
+          jfc.setDialogTitle ("Save Patch");
+          final int returnValue = jfc.showOpenDialog (null);
+          if (returnValue == JFileChooser.APPROVE_OPTION)
+          {
+            final File selectedFile = jfc.getSelectedFile ();
+            try (final FileWriter file = new FileWriter (selectedFile))
+            {
+              final List<Map<String, Object>> jsonPatchMapList = Collections.singletonList (patch.toTlsJsonMap ());
+              final JSONObject jsonObject = MidiUtils_RolandBoss.constructTslJsonObject_ME80 (jsonPatchMapList);
+              file.write (jsonObject.toJSONString ());
+              file.flush ();
+              JMe80Panel_PatchIO.this.jPatchFile.setText (selectedFile.getName ());
+              JOptionPane.showMessageDialog (null,
+                "Saved Patch in " + selectedFile.getAbsolutePath (),
+                "Message",
+                JOptionPane.INFORMATION_MESSAGE);            
+            }
+            catch (IOException ie)
+            {
+              JOptionPane.showMessageDialog (null,
+                "I/O Error: " + selectedFile.getAbsolutePath (),
+                "Problem",
+                JOptionPane.ERROR_MESSAGE);
+            }
+          }
+        }
+      });
+      add (jSavePatch);
       
-      add (new JLabel ("Save Patch As"));
-      add (new JColorCheckBox ((final Object o) -> Color.blue.darker ()));
+      add (new JLabel ("Patch File"));
+      this.jPatchFile = new JTextField ();
+      this.jPatchFile.setOpaque (false);
+      this.jPatchFile.setEditable (false);
+      add (this.jPatchFile);
+      
+      add (new JLabel ());
+      add (new JLabel ());
       
       add (new JLabel ());
       add (new JLabel ());
@@ -411,6 +570,7 @@ public class JMe80Panel
       }
     }
 
+    private final JTextField jPatchFile;
     
   }
 
@@ -420,6 +580,8 @@ public class JMe80Panel
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // See JMe80Panel_PatchSelector in separate file.
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // COMP
@@ -580,7 +742,7 @@ public class JMe80Panel
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // PEDAL/FX
+  // [MISC] PEDAL/FX
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -603,7 +765,7 @@ public class JMe80Panel
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // NS
+  // [MISC] NS
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -623,7 +785,7 @@ public class JMe80Panel
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // FOOT VOLUME / EXPRESSION
+  // [MISC] FOOT VOLUME / EXPRESSION
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -955,6 +1117,14 @@ public class JMe80Panel
 
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // CTL
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  // See JMe80Panel_CTL in separate file.
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
