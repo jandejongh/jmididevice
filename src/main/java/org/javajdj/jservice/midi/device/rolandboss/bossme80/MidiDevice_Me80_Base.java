@@ -30,6 +30,7 @@ import org.javajdj.jservice.midi.device.rolandboss.AbstractMidiDevice_RolandBoss
 import org.javajdj.jservice.midi.device.rolandboss.ParameterDescriptor_RolandBoss;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.jservice.support.Service_FromMix;
 
 /** A {@link MidiDevice} implementation (base part) for the Roland-Boss ME-80.
  * 
@@ -47,6 +48,14 @@ import org.javajdj.jservice.midi.device.MidiDevice;
  * The three parameters are subdivided into more
  * detailed (sub-)parameters in
  * {@link MidiDevice_Me80}.
+ * 
+ * <p>
+ * In addition to parameter registration,
+ * this class hands two {@link Runnable}s to the
+ * super {@link Service_FromMix},
+ * one that acts as a watchdog for the device (monitoring reception of ID SysEx messages),
+ * and one periodically requesting the id and the values of registered parameters
+ * from the device.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
