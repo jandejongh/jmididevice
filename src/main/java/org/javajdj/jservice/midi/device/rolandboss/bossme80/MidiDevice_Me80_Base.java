@@ -36,7 +36,7 @@ import org.javajdj.jservice.midi.device.MidiDevice;
  * <p>
  * The base part registers only three parameters:
  * The current patch number,
- * the system setting, and
+ * the system settings, and
  * the temporary patch.
  * These three parameters are periodically requested from the device
  * through RQ1 messages.
