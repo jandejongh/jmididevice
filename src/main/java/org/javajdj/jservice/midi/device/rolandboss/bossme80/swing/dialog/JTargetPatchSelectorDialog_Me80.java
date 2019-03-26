@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-import org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80Panel_PatchSelector;
+import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80_Base;
 
 /** A {@link JDialog} requesting a target bank and patch on an ME-80, as well as a patch name.
  *
@@ -67,8 +67,8 @@ public class JTargetPatchSelectorDialog_Me80
   public JTargetPatchSelectorDialog_Me80
   ( final Frame frame,
     final String initialName,
-    final JMe80Panel_PatchSelector.ME80_BANK initialBank,
-    final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK initialPatchInBank)
+    final MidiDevice_Me80_Base.ME80_BANK initialBank,
+    final MidiDevice_Me80_Base.ME80_PATCH_IN_BANK initialPatchInBank)
   {
     
     super (frame, "Select Target Patch on ME-80", true);
@@ -89,9 +89,9 @@ public class JTargetPatchSelectorDialog_Me80
     final JPanel jBank = new JPanel ();
     jBank.setLayout (new GridLayout (1, 9, 10, 10));
     final ButtonGroup bankButtonGroup = new ButtonGroup ();
-    final EnumSet<JMe80Panel_PatchSelector.ME80_BANK> userBanks
-      = EnumSet.range (JMe80Panel_PatchSelector.ME80_BANK.U1, JMe80Panel_PatchSelector.ME80_BANK.U9);
-    for (final JMe80Panel_PatchSelector.ME80_BANK me80_bank : userBanks)
+    final EnumSet<MidiDevice_Me80_Base.ME80_BANK> userBanks
+      = EnumSet.range (MidiDevice_Me80_Base.ME80_BANK.U1, MidiDevice_Me80_Base.ME80_BANK.U9);
+    for (final MidiDevice_Me80_Base.ME80_BANK me80_bank : userBanks)
     {
       final JRadioButton jRadioButton = new JRadioButton (me80_bank.toString ());
       if (me80_bank == initialBank)
@@ -116,9 +116,9 @@ public class JTargetPatchSelectorDialog_Me80
     final JPanel jPatch = new JPanel ();
     jPatch.setLayout (new GridLayout (1, 4, 10, 10));
     final ButtonGroup patchButtonGroup = new ButtonGroup ();
-    final EnumSet<JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK> userPatches
-      = EnumSet.range (JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK.PIB_1, JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK.PIB_4);
-    for (final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK me80_patch_in_bank : userPatches)
+    final EnumSet<MidiDevice_Me80_Base.ME80_PATCH_IN_BANK> userPatches
+      = EnumSet.range (MidiDevice_Me80_Base.ME80_PATCH_IN_BANK.PIB_1, MidiDevice_Me80_Base.ME80_PATCH_IN_BANK.PIB_4);
+    for (final MidiDevice_Me80_Base.ME80_PATCH_IN_BANK me80_patch_in_bank : userPatches)
     {
       final JRadioButton jRadioButton = new JRadioButton (me80_patch_in_bank.toString ());
       if (JTargetPatchSelectorDialog_Me80.this.me80_bank != null && me80_patch_in_bank == initialPatchInBank)
@@ -231,7 +231,7 @@ public class JTargetPatchSelectorDialog_Me80
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private JMe80Panel_PatchSelector.ME80_BANK me80_bank;
+  private MidiDevice_Me80_Base.ME80_BANK me80_bank;
   
   /** Returns the selected bank.
    * 
@@ -244,7 +244,7 @@ public class JTargetPatchSelectorDialog_Me80
    * @see #getPatchInBank
    * 
    */
-  public final JMe80Panel_PatchSelector.ME80_BANK getBank ()
+  public final MidiDevice_Me80_Base.ME80_BANK getBank ()
   {
     if (this.ok)
       return this.me80_bank;
@@ -258,7 +258,7 @@ public class JTargetPatchSelectorDialog_Me80
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK me80_patch_in_bank;
+  private MidiDevice_Me80_Base.ME80_PATCH_IN_BANK me80_patch_in_bank;
   
   /** Returns the selected patch in the (selected) bank.
    * 
@@ -271,7 +271,7 @@ public class JTargetPatchSelectorDialog_Me80
    * @see #getBank
    * 
    */
-  public final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK getPatchInBank ()
+  public final MidiDevice_Me80_Base.ME80_PATCH_IN_BANK getPatchInBank ()
   {
     if (this.ok)
       return this.me80_patch_in_bank;

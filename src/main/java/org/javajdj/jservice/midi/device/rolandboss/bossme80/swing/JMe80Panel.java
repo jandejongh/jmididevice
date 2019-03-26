@@ -347,11 +347,11 @@ public class JMe80Panel
           final Patch_Me80 patch; 
           final String initialName;
           final Integer currentPatchNo = (Integer) getMidiDevice ().get (MidiDevice_Me80.CURRENT_PATCH_NO_NAME);
-          final JMe80Panel_PatchSelector.ME80_BANK initialBank;
-          final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK initialPatchInBank;
+          final MidiDevice_Me80_Base.ME80_BANK initialBank;
+          final MidiDevice_Me80_Base.ME80_PATCH_IN_BANK initialPatchInBank;
           if (currentPatchNo != null)
           {
-            final JMe80Panel_PatchSelector.ME80_BANK currentBank = JMe80Panel_PatchSelector.bankFromMidiProgram (currentPatchNo);
+            final MidiDevice_Me80_Base.ME80_BANK currentBank = MidiDevice_Me80_Base.bankFromMidiProgram (currentPatchNo);
             if (currentBank != null && currentBank.isUserBank ())
               initialBank = currentBank;
             else
@@ -360,7 +360,7 @@ public class JMe80Panel
           else
             initialBank = null;
           if (initialBank != null)
-            initialPatchInBank = JMe80Panel_PatchSelector.patchInBankFromMidiProgram (currentPatchNo);
+            initialPatchInBank = MidiDevice_Me80_Base.patchInBankFromMidiProgram (currentPatchNo);
           else
             initialPatchInBank = null;
           synchronized (JMe80Panel_PatchIO.this.temporaryPatchLock)
@@ -385,8 +385,8 @@ public class JMe80Panel
           if (dialog.isOk ())
           {
             final String patchName = dialog.getPatchName ();
-            final JMe80Panel_PatchSelector.ME80_BANK bank = dialog.getBank ();
-            final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK patchInBank = dialog.getPatchInBank ();
+            final MidiDevice_Me80_Base.ME80_BANK bank = dialog.getBank ();
+            final MidiDevice_Me80_Base.ME80_PATCH_IN_BANK patchInBank = dialog.getPatchInBank ();
             ((MidiDevice_Me80) getMidiDevice ()).writePatchToDevice (patch.withName (patchName).getBytes (), bank, patchInBank);
             JOptionPane.showMessageDialog (null,
               "Saved Patch to ME-80::" + bank + "." + patchInBank + "!",

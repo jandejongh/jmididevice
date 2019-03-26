@@ -118,6 +118,91 @@ public class MidiDevice_Me80_Base
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
+  // BANK
+  // PATCH IN BANK
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  public enum ME80_BANK
+  {
+    U1 (true),
+    U2 (true),
+    U3 (true),
+    U4 (true),
+    U5 (true),
+    U6 (true),
+    U7 (true),
+    U8 (true),
+    U9 (true),
+    P1 (false),
+    P2 (false),
+    P3 (false),
+    P4 (false),
+    P5 (false),
+    P6 (false),
+    P7 (false),
+    P8 (false),
+    P9 (false);
+    
+    private ME80_BANK (final boolean isUserBank)
+    {
+      this.isUserBank = isUserBank;
+    }
+    
+    private final boolean isUserBank;
+    
+    public final boolean isUserBank ()
+    {
+      return this.isUserBank;
+    }
+    
+  }
+
+  public enum ME80_PATCH_IN_BANK
+  {
+    PIB_1 ("1"),
+    PIB_2 ("2"),
+    PIB_3 ("3"),
+    PIB_4 ("4");
+
+    private final String string;
+    
+    private ME80_PATCH_IN_BANK (final String string)
+    {
+      this.string = string;
+    }
+
+    @Override
+    public String toString ()
+    {
+      return this.string;
+    }
+    
+  }
+  
+  public static byte toMidiProgram (final ME80_BANK bank, final ME80_PATCH_IN_BANK patch)
+  {
+    return (byte) (4 * bank.ordinal () + patch.ordinal ());
+  }
+  
+  public static ME80_BANK bankFromMidiProgram (final int midiProgram)
+  {
+    if (midiProgram < 0 || midiProgram > 71)
+      return null;
+    else
+      return ME80_BANK.values ()[midiProgram / 4];    
+  }
+  
+  public static ME80_PATCH_IN_BANK patchInBankFromMidiProgram (final int midiProgram)
+  {
+    if (midiProgram < 0 || midiProgram > 71)
+      return null;
+    else
+      return ME80_PATCH_IN_BANK.values ()[midiProgram % 4];
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
   // ME80 MAIN REQUEST LOOP
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

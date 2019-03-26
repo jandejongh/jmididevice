@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import org.javajdj.jservice.midi.device.rolandboss.ParameterDescriptor_RolandBoss;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
-import org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80Panel_PatchSelector;
 
 /** A {@link MidiDevice} implementation for the Roland-Boss ME-80.
  * 
@@ -1185,9 +1184,9 @@ public final class MidiDevice_Me80
   private void registerParameters_Me80_Patches ()
   {   
     byte patchCounter = 1; // Start with 1, hence with 0x20010000 for U1.1; note that 0x20000000 is the temporary patch.
-    for (final JMe80Panel_PatchSelector.ME80_BANK me80_bank : JMe80Panel_PatchSelector.ME80_BANK.values ())
-      for (final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK me80_patch_in_bank :
-        JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK.values ())
+    for (final ME80_BANK me80_bank : ME80_BANK.values ())
+      for (final ME80_PATCH_IN_BANK me80_patch_in_bank :
+        ME80_PATCH_IN_BANK.values ())
       {
         registerParameter (new ParameterDescriptor_RolandBoss (
           toParameterName (me80_bank, me80_patch_in_bank),
@@ -1207,8 +1206,8 @@ public final class MidiDevice_Me80
    * 
    */
   public static String toParameterName
-  (final JMe80Panel_PatchSelector.ME80_BANK me80_bank,
-   final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK me80_patch_in_bank)
+  (final ME80_BANK me80_bank,
+   final ME80_PATCH_IN_BANK me80_patch_in_bank)
   {
     return "patch." + me80_bank.name ().trim ().toLowerCase () + "." + me80_patch_in_bank.name ().trim ().toLowerCase ();
   }
@@ -1447,8 +1446,8 @@ public final class MidiDevice_Me80
    */
   public final void writePatchToDevice
   ( final byte[] patch,
-    final JMe80Panel_PatchSelector.ME80_BANK targetBank,
-    final JMe80Panel_PatchSelector.ME80_PATCH_IN_BANK targetPatchInBank)
+    final ME80_BANK targetBank,
+    final ME80_PATCH_IN_BANK targetPatchInBank)
   {
     if (patch == null || patch.length != MidiDevice_Me80_Base.PATCH_SIZE)
       throw new IllegalArgumentException ();
