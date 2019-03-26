@@ -17,20 +17,45 @@
 package org.javajdj.jservice.midi.device.swing;
 
 import java.awt.GridLayout;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.javajdj.jservice.midi.device.MidiDevice;
-import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.swing.SwingUtilsJdJ;
 
-/** A {@link JPanel} holding the name and value of a (simple) MIDI-Device parameter.
+/** A {@link JPanel} holding the name and value of a (single, simple) MIDI-Device parameter.
  * 
  * <p>
- * Both name and value component are optional.
+ * Both name and value components are optional.
  * This allows sub-classes to merely use the basic MIDI-device registry
  * functions of this component.
+ * 
+ * <p>
+ * The implementation uses a single-row {@link GridLayout} to lay-out horizontally
+ * the name and value components (if any is provided at all).
+ * 
+ * <p>
+ * Note that the name, if non-{@code null} upon construction,
+ * may be changed later in order to implement multi-named parameters
+ * (e.g., parameters for which the meaning depends on the value of some other parameter);
+ * see {@link #setDisplayName}.
+ * 
+ * <p>
+ * Implementations are encouraged to use the super-class for setting from their constructor(s)
+ * the initial value on the
+ * component as follows: {@code dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));}.
+ * The super-class, in turn, will invoke {@link #dataValueChanged(java.lang.Object)} on this
+ * class.
+ * This sequence of invocations ensures that the enabled/disabled status of the component(s)
+ * is properly set from the super-class.
+ * 
+ * <p>
+ * Ready-to-go {@link JMidiDeviceParameter}s for certain parameter types are available in the same package.
+ * For instance, {@link JMidiDeviceParameter_Boolean} for a {@link Boolean} parameter.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
@@ -38,7 +63,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * 
  */
 public class JMidiDeviceParameter<C>
-  extends JPanel
+  extends JMidiDeviceMultiParameter
 {
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,29 +72,67 @@ public class JMidiDeviceParameter<C>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  private final static class JLabel_Private
+    extends JLabel
+  {
+    public JLabel_Private (final String string)
+    {
+      super (string);
+    } 
+  }
+  
+  private static Map<String, Set<JComponent>> createComponentMap
+  ( final MidiDevice midiDevice,
+    final String displayName,
+    final String key,
+    final JComponent jValueComponent)
+  {
+    if (midiDevice == null || key == null || ! midiDevice.containsKey (key))
+      throw new IllegalArgumentException ();
+    final Map<String, Set<JComponent>> componentMap = new LinkedHashMap<> ();
+    if (displayName == null && jValueComponent == null)
+      componentMap.put (key, null);
+    else
+    {
+      componentMap.put (key, new LinkedHashSet<> ());
+      if (displayName != null)
+        componentMap.get (key).add (new JLabel_Private (displayName));
+      if (jValueComponent != null)
+        componentMap.get (key).add (jValueComponent);
+    }
+    return componentMap;
+  }
+  
+  /** Constructs the component.
+   * 
+   * <p>
+   * Both name and value component are optional.
+   * This allows sub-classes to merely use the basic MIDI-device registry
+   * functions of this component.
+   * 
+   * @param midiDevice      The MIDI device, non-{@code null}.
+   * @param displayName     The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key             The parameter key (must exist on the {@code midiDevice}).
+   * @param jValueComponent The component to show for the parameter; if {@code null}, no value component is shown.
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceMultiParameter
+   * 
+   */
   public JMidiDeviceParameter
     (final MidiDevice midiDevice,
      final String displayName,
      final String key,
      final JComponent jValueComponent)
   {
-    super ();
-    if (midiDevice == null || key == null || ! midiDevice.containsKey (key))
-      throw new IllegalArgumentException ();
-    this.midiDevice = midiDevice;
-    this.displayName = displayName;
-    this.jDisplayNameComponent = (this.displayName != null ? new JLabel (this.displayName) : null);
-    this.key = key;
-    this.jValueComponent = jValueComponent;
-    getMidiDevice ().addMidiDeviceListener (this.midiDeviceListener);
-    if (this.jDisplayNameComponent != null || this.jValueComponent != null)
+    super (midiDevice, createComponentMap (midiDevice, displayName, key, jValueComponent));
+    final Set<JComponent> components = getJComponents (key);
+    if (components != null)
     {
-      final int nrOfComponents = (this.jDisplayNameComponent != null && this.jValueComponent != null ? 2 : 1);
-      setLayout (new GridLayout (1, nrOfComponents, 5, 5));
-      if (this.jDisplayNameComponent != null)
-        add (this.jDisplayNameComponent);
-      if (this.jValueComponent != null)
-        add (this.jValueComponent);
+      setLayout (new GridLayout (1, components.size (), 5, 5));
+      for (final JComponent component : components)
+        add (component);
     }
   }
 
@@ -77,43 +140,68 @@ public class JMidiDeviceParameter<C>
   //
   // MIDI DEVICE
   //
+  // GET/SET DATA VALUE
+  //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private final MidiDevice midiDevice;
-  
-  public final MidiDevice getMidiDevice ()
-  {
-    return this.midiDevice;
-  }
 
+  /** Gets the value of the parameter from the MIDI device.
+   * 
+   * @return The value, may be {@code null}.
+   * 
+   * @see JMidiDeviceMultiParameter#getDataValue
+   * @see #getKey
+   * @see MidiDevice#get
+   * 
+   */
+  protected final C getDataValue ()
+  {
+    return (C) super.getDataValue (getKey ());
+  }
+  
+  /** Sets the value of the parameter on the MIDI device.
+   * 
+   * <p>
+   * The request is silently ignored if this is a read-only component, see {@link #isReadOnly}.
+   * 
+   * @param newDataValue The new value, non-{@code null}.
+   * 
+   * @throws NullPointerException     If the value is {@code null} (conform {@link Map#put} and {@link MidiDevice#put}).
+   * 
+   * @see JMidiDeviceMultiParameter#setDataValue
+   * @see #getKey
+   * @see MidiDevice#put
+   * @see #isReadOnly
+   * 
+   */
+  protected final void setDataValue (final C newDataValue)
+  {
+    if (! this.readOnly)
+      super.setDataValue (getKey (), newDataValue);
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // MIDI DEVICE LISTENER
   //
-  // SET DATA VALUE
   // DATA VALUE CHANGED
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
-  {
-    if (changes == null || changes.isEmpty ())
-      throw new RuntimeException ();
-    if (! changes.containsKey (getKey ()))
-      return;
-    final C value = (C) changes.get (getKey ());
-    dataValueChanged (value);
-    SwingUtilsJdJ.invokeOnSwingEDT (()->
-    {
-      // XXX Many of our sub-classes already do this in #dataValueChanged...
-      SwingUtilsJdJ.enableComponentAndDescendants (this, (! JMidiDeviceParameter.this.readOnly) && value != null);
-    });
-  };
-  
-  protected void setDataValue (final C newDataValue)
+  /** Invokes the super method if this component is not read-only and
+   *  delegates to {@link #dataValueChanged(java.lang.Object)}.
+   * 
+   * @param changes The changes as a map from registered keys at this object onto their new values; non-{@code null}.
+   * 
+   */
+  @Override
+  protected final void dataValueChanged (final Map<String, Object> changes)
   {
     if (! this.readOnly)
-      getMidiDevice ().put (getKey (), newDataValue);
+      super.dataValueChanged (changes);
+    if (! changes.containsKey (getKey ()))
+      throw new RuntimeException ();
+    final C value = (C) changes.get (getKey ());
+    dataValueChanged (value);
   }
   
   /** Notification method for sub-classes indicating that a new data value was received from the MIDI device.
@@ -125,6 +213,9 @@ public class JMidiDeviceParameter<C>
    * 
    * <p>
    * The default implementation does nothing.
+   * 
+   * <p>
+   * Implementations are strongly encouraged to invoke the super method first.
    * 
    * @param newDataValue The new value; may be {@code null}.
    * 
@@ -140,25 +231,51 @@ public class JMidiDeviceParameter<C>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private volatile String displayName;
-  
-  private final JLabel jDisplayNameComponent;
-  
-  public final String getDisplayName ()
+  private JLabel_Private getDisplayNameComponent ()
   {
-    return this.displayName;
+    final Set<JComponent> components = getJComponents (getKey ());
+    if (components == null)
+      return null;
+    if (components.isEmpty ())
+      throw new RuntimeException ();
+    else if (components.size () == 1)
+      return (components.toArray ()[0] instanceof JLabel_Private) ? (JLabel_Private) components.toArray ()[0] : null;
+    else if (components.size () == 2)
+      return (JLabel_Private) components.toArray ()[0];
+    else
+      throw new RuntimeException ();
   }
   
+  /** Gets the display name, if present.
+   * 
+   * @return The display name, {@code null} if not present.
+   * 
+   */
+  public final String getDisplayName ()
+  {
+    final JLabel_Private displayNameComponent = getDisplayNameComponent ();
+    return displayNameComponent != null ? displayNameComponent.getText () : null;
+  }
+  
+  /** Sets the display name.
+   * 
+   * @param displayName The new display name.
+   * 
+   * @throws IllegalArgumentException If the new display name is {@code null}
+   *                                    while the old one non-{@code} or vice versa.
+   * 
+   */
   public final void setDisplayName (final String displayName)
   {
-    if (displayName == null || displayName.trim ().isEmpty ())
+    final JLabel_Private displayNameComponent = getDisplayNameComponent ();
+    if ( (displayNameComponent == null && displayName != null)
+      || (displayNameComponent != null && displayName == null))
       throw new IllegalArgumentException ();
-    if (this.displayName == null)
-      throw new IllegalArgumentException ();
-    if (this.displayName == null || displayName.equals (this.displayName))
+    if (displayNameComponent == null && displayName == null)
       return;
-    this.displayName = displayName;
-    SwingUtilsJdJ.invokeOnSwingEDT (() -> JMidiDeviceParameter.this.jDisplayNameComponent.setText (displayName));
+    if (getDisplayName ().equals (displayName))
+      return;
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> JMidiDeviceParameter.this.getDisplayNameComponent ().setText (displayName));
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,11 +284,14 @@ public class JMidiDeviceParameter<C>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final String key;
-  
+  /** Obtains the parameter key.
+   * 
+   * @return The parameter key, non-{@code null}, fixed, and registered at the MIDI device.
+   * 
+   */
   public final String getKey ()
   {
-    return this.key;
+    return (String) getKeys ().toArray ()[0];
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,11 +300,24 @@ public class JMidiDeviceParameter<C>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final JComponent jValueComponent;
-  
+  /** Obtains the value component passed upon construction.
+   * 
+   * @return The value component passed upon construction, fixed but may be {@code null}.
+   * 
+   */
   protected final JComponent getValueComponent ()
   {
-    return this.jValueComponent;
+    final Set<JComponent> components = getJComponents (getKey ());
+    if (components == null)
+      return null;
+    if (components.isEmpty ())
+      throw new RuntimeException ();
+    else if (components.size () == 1)
+      return (components.toArray ()[0] instanceof JLabel_Private) ? null : (JComponent) components.toArray ()[0];
+    else if (components.size () == 2)
+      return (JComponent) components.toArray ()[1];
+    else
+      throw new RuntimeException ();
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,17 +328,47 @@ public class JMidiDeviceParameter<C>
   
   private volatile boolean readOnly = false;
   
+  /** Returns whether or not this is a read-only component.
+   * 
+   * <p>
+   * Read-only components are always disabled, irrespective of the value of the parameter,
+   * which is still properly shown.
+   * 
+   * <p>
+   * The default value of this property is {@code false}.
+   * 
+   * @return Whether or not this is a read-only component.
+   * 
+   * @see #setReadOnly
+   * 
+   */
   public final boolean isReadOnly ()
   {
     return this.readOnly;
   }
   
-  public synchronized void setReadOnly (final boolean readOnly)
+  /** Sets whether or not this is a read-only component.
+   * 
+   * <p>
+   * Read-only components are always disabled, irrespective of the value of the parameter,
+   * which is still properly shown.
+   * 
+   * <p>
+   * The default value of this property is {@code false}.
+   * 
+   * @param readOnly Whether or not this is a read-only component from now on.
+   * 
+   * @see #isReadOnly
+   * 
+   */
+  public final void setReadOnly (final boolean readOnly)
   {
     if (readOnly != this.readOnly)
     {
       this.readOnly = readOnly;
-      SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants (JMidiDeviceParameter.this, ! readOnly));
+      final Object value = getDataValue ();
+      SwingUtilsJdJ.invokeOnSwingEDT (() -> SwingUtilsJdJ.enableComponentAndDescendants
+        (JMidiDeviceParameter.this, value != null && ! readOnly));
     }
   }
   
