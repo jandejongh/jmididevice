@@ -190,10 +190,16 @@ public class JMidiDeviceMultiParameter
    * <p>
    * The default implementation disables registered {@link JComponent}s for which
    * the corresponding value has turned {@code null},
-   * or enables them is the value has turned non-{@code null}.
+   * or enables them if the value has turned non-{@code null}.
    * Some sub-classes depend on this (and only this) behavior in order to implement
    * {@link JComponent}s for read-only parameters,
    * so be careful modifying and/or extending the default implementation.
+   * 
+   * <p>
+   * Normally, this method is invoked from a private {@link MidiDeviceListener},
+   * and should not be invoked directly from sub-classes.
+   * The only exception is at the end of a constructor of a (final) sub-class
+   * as a means to set the initial value of the parameters on the component.
    * 
    * @param changes The changes as a map from registered keys at this object onto their new values; non-{@code null}.
    * 
