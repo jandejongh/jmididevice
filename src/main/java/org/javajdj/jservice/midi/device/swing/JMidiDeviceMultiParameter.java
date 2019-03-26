@@ -54,7 +54,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * Sub-classes are not obliged to even use object's of this class as their main {@link JPanel}.
  * 
  * <p>
- * Ready-to-go {@link JComponent}s for <i>single</i> parameters are available in the same package.
+ * Ready-to-go {@link JMidiDeviceMultiParameter}s for <i>single</i> parameters are available in the same package.
  * For instance, {@link JMidiDeviceParameter_Boolean} for a {@link Boolean} parameter.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
