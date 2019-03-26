@@ -689,10 +689,43 @@ public final class MidiDevice_Me80
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public final static String TP_CTL_TARGET_NAME            = "temporary_patch.ctl.target";
-  public final static String TP_CTL_KNOB_VALUE_NAME        = "temporary_patch.ctl.knob_value";
-  public final static String TP_CTL_MODE_NAME              = "temporary_patch.ctl.mode";
-  public final static String TP_CTL_TARGET_CUSTOM_NAME     = "temporary_patch.ctl.target_custom";
+  public final static byte BOSS_ME80_CTL_SW_CONTROLLER = (byte) 0x50; // CC80: 0x00 = false, 0x7F = true.
+  
+  public final static String TP_CTL_SW_NAME            = "temporary_patch.ctl.sw";  
+  public final static String TP_CTL_TARGET_NAME        = "temporary_patch.ctl.target";
+  public final static String TP_CTL_KNOB_VALUE_NAME    = "temporary_patch.ctl.knob_value";
+  public final static String TP_CTL_MODE_NAME          = "temporary_patch.ctl.mode";
+  public final static String TP_CTL_TARGET_CUSTOM_NAME = "temporary_patch.ctl.target_custom";
+  
+  private static class CtlSwitchValueCustomConverter
+    implements ParameterDescriptor_RolandBoss.CustomValueConverter<Boolean>
+  {
+
+    @Override
+    public final Boolean fromDevice (final byte[] bytes)
+    {
+      if (bytes == null || bytes.length != 1)
+        throw new IllegalArgumentException ();
+      switch (bytes[0])
+      {
+        case 0x00:
+          return false;
+        case 0x7F:
+          return true;
+        default:
+          throw new IllegalArgumentException ();
+      }
+    }
+
+    @Override
+    public final byte[] toDevice (final Boolean c)
+    {
+      if (c == null)
+        throw new IllegalArgumentException ();
+      return new byte[]{(byte) (c ? 0x7F : 0x00)};
+    }
+    
+  }
   
   public static enum CtlTargetCustom
   {
@@ -1042,6 +1075,10 @@ public final class MidiDevice_Me80
   private void registerParameters_Me80_TemporaryPatch_CTL ()
   {
     
+    registerParameter (new ParameterDescriptor_RolandBoss (TP_CTL_SW_NAME, Boolean.class,
+      BOSS_ME80_CTL_SW_CONTROLLER,
+      new CtlSwitchValueCustomConverter ()));
+
     // The ctl_target parameter is defined in the data\addressmap.json in the (a/my) Boss Tone Studio distribution
     // as having length 1, but that seems to be an error.
     // The ME-80 does not provide any value with a unit-length request at 0x20000035; it simple igores the request.
