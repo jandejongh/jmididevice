@@ -193,6 +193,23 @@ public class ParameterDescriptor_RolandBoss<E>
       null);
   }
     
+  public ParameterDescriptor_RolandBoss
+  ( final String parameterName,
+    final Class<E> parameterValueClass,
+    final byte controller,
+    final CustomValueConverter<E> customValueConverter)
+  {
+    this (ParameterType_RolandBoss.MidiControlChange,
+      parameterName,
+      parameterValueClass,
+      ParameterConversion_RolandBoss.CUSTOM,
+      controller,
+      null,
+      null,
+      null,
+      customValueConverter);
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // PARAMETER TYPE
