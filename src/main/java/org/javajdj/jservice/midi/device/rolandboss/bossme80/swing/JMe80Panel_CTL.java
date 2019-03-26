@@ -33,6 +33,7 @@ import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Boolean;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
 
@@ -61,6 +62,9 @@ public class JMe80Panel_CTL
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
     setLayout (new GridLayout (6, 1, 5, 5));
+    //
+    final JPanel jActive = new JMidiDeviceParameter_Boolean (midiDevice, "Pressed", MidiDevice_Me80.TP_CTL_SW_NAME);
+    add (jActive);
     //
     final JPanel targetPanel = new JPanel ();
     targetPanel.setLayout (new GridLayout (1, 2, 5, 5));
@@ -109,7 +113,6 @@ public class JMe80Panel_CTL
     add (new JMidiDeviceParameter_Enum (midiDevice,
       "Ctl Mode", MidiDevice_Me80.TP_CTL_MODE_NAME, MidiDevice_Me80.CtlMode.class));
     //
-    add (new JPanel ());
     add (new JPanel ());
     //
     this.midiDevice.addMidiDeviceListener (this.midiDeviceListener);
