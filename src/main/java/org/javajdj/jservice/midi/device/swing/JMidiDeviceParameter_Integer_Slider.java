@@ -132,7 +132,11 @@ public class JMidiDeviceParameter_Integer_Slider
   protected final void dataValueChanged (final Integer newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    SwingUtilsJdJ.invokeOnSwingEDT (() -> getSlider ().setValue (newDataValue));
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
+    {
+      if (newDataValue != null)
+        getSlider ().setValue (newDataValue);
+    });
   }
     
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
