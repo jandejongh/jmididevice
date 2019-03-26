@@ -18,7 +18,9 @@ package org.javajdj.jservice.midi.device.swing;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Collections;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.SwingUtilsJdJ;
 
@@ -42,6 +44,18 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Constructs the component.
+   * 
+   * @param midiDevice      The MIDI device, non-{@code null}.
+   * @param displayName     The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key             The parameter key (must exist on the {@code midiDevice}).
+   * @param clazz           The {@link Class} of the parameter value.
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceParameter
+   * 
+   */
   public JMidiDeviceParameter_Enum (final MidiDevice midiDevice,
                                    final String displayName,
                                    final String key,
@@ -50,7 +64,7 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
     super (midiDevice, displayName, key, new JComboBox<> (clazz.getEnumConstants ()));
     getComboBox ().setEditable (false); // User is not allowed to modify the entries.
     getComboBox ().addItemListener (new ValueItemListener ());
-    setValueOnGui ((E) midiDevice.get (key));
+    dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +74,13 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Returns the value component, a {@link JComboBox}.
+   * 
+   * @return The value component, non-{@code null}.
+   * 
+   * @see #getValueComponent
+   * 
+   */
   protected final JComboBox<E> getComboBox ()
   {
     return (JComboBox<E>) getValueComponent ();
@@ -92,22 +113,21 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Sets the new value on the value component.
+   * 
+   * @param newDataValue The new value; may be {@code null}.
+   * 
+   * @see #getValueComponent
+   * @see #getComboBox
+   * 
+   */
   @Override
-  protected void dataValueChanged (final E newDataValue)
+  protected final void dataValueChanged (final E newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    setValueOnGui (newDataValue);
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> getComboBox ().setSelectedItem (newDataValue));
   }
     
-  private void setValueOnGui (final E newDataValue)
-  {
-    SwingUtilsJdJ.invokeOnSwingEDT (() ->
-    {
-      getComboBox ().setSelectedItem (newDataValue);
-      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
-    });
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE

@@ -19,8 +19,10 @@ package org.javajdj.jservice.midi.device.swing;
 import org.javajdj.swing.DefaultMouseListener;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JLabel;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
@@ -48,13 +50,24 @@ public class JMidiDeviceParameter_Boolean
     return new JColorCheckBox.JBoolean (colorMap);
   }
 
+  /** Constructs the component.
+   * 
+   * @param midiDevice      The MIDI device, non-{@code null}.
+   * @param displayName     The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key             The parameter key (must exist on the {@code midiDevice}).
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceParameter
+   * 
+   */
   public JMidiDeviceParameter_Boolean (final MidiDevice midiDevice,
                                       final String displayName,
                                       final String key)
   {
     super (midiDevice, displayName, key, createValueComponent ());
     getCheckBox ().addMouseListener (new ValueMouseListener ());
-    setValueOnGui ((Boolean) midiDevice.get (key));
+    dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +77,13 @@ public class JMidiDeviceParameter_Boolean
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Returns the value component, a {@link JColorCheckBox.JBoolean}.
+   * 
+   * @return The value component, non-{@code null}.
+   * 
+   * @see #getValueComponent
+   * 
+   */
   protected final JColorCheckBox.JBoolean getCheckBox ()
   {
     return (JColorCheckBox.JBoolean) getValueComponent ();
@@ -91,22 +111,21 @@ public class JMidiDeviceParameter_Boolean
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Sets the new value on the value component.
+   * 
+   * @param newDataValue The new value; may be {@code null}.
+   * 
+   * @see #getValueComponent
+   * @see #getCheckBox
+   * 
+   */
   @Override
-  protected void dataValueChanged (final Boolean newDataValue)
+  protected final void dataValueChanged (final Boolean newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    setValueOnGui (newDataValue);
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> getCheckBox ().setDisplayedValue (newDataValue));
   }
     
-  private void setValueOnGui (final Boolean newDataValue)
-  {
-    SwingUtilsJdJ.invokeOnSwingEDT (() ->
-    {
-      getCheckBox ().setDisplayedValue (newDataValue);
-      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
-    });
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE

@@ -16,6 +16,8 @@
  */
 package org.javajdj.jservice.midi.device.swing;
 
+import java.util.Collections;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -45,6 +47,19 @@ public class JMidiDeviceParameter_Integer_Slider
     return new JSlider (minValue, maxValue);
   }
 
+  /** Constructs the component.
+   * 
+   * @param midiDevice      The MIDI device, non-{@code null}.
+   * @param displayName     The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key             The parameter key (must exist on the {@code midiDevice}).
+   * @param minValue        The minimum parameter value (inclusive), see {@link JSlider#JSlider(int, int)}.
+   * @param maxValue        The maximum parameter value (inclusive), see {@link JSlider#JSlider(int, int)}.
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceParameter
+   * 
+   */
   public JMidiDeviceParameter_Integer_Slider (final MidiDevice midiDevice,
                                          final String displayName,
                                          final String key,
@@ -56,7 +71,7 @@ public class JMidiDeviceParameter_Integer_Slider
     // getSlider ().setPaintTicks (true);
     getSlider ().setPaintLabels (true);
     getSlider ().addChangeListener (new ValueChangeListener ());
-    setValueOnGui ((Integer) midiDevice.get (key));
+    dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +81,13 @@ public class JMidiDeviceParameter_Integer_Slider
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Returns the value component, a {@link JSlider}.
+   * 
+   * @return The value component, non-{@code null}.
+   * 
+   * @see #getValueComponent
+   * 
+   */
   public final JSlider getSlider ()
   {
     return (JSlider) getValueComponent ();
@@ -98,23 +120,21 @@ public class JMidiDeviceParameter_Integer_Slider
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Sets the new value on the value component.
+   * 
+   * @param newDataValue The new value; may be {@code null}.
+   * 
+   * @see #getValueComponent
+   * @see #getSlider
+   * 
+   */
   @Override
-  protected void dataValueChanged (final Integer newDataValue)
+  protected final void dataValueChanged (final Integer newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    setValueOnGui (newDataValue);
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> getSlider ().setValue (newDataValue));
   }
     
-  private void setValueOnGui (final Integer newDataValue)
-  {
-    SwingUtilsJdJ.invokeOnSwingEDT (() ->
-    {
-      if (newDataValue != null)
-        getSlider ().setValue (newDataValue);
-      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
-    });
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE

@@ -16,7 +16,9 @@
  */
 package org.javajdj.jservice.midi.device.swing;
 
+import java.util.Collections;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.swing.JTextFieldListener;
@@ -48,6 +50,19 @@ public class JMidiDeviceParameter_String
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Constructs the component.
+   * 
+   * @param midiDevice  The MIDI device, non-{@code null}.
+   * @param displayName The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key         The parameter key (must exist on the {@code midiDevice}).
+   * @param columns     The optional number of columns to use to lay out the {@link JTextField}
+   *                      value component, ignored if {@code null}, see {@link JTextField#JTextField(int)}.
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceParameter
+   * 
+   */
   public JMidiDeviceParameter_String (final MidiDevice midiDevice,
                                      final String displayName,
                                      final String key,
@@ -56,9 +71,20 @@ public class JMidiDeviceParameter_String
     super (midiDevice, displayName, key, columns != null ? new JTextField (columns) : new JTextField ());
     getTextField ().setOpaque (false);
     JTextFieldListener.addJTextFieldListener (getTextField (), this.valueComponentListener);
-    setValueOnGui ((String) midiDevice.get (key));
+    dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
   }
   
+  /** Constructs the component.
+   * 
+   * @param midiDevice  The MIDI device, non-{@code null}.
+   * @param displayName The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key         The parameter key (must exist on the {@code midiDevice}).
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceParameter
+   * 
+   */
   public JMidiDeviceParameter_String (final MidiDevice midiDevice,
                                      final String displayName,
                                      final String key)
@@ -73,6 +99,13 @@ public class JMidiDeviceParameter_String
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Returns the value component, a {@link JTextField}.
+   * 
+   * @return The value component, non-{@code null}.
+   * 
+   * @see #getValueComponent
+   * 
+   */
   public final JTextField getTextField ()
   {
     return (JTextField) getValueComponent ();
@@ -86,8 +119,7 @@ public class JMidiDeviceParameter_String
       if (isReadOnly ())
         return;
       final String newValue = JMidiDeviceParameter_String.this.getTextField ().getText ();
-      // LOG.log (Level.INFO, "New value: {0}.", newValue);
-      JMidiDeviceParameter_String.this.getMidiDevice ().put (JMidiDeviceParameter_String.this.getKey (), newValue);
+      JMidiDeviceParameter_String.this.setDataValue (newValue);
     }
   };
   
@@ -97,42 +129,21 @@ public class JMidiDeviceParameter_String
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  /** Sets the new value on the value component.
+   * 
+   * @param newDataValue The new value; may be {@code null}.
+   * 
+   * @see #getValueComponent
+   * @see #getTextField
+   * 
+   */
   @Override
-  protected void dataValueChanged (final String newDataValue)
+  protected final void dataValueChanged (final String newDataValue)
   {
     super.dataValueChanged (newDataValue);
-    setValueOnGui (newDataValue);
+    SwingUtilsJdJ.invokeOnSwingEDT (() -> getTextField ().setText (newDataValue));
   }
     
-  private void setValueOnGui (final String newDataValue)
-  {
-    SwingUtilsJdJ.invokeOnSwingEDT (() ->
-    {
-      getTextField ().setText (newDataValue);
-      SwingUtilsJdJ.enableComponentAndDescendants (this, newDataValue != null && ! isReadOnly ());
-      getTextField ().setEditable (newDataValue != null && ! isReadOnly ());
-    });
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // READ ONLY
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  @Override
-  public synchronized void setReadOnly (final boolean readOnly)
-  {
-    super.setReadOnly (readOnly);
-    if (! isReadOnly ())
-      SwingUtilsJdJ.invokeOnSwingEDT (() ->
-      {
-        setEnabled (false);
-        getTextField ().setEnabled (false);
-        getTextField ().setEditable (false);
-      });
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
