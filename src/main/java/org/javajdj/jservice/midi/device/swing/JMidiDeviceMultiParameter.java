@@ -55,7 +55,8 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * 
  * <p>
  * Ready-to-go {@link JMidiDeviceMultiParameter}s for <i>single</i> parameters are available in the same package.
- * For instance, {@link JMidiDeviceParameter_Boolean} for a {@link Boolean} parameter.
+ * For instance, {@link JMidiDeviceParameter_Boolean} for a {@link Boolean} parameter,
+ * or {@link JMidiDeviceParameter} for an arbitrarily-typed single parameter.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
