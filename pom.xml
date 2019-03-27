@@ -7,7 +7,7 @@
   
   <groupId>org.javajdj</groupId>
   <artifactId>jmididevice</artifactId>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.2.0</version>
   <description>A Java library holding a few MIDI device implementations, some with Swing components.</description>
   <url>https://github.com/jandejongh/jmididevice</url>
   
