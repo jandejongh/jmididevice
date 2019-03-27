@@ -754,6 +754,24 @@ public final class MidiDevice_Me80
     
   }
   
+  /** Possible target for the CTL function of a ME-80 patch.
+   * 
+   * <p>
+   * The CTL function can affect either the set of effects being active
+   * <i>or</i> changing a single parameter value.
+   * This class combines both;
+   * {@link #EFFECTS} applies to the first case,
+   * whereas the remaining values apply to the second case.
+   * 
+   * <p>
+   * In order to fully describe the CTL effect,
+   * a {@link Set} of effects ({@link CtlEffectCustom} )to switch is required with {@link #EFFECTS},
+   * whereas a controller value is required in conjunction with the other values,
+   * i.e., with setting a parameter value.
+   * 
+   * @see CtlTargetAndKnobValueCustom
+   * 
+   */
   public static enum CtlTargetCustom
   {
     
@@ -833,7 +851,20 @@ public final class MidiDevice_Me80
     
   }
 
-  public static enum CtlEffectsCustom
+  /** Possible effect (switch) targets for the CTL function of a ME-80 patch.
+   * 
+   * <p>
+   * Only applicable when {@link CtlTargetCustom#EFFECTS} is active
+   * in the patch.
+   * 
+   * <p>
+   * In an ME-80 patch, an arbitrary set of effects from this class can be toggled
+   * with CTL.
+   * 
+   * @see CtlTargetAndKnobValueCustom
+   * 
+   */
+  public static enum CtlEffectCustom
   {
     
     COMP,
@@ -844,13 +875,13 @@ public final class MidiDevice_Me80
     EQ_FX2,
     REVERB;
     
-    private static EnumSet<CtlEffectsCustom> fromDevice (final byte[] bytes)
+    private static EnumSet<CtlEffectCustom> fromDevice (final byte[] bytes)
     {
       if (bytes == null || bytes.length != 3)
         throw new IllegalArgumentException ();
       if (bytes[2] == 0x64)
       {
-        final EnumSet<CtlEffectsCustom> ctlEffectsCustoms = EnumSet.noneOf (CtlEffectsCustom.class);
+        final EnumSet<CtlEffectCustom> ctlEffectsCustoms = EnumSet.noneOf (CtlEffectCustom.class);
         if ((bytes[1] & 0x01) != 0)
           ctlEffectsCustoms.add (COMP);
         if ((bytes[1] & 0x02) != 0)
@@ -871,11 +902,11 @@ public final class MidiDevice_Me80
         return null;
     }
     
-    private static byte[] mergeEffectsToDevice (final byte[] bytes, final Set<CtlEffectsCustom> c_set)
+    private static byte[] mergeEffectsToDevice (final byte[] bytes, final Set<CtlEffectCustom> c_set)
     {
       if (bytes == null || bytes.length != 3 || c_set == null)
         throw new IllegalArgumentException ();
-      for (final CtlEffectsCustom c : c_set)
+      for (final CtlEffectCustom c : c_set)
         switch (c)
         {
           case COMP:
@@ -907,13 +938,38 @@ public final class MidiDevice_Me80
     
   }
 
+  /** Specification (complete) of the effect of the CTL function of a ME-80 patch.
+   * 
+   * <p>
+   * A complete specification of the CTL effect requires a
+   * target specification as per {@link CtlTargetCustom},
+   * and either a set of effects to switch for the {@link CtlTargetCustom#EFFECTS} case,
+   * as per an {@link EnumSet} of {@link CtlEffectCustom},
+   * or an {@link Integer} for the knob value for all other case.
+   * 
+   * <p>
+   * Objects of this class are immutable.
+   * 
+   */
   public static class CtlTargetAndKnobValueCustom
   {
 
+    /** Constructs a specification of the CTL effect on a ME-80 patch.
+     * 
+     * @param ctlTargetCustom    The target to control with CTL, non-{@code null}.
+     * @param ctlKnobValueCustom The target knob value,
+     *                             between 0 and 99 if {@code ctlTargetCustom != CtlTargetCustom.EFFECTS},
+     *                             {@code null} or {@code 0x64} otherwise.
+     * @param ctlEffectsCustom   The set holding the effects to switch if if {@code ctlTargetCustom == CtlTargetCustom.EFFECTS};
+     *                             must be {@code null} otherwise.
+     * 
+     * @throws IllegalArgumentException If any parameter has an illegal value (see above).
+     * 
+     */
     public CtlTargetAndKnobValueCustom
     ( final CtlTargetCustom ctlTargetCustom,
       final Integer ctlKnobValueCustom,
-      final EnumSet<CtlEffectsCustom> ctlEffectsCustom)
+      final EnumSet<CtlEffectCustom> ctlEffectsCustom)
     {
       if (ctlTargetCustom == null)
         throw new IllegalArgumentException ();
@@ -936,15 +992,35 @@ public final class MidiDevice_Me80
       this.ctlEffectsCustom = (ctlEffectsCustom != null ? EnumSet.copyOf (ctlEffectsCustom) : null);
     }
     
+    /** Returns a CTL defining object for a ME-80 patch from its three-byte representation in the ME-80 MIDI encoding.
+     * 
+     * @param bytes The three bytes.
+     * 
+     * @return The specification of the CTL effect as encoded in the three bytes.
+     * 
+     * @throws IllegalArgumentException If the argument is {@code null}, not of length three,
+     *                                    or holds value incompatible with the ME-80 encoding
+     *                                    of the CTL effect in a patch.
+     * 
+     */
     public static CtlTargetAndKnobValueCustom fromDevice (final byte[] bytes)
     {
       if (bytes == null || bytes.length != 3)
         throw new IllegalArgumentException ();
       return new CtlTargetAndKnobValueCustom (CtlTargetCustom.fromDevice (bytes),
                                               (int) bytes[2],
-                                              CtlEffectsCustom.fromDevice (bytes));
+                                              CtlEffectCustom.fromDevice (bytes));
     }
     
+    /** Encodes a CTL defining object for a ME-80 patch in its three-byte representation in the ME-80 MIDI encoding.
+     * 
+     * @param c The specification of the CTL effect.
+     * 
+     * @return The CTL effect encoded in the three-byte representation in the ME-80 MIDI encoding.
+     * 
+     * @throws IllegalArgumentException If the argument is {@code null}.
+     * 
+     */
     public static byte[] toDevice (final CtlTargetAndKnobValueCustom c)
     {
       if (c == null)
@@ -956,7 +1032,7 @@ public final class MidiDevice_Me80
       {
         case EFFECTS:
           bytes[2] = 0x64;
-          CtlEffectsCustom.mergeEffectsToDevice (bytes, c.getCtlEffectsCustom ()); // in-situ
+          CtlEffectCustom.mergeEffectsToDevice (bytes, c.getCtlEffectsCustom ()); // in-situ
           break;
         case COMP_1:
         case COMP_2:
@@ -999,11 +1075,30 @@ public final class MidiDevice_Me80
     
     private final CtlTargetCustom ctlTargetCustom;
     
+    /** Return the target of this specification of the CTL effect on a ME-80 patch.
+     * 
+     * @return The target of this specification of the CTL effect on a ME-80 patch, non-{@code null}.
+     * 
+     */
     public final CtlTargetCustom getTarget ()
     {
       return this.ctlTargetCustom;
     }
     
+    /** Returns a CTL specification equal to this one but with given target.
+     * 
+     * <p>
+     * Note that this method supports switching from and to {@link CtlTargetCustom#EFFECTS},
+     * but when doing so, makes (reasonable) assumptions on the
+     * effects to switch (none) and the target knob value (half-way).
+     * 
+     * @param ctlTargetCustom The target for the returned CTL specification.
+     * 
+     * @return A CTL specification equal to this one but with given target.
+     * 
+     * @throws IllegalArgumentException If the argument is {@code null}.
+     * 
+     */
     public final CtlTargetAndKnobValueCustom withTarget (final CtlTargetCustom ctlTargetCustom)
     {
       if (ctlTargetCustom == null)
@@ -1011,25 +1106,121 @@ public final class MidiDevice_Me80
       if (this.ctlTargetCustom == ctlTargetCustom)
         return new CtlTargetAndKnobValueCustom (this.ctlTargetCustom, this.ctlKnobValueCustom, this.ctlEffectsCustom);
       else if (ctlTargetCustom == CtlTargetCustom.EFFECTS)
-        return new CtlTargetAndKnobValueCustom (CtlTargetCustom.EFFECTS, null, EnumSet.noneOf (CtlEffectsCustom.class));
+        return new CtlTargetAndKnobValueCustom (CtlTargetCustom.EFFECTS, null, EnumSet.noneOf (CtlEffectCustom.class));
       else if (this.ctlTargetCustom == CtlTargetCustom.EFFECTS)
-        return new CtlTargetAndKnobValueCustom (ctlTargetCustom, 0x32, null);
+        return new CtlTargetAndKnobValueCustom (ctlTargetCustom, 0x32 /* half-way */, null);
       else
         return new CtlTargetAndKnobValueCustom (ctlTargetCustom, getKnobValue (), null);        
     }
     
     private final Integer ctlKnobValueCustom;
     
+    /** Returns the knob value (if applicable) of this specification of the CTL effect on a ME-80 patch.
+     * 
+     * @return The knob value of the CTL effect,
+     *         {@code null} if and only if this object's target is {@link CtlTargetCustom#EFFECTS}.
+     * 
+     * @see #getTarget
+     * @see CtlTargetCustom
+     * 
+     */
     public final Integer getKnobValue ()
     {
       return this.ctlKnobValueCustom;
     }
     
-    private final EnumSet<CtlEffectsCustom> ctlEffectsCustom;
+    /** Returns a CTL specification equal to this one but with given knob value.
+     * 
+     * <p>
+     * You cannot use this method to switch between {@link CtlTargetCustom#EFFECTS}
+     * and the other values for the CTL target.
+     * In general, the use of this method is restricted to objects having
+     * {@link #getTarget} <i>not</i> equal to {@link CtlTargetCustom#EFFECTS},
+     * in which case the argument must be non-{@code null} and between 0 and 99 inclusive.
+     * 
+     * <p>
+     * If the target on this object <i>is</i> equal to {@link CtlTargetCustom#EFFECTS},
+     * only {@code null} and {@code 0x64} are admissible argument values,
+     * though these values cause this method to simply return {@code this}.
+     * For all other values, an {@link UnsupportedOperationException} is thrown.
+     * 
+     * @param ctlKnobValueCustom The new target knob value for the returned CTL specification.
+     * 
+     * @return A CTL specification equal to this one but with given knob value.
+     * 
+     * @throws IllegalArgumentException      If the argument is out of range.
+     * @throws UnsupportedOperationException If an attempt is made to switch between {@link CtlTargetCustom#EFFECTS}
+     *                                         and the other values for the CTL target.
+     * 
+     * @see #getTarget
+     * 
+     */
+    public final CtlTargetAndKnobValueCustom withKnobValue (final Integer ctlKnobValueCustom)
+    {
+      if (ctlKnobValueCustom != null && (ctlKnobValueCustom < 0 || ctlKnobValueCustom >= 0x64))
+        throw new IllegalArgumentException ();
+      if (this.ctlTargetCustom == CtlTargetCustom.EFFECTS)
+      {
+        if (ctlKnobValueCustom != null && ctlKnobValueCustom != 0x64)
+          throw new UnsupportedOperationException ();
+        else
+          return this;
+      }
+      if (ctlKnobValueCustom == null || ctlKnobValueCustom == 0x64)
+        throw new UnsupportedOperationException ();
+      if (Objects.equals (this.ctlKnobValueCustom, ctlKnobValueCustom))
+        return this;
+      else
+        return new CtlTargetAndKnobValueCustom (this.ctlTargetCustom, ctlKnobValueCustom, null);        
+    }
     
-    public final Set<CtlEffectsCustom> getCtlEffectsCustom ()
+    private final EnumSet<CtlEffectCustom> ctlEffectsCustom;
+    
+    /** Returns the effects switched (if applicable) of this specification of the CTL effect on a ME-80 patch.
+     * 
+     * @return The effects switched of the CTL effect,
+     *         non-{@code null} if and only if this object's target is {@link CtlTargetCustom#EFFECTS}.
+     * 
+     * @see #getTarget
+     * @see CtlTargetCustom
+     * 
+     */
+    public final Set<CtlEffectCustom> getCtlEffectsCustom ()
     {
       return Collections.unmodifiableSet (this.ctlEffectsCustom);
+    }
+    
+    /** Returns a CTL specification equal to this one but with given effect toggled.
+     * 
+     * <p>
+     * You cannot use this method to switch between {@link CtlTargetCustom#EFFECTS}
+     * and the other values for the CTL target.
+     * In general, the use of this method is restricted to objects having
+     * {@link #getTarget} <i>equal</i> to {@link CtlTargetCustom#EFFECTS},
+     * in which case the argument must be non-{@code null}.
+     * 
+     * @param ctlEffectCustom The effect to toggle for the returned CTL specification.
+     * 
+     * @return A CTL specification equal to this one but with given effect toggled.
+     * 
+     * @throws IllegalArgumentException      If the argument is {@code null}.
+     * @throws UnsupportedOperationException If the target of this object is <i>not</i> {@link CtlTargetCustom#EFFECTS}.
+     * 
+     * @see #getTarget
+     * 
+     */
+    public final CtlTargetAndKnobValueCustom withEffectToggled (final CtlEffectCustom ctlEffectCustom)
+    {
+      if (ctlEffectCustom == null)
+        throw new IllegalArgumentException ();
+      if (this.ctlTargetCustom != CtlTargetCustom.EFFECTS)
+        throw new UnsupportedOperationException ();
+      final EnumSet<CtlEffectCustom> newCtlEffectsCustum = EnumSet.copyOf (this.ctlEffectsCustom);
+      if (newCtlEffectsCustum.contains (ctlEffectCustom))
+        newCtlEffectsCustum.remove (ctlEffectCustom);
+      else
+        newCtlEffectsCustum.add (ctlEffectCustom);
+      return new CtlTargetAndKnobValueCustom (CtlTargetCustom.EFFECTS, null, newCtlEffectsCustum);      
     }
 
     @Override
@@ -1093,6 +1284,9 @@ public final class MidiDevice_Me80
     
   }
   
+  /** Possible values for the CTL Mode on the ME-80 (momentary or toggle).
+   * 
+   */
   public enum CtlMode
   {
     MOMENTARY,
