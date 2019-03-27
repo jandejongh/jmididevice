@@ -844,13 +844,13 @@ public final class MidiDevice_Me80
     EQ_FX2,
     REVERB;
     
-    private static Set<CtlEffectsCustom> fromDevice (final byte[] bytes)
+    private static EnumSet<CtlEffectsCustom> fromDevice (final byte[] bytes)
     {
       if (bytes == null || bytes.length != 3)
         throw new IllegalArgumentException ();
       if (bytes[2] == 0x64)
       {
-        final Set<CtlEffectsCustom> ctlEffectsCustoms = EnumSet.noneOf (CtlEffectsCustom.class);
+        final EnumSet<CtlEffectsCustom> ctlEffectsCustoms = EnumSet.noneOf (CtlEffectsCustom.class);
         if ((bytes[1] & 0x01) != 0)
           ctlEffectsCustoms.add (COMP);
         if ((bytes[1] & 0x02) != 0)
@@ -913,7 +913,7 @@ public final class MidiDevice_Me80
     public CtlTargetAndKnobValueCustom
     ( final CtlTargetCustom ctlTargetCustom,
       final Integer ctlKnobValueCustom,
-      final Set<CtlEffectsCustom> ctlEffectsCustom)
+      final EnumSet<CtlEffectsCustom> ctlEffectsCustom)
     {
       if (ctlTargetCustom == null)
         throw new IllegalArgumentException ();
@@ -1011,7 +1011,7 @@ public final class MidiDevice_Me80
       if (this.ctlTargetCustom == ctlTargetCustom)
         return new CtlTargetAndKnobValueCustom (this.ctlTargetCustom, this.ctlKnobValueCustom, this.ctlEffectsCustom);
       else if (ctlTargetCustom == CtlTargetCustom.EFFECTS)
-        return new CtlTargetAndKnobValueCustom (CtlTargetCustom.EFFECTS, null, Collections.EMPTY_SET);
+        return new CtlTargetAndKnobValueCustom (CtlTargetCustom.EFFECTS, null, EnumSet.noneOf (CtlEffectsCustom.class));
       else if (this.ctlTargetCustom == CtlTargetCustom.EFFECTS)
         return new CtlTargetAndKnobValueCustom (ctlTargetCustom, 0x32, null);
       else
