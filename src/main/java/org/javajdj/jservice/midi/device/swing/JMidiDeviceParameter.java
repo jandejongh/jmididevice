@@ -214,9 +214,6 @@ public class JMidiDeviceParameter<C>
    * <p>
    * The default implementation does nothing.
    * 
-   * <p>
-   * Implementations are strongly encouraged to invoke the super method first.
-   * 
    * @param newDataValue The new value; may be {@code null}.
    * 
    */
