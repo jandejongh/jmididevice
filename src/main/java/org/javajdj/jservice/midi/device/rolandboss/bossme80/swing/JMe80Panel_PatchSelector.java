@@ -20,28 +20,34 @@ import org.javajdj.swing.DefaultMouseListener;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.MidiDevice;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
+import org.javajdj.jservice.midi.device.rolandboss.bossme80.PatchSlot_Me80;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceMultiParameter;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_String;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
 
-/** A {@link JPanel} for selecting the current patch on a Boss ME-80,
- *  switch between manual and banks,
- *  and showing/setting the patch name.
+/** *  A {@link JPanel} for selecting the current patch on a Boss ME-80,
+  switch between manualSlot and banks,
+  and showing/setting the patch name.
  * 
  * <p>
  * Subordinate to {@link JMe80Panel}.
@@ -50,7 +56,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * 
  */
 public class JMe80Panel_PatchSelector
-  extends JMidiDeviceParameter<Integer>
+  extends JMidiDeviceMultiParameter
 {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,10 +73,29 @@ public class JMe80Panel_PatchSelector
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+  private static Map<String, Set<JComponent>> createComponentMap (final MidiDevice midiDevice)
+  {
+    if (midiDevice == null || ! midiDevice.containsKey (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME))
+      throw new IllegalArgumentException ();
+    final Map<String, Set<JComponent>> componentMap = new LinkedHashMap<> ();
+    componentMap.put (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, new LinkedHashSet<> ());
+    final JPanel manualPanel = new JPanel ();
+    componentMap.get (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME).add (manualPanel);
+    final JPanel bankPanel = new JPanel ();
+    componentMap.get (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME).add (bankPanel);
+    final JPanel patchPanel = new JPanel ();
+    componentMap.get (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME).add (patchPanel);
+    componentMap.put (MidiDevice_Me80.TP_NAME_NAME, new LinkedHashSet<> ());
+    final JComponent jName = new JMidiDeviceParameter_String (midiDevice, null, MidiDevice_Me80.TP_NAME_NAME, 16);
+    componentMap.get (MidiDevice_Me80.TP_NAME_NAME).add (jName);
+    return componentMap;
+    
+  }
+  
   public JMe80Panel_PatchSelector (final MidiDevice midiDevice)
   {
     
-    super (midiDevice, null, MidiDevice_Me80.CURRENT_PATCH_NO_NAME, null);
+    super (midiDevice, createComponentMap (midiDevice));
     
     setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
     
@@ -78,38 +103,24 @@ public class JMe80Panel_PatchSelector
     manualNamePanel.setLayout (new GridLayout (1, 2, 1, 1));
     // manualNamePanel.setLayout (new BoxLayout (manualNamePanel, BoxLayout.X_AXIS));
     this.jManual = new JColorCheckBox.JBoolean (t -> (t != null && t ? Color.green : null));
-    this.jManual.addMouseListener (new DefaultMouseListener ()
-    {
-      @Override
-      public final void mouseClicked (final MouseEvent me)
-      {
-        super.mouseClicked (me);
-        final Boolean displayedValue = JMe80Panel_PatchSelector.this.jManual.getDisplayedValue ();
-        final boolean newValue = (displayedValue != null ? ! displayedValue : true);
-        if (newValue)
-          JMe80Panel_PatchSelector.this.getMidiDevice ().put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, 0x48);
-        else
-          // XXX We should really store the old patch? But what if there was none? How do we know for sure?
-          JMe80Panel_PatchSelector.this.getMidiDevice ().put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, 0x00);
-      }
-    });
+    this.jManual.addMouseListener (this.jManualMouseListener);
     final Border manualLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
     final TitledBorder manualBorder = BorderFactory.createTitledBorder (manualLineBorder, "Manual");
-    final JPanel manualPanel = new JPanel ();
+    final JPanel manualPanel = (JPanel) getJComponents (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME).toArray ()[0];
     manualPanel.setLayout (new GridLayout (1, 1, 5, 5));
     manualPanel.add (this.jManual);
     manualPanel.setBorder (manualBorder);
     manualNamePanel.add (manualPanel);
-    this.jName = new JMidiDeviceParameter_String (getMidiDevice (), null, MidiDevice_Me80.TP_NAME_NAME, 16);
+    final JComponent jName = (JComponent) getJComponents (MidiDevice_Me80.TP_NAME_NAME).toArray ()[0];
     final Border nameLineBorder = BorderFactory.createLineBorder (Color.orange, 2, true);
     final TitledBorder nameBorder = BorderFactory.createTitledBorder (nameLineBorder, "Name");
-    this.jName.setBorder (nameBorder);
-    manualNamePanel.add (this.jName);
+    jName.setBorder (nameBorder);
+    manualNamePanel.add (jName);
     add (manualNamePanel);
     
-    this.jBank = new JPanel ();
+    this.jBank = (JPanel) getJComponents (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME).toArray ()[1];
     this.jBank.setLayout (new GridLayout (2, 9, 1, 1));
-    for (final ME80_BANK me80_bank : ME80_BANK.values ())
+    for (final PatchSlot_Me80.ME80_BANK me80_bank : PatchSlot_Me80.ME80_BANK.values ())
     {
       this.jBank.add (new JMe80Bank (me80_bank));
     }
@@ -118,9 +129,9 @@ public class JMe80Panel_PatchSelector
     this.jBank.setBorder (bankBorder);
     add (this.jBank);
     
-    this.jPatch = new JPanel ();
+    this.jPatch = (JPanel) getJComponents (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME).toArray ()[2];
     this.jPatch.setLayout (new GridLayout (1, 4, 1, 1));
-    for (final ME80_PATCH_IN_BANK me80_patch : ME80_PATCH_IN_BANK.values ())
+    for (final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch : PatchSlot_Me80.ME80_PATCH_IN_BANK.values ())
     {
       this.jPatch.add (new JMe80Patch (me80_patch));
     }
@@ -129,121 +140,71 @@ public class JMe80Panel_PatchSelector
     this.jPatch.setBorder (patchBorder);
     add (this.jPatch);
     
-    setEnabledCustom (false);
+    dataValueChanged (Collections.singletonMap
+      (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, getDataValue (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME)));
+    dataValueChanged (Collections.singletonMap
+      (MidiDevice_Me80.TP_NAME_NAME, getDataValue (MidiDevice_Me80.TP_NAME_NAME)));
     
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
-  // MIDI DEVICE LISTENER [JMidiDeviceParameter]
-  //
-  // UPDATE FROM/TO BOSS ME-80
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  @Override
-  protected void dataValueChanged (final Integer newDataValue)
-  {
-    super.dataValueChanged (newDataValue);
-    updateFromMe80 (newDataValue);
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // UPDATE FROM/TO BOSS ME-80
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private void updateFromMe80 (final Integer me80Patch)
-  {
-    if (me80Patch == null)
-    {
-      setEnabledCustom (false);
-    }
-    else
-    {
-      setEnabledCustom (true);
-      final ME80_BANK bank = bankFromMidiProgram (me80Patch);
-      final ME80_PATCH_IN_BANK patch = patchInBankFromMidiProgram (me80Patch);
-      synchronized (this)
-      {
-        this.selectedBank = bank;
-        this.selectedPatch = patch;
-      }
-      updateManualPanel ();
-      updateBankPanel ();
-      updatePatchPanel ();
-    }
-  }
-  
-  private void updateToMe80 ()
-  {
-    final ME80_BANK bank;
-    final ME80_PATCH_IN_BANK patch;
-    synchronized (this)
-    {
-      bank = this.selectedBank;
-      patch = this.selectedPatch;
-    }
-    if (bank != null && patch != null)
-      getMidiDevice ().put (MidiDevice_Me80.CURRENT_PATCH_NO_NAME, (int) toMidiProgram (bank, patch));
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // ENABLE / DISABLE COMPONENT
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private void setEnabledCustom (final boolean enable)
-  {
-    if (! SwingUtilities.isEventDispatchThread ())
-      SwingUtilities.invokeLater (() -> setEnabledCustom (enable));
-    else
-    {
-      SwingUtilsJdJ.enableComponentAndDescendants (this.jManual, enable);
-      SwingUtilsJdJ.enableComponentAndDescendants (this.jBank, enable);
-      SwingUtilsJdJ.enableComponentAndDescendants (this.jPatch, enable);
-      for (final JColorCheckBox<Boolean> c : this.bankMap.values ())
-      {
-        c.setDisplayedValue (null);
-        SwingUtilsJdJ.enableComponentAndDescendants (c, enable);
-      }
-      for (final JColorCheckBox<Boolean> c : this.patchMap.values ())
-      {
-        c.setDisplayedValue (null);
-        SwingUtilsJdJ.enableComponentAndDescendants (c, enable);
-      }
-    }
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // MANUAL
+  // VALUE COMPONENTS
+  // VALUE COMPONENT LISTENERS
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   private final JColorCheckBox.JBoolean jManual;
   
-  private void updateManualPanel ()
+  private final MouseListener jManualMouseListener = new DefaultMouseListener ()
   {
-    if (! SwingUtilities.isEventDispatchThread ())
+    @Override
+    public final void mouseClicked (final MouseEvent me)
     {
-      SwingUtilities.invokeLater (() -> JMe80Panel_PatchSelector.this.updateManualPanel ());
+      super.mouseClicked (me);
+      final Boolean displayedValue = JMe80Panel_PatchSelector.this.jManual.getDisplayedValue ();
+      final boolean newValue = (displayedValue != null ? (! displayedValue) : true);
+      if (newValue)
+        JMe80Panel_PatchSelector.this.setDataValue (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, PatchSlot_Me80.MANUAL_SLOT);
+      else
+        // XXX We should really store the old patch? But what if there was none? How do we know for sure?
+        JMe80Panel_PatchSelector.this.setDataValue
+          (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME,
+           new PatchSlot_Me80 (PatchSlot_Me80.ME80_BANK.U1, PatchSlot_Me80.ME80_PATCH_IN_BANK.PIB_1));
+    }    
+  };
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE LISTENER [JMidiDeviceParameter]
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  @Override
+  protected final void dataValueChanged (final Map<String, Object> changes)
+  {
+    super.dataValueChanged (changes);
+    if (changes == null || changes.isEmpty ())
+      throw new RuntimeException ();
+    if (! changes.containsKey (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME))
       return;
-    }
-    final ME80_BANK selectedBank = this.selectedBank;
-    final ME80_PATCH_IN_BANK selectedPatch = this.selectedPatch;
-    this.jManual.setDisplayedValue (selectedBank == null && selectedPatch == null);
+    final PatchSlot_Me80 newDataValue = (PatchSlot_Me80) changes.get (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME);
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
+    {
+      if (newDataValue == null)
+        this.jManual.setDisplayedValue (null);
+      else
+      {
+        this.jManual.setDisplayedValue (newDataValue.isManualPatchSlot ());
+        final PatchSlot_Me80.ME80_BANK bank = newDataValue.getBank ();
+        final PatchSlot_Me80.ME80_PATCH_IN_BANK patch = newDataValue.getPatchInBank ();
+        for (final Entry<PatchSlot_Me80.ME80_BANK, JColorCheckBox<Boolean>> entry : this.bankMap.entrySet ())
+          entry.getValue ().setDisplayedValue (entry.getKey () == bank);
+        for (final Entry<PatchSlot_Me80.ME80_PATCH_IN_BANK, JColorCheckBox<Boolean>> entry : this.patchMap.entrySet ())
+          entry.getValue ().setDisplayedValue (entry.getKey () == patch);
+      }
+    });
   }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // NAME
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private final JMidiDeviceParameter_String jName;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -256,84 +217,6 @@ public class JMe80Panel_PatchSelector
   
   private final JPanel jPatch;
   
-  public enum ME80_BANK
-  {
-    U1 (true),
-    U2 (true),
-    U3 (true),
-    U4 (true),
-    U5 (true),
-    U6 (true),
-    U7 (true),
-    U8 (true),
-    U9 (true),
-    P1 (false),
-    P2 (false),
-    P3 (false),
-    P4 (false),
-    P5 (false),
-    P6 (false),
-    P7 (false),
-    P8 (false),
-    P9 (false);
-    
-    private ME80_BANK (final boolean isUserBank)
-    {
-      this.isUserBank = isUserBank;
-    }
-    
-    private final boolean isUserBank;
-    
-    public final boolean isUserBank ()
-    {
-      return this.isUserBank;
-    }
-    
-  }
-
-  public enum ME80_PATCH_IN_BANK
-  {
-    PIB_1 ("1"),
-    PIB_2 ("2"),
-    PIB_3 ("3"),
-    PIB_4 ("4");
-
-    private final String string;
-    
-    private ME80_PATCH_IN_BANK (final String string)
-    {
-      this.string = string;
-    }
-
-    @Override
-    public String toString ()
-    {
-      return this.string;
-    }
-    
-  }
-  
-  public static byte toMidiProgram (final ME80_BANK bank, final ME80_PATCH_IN_BANK patch)
-  {
-    return (byte) (4 * bank.ordinal () + patch.ordinal ());
-  }
-  
-  public static ME80_BANK bankFromMidiProgram (final int midiProgram)
-  {
-    if (midiProgram < 0 || midiProgram > 71)
-      return null;
-    else
-      return ME80_BANK.values ()[midiProgram / 4];    
-  }
-  
-  public static ME80_PATCH_IN_BANK patchInBankFromMidiProgram (final int midiProgram)
-  {
-    if (midiProgram < 0 || midiProgram > 71)
-      return null;
-    else
-      return ME80_PATCH_IN_BANK.values ()[midiProgram % 4];
-  }
-  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // BANK MAP
@@ -341,54 +224,12 @@ public class JMe80Panel_PatchSelector
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private final EnumMap<ME80_BANK, JColorCheckBox<Boolean>> bankMap = new EnumMap<> (ME80_BANK.class);
+  private final EnumMap<PatchSlot_Me80.ME80_BANK, JColorCheckBox<Boolean>> bankMap
+    = new EnumMap<> (PatchSlot_Me80.ME80_BANK.class);
   
-  private final EnumMap<ME80_PATCH_IN_BANK, JColorCheckBox<Boolean>> patchMap = new EnumMap<> (ME80_PATCH_IN_BANK.class);
+  private final EnumMap<PatchSlot_Me80.ME80_PATCH_IN_BANK, JColorCheckBox<Boolean>> patchMap
+    = new EnumMap<> (PatchSlot_Me80.ME80_PATCH_IN_BANK.class);
   
-  private void updateBankPanel ()
-  {
-    if (! SwingUtilities.isEventDispatchThread ())
-    {
-      SwingUtilities.invokeLater (() -> JMe80Panel_PatchSelector.this.updateBankPanel ());
-      return;
-    }
-    final ME80_BANK selectedBank = this.selectedBank;
-    for (final Entry<ME80_BANK, JColorCheckBox<Boolean>> entry : bankMap.entrySet ())
-      entry.getValue ().setDisplayedValue (entry.getKey () == selectedBank);
-  }
-  
-  private void updatePatchPanel ()
-  {
-    if (! SwingUtilities.isEventDispatchThread ())
-    {
-      SwingUtilities.invokeLater (() -> JMe80Panel_PatchSelector.this.updatePatchPanel ());
-      return;
-    }
-    final ME80_PATCH_IN_BANK selectedPatch = this.selectedPatch;
-    for (final Entry<ME80_PATCH_IN_BANK, JColorCheckBox<Boolean>> entry : patchMap.entrySet ())
-      entry.getValue ().setDisplayedValue (entry.getKey () == selectedPatch);
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // SELECTED BANK
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private volatile ME80_BANK selectedBank = null;
-  
-  public final ME80_BANK getSelectedBank ()
-  {
-    return this.selectedBank;
-  }
-  
-  public final void setSelectedBank (final ME80_BANK selectedBank)
-  {
-    this.selectedBank = selectedBank;
-    updateBankPanel ();
-    updateToMe80 ();
-  }
-
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // BANK JCOMPONENT
@@ -407,9 +248,9 @@ public class JMe80Panel_PatchSelector
     extends JPanel
   {
     
-    private final ME80_BANK me80_bank;
+    private final PatchSlot_Me80.ME80_BANK me80_bank;
     
-    protected JMe80Bank (final ME80_BANK me80_bank)
+    protected JMe80Bank (final PatchSlot_Me80.ME80_BANK me80_bank)
     {
       if (me80_bank == null)
         throw new IllegalArgumentException ();
@@ -428,9 +269,9 @@ public class JMe80Panel_PatchSelector
     extends DefaultMouseListener
   {
 
-    private final ME80_BANK me80_bank;
+    private final PatchSlot_Me80.ME80_BANK me80_bank;
 
-    public JBankSelectorMouseListener (final ME80_BANK me80_bank)
+    public JBankSelectorMouseListener (final PatchSlot_Me80.ME80_BANK me80_bank)
     {
       if (me80_bank == null)
         throw new IllegalArgumentException ();
@@ -442,33 +283,17 @@ public class JMe80Panel_PatchSelector
     {
       if (JMe80Panel_PatchSelector.this.jBank.isEnabled ())
       {
-        if (getSelectedBank () == this.me80_bank)
-          setSelectedBank (null);
+        final PatchSlot_Me80 patchSlot =
+          (PatchSlot_Me80) JMe80Panel_PatchSelector.this.getDataValue (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME);
+        if (patchSlot.getBank () == this.me80_bank)
+          JMe80Panel_PatchSelector.this.setDataValue
+            (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, PatchSlot_Me80.MANUAL_SLOT);
         else
-          setSelectedBank (this.me80_bank);
+          JMe80Panel_PatchSelector.this.setDataValue
+            (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, patchSlot.withBank (this.me80_bank));
       }
     }
 
-  }
-  
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //
-  // SELECTED PATCH
-  //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  private volatile ME80_PATCH_IN_BANK selectedPatch = null;
-  
-  public final ME80_PATCH_IN_BANK getSelectedPatch ()
-  {
-    return this.selectedPatch;
-  }
-  
-  public final void setSelectedPatch (final ME80_PATCH_IN_BANK selectedPatch)
-  {
-    this.selectedPatch = selectedPatch;
-    updatePatchPanel ();
-    updateToMe80 ();
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,9 +306,9 @@ public class JMe80Panel_PatchSelector
     extends JPanel
   {
     
-    private final ME80_PATCH_IN_BANK me80_patch;
+    private final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch;
     
-    protected JMe80Patch (final ME80_PATCH_IN_BANK me80_patch)
+    protected JMe80Patch (final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch)
     {
       if (me80_patch == null)
         throw new IllegalArgumentException ();
@@ -501,9 +326,9 @@ public class JMe80Panel_PatchSelector
   private class JPatchSelectorMouseListener
     extends DefaultMouseListener
   {
-      private final ME80_PATCH_IN_BANK me80_patch;
+      private final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch;
 
-    public JPatchSelectorMouseListener (final ME80_PATCH_IN_BANK me80_patch)
+    public JPatchSelectorMouseListener (final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch)
     {
       if (me80_patch == null)
         throw new IllegalArgumentException ();
@@ -515,10 +340,14 @@ public class JMe80Panel_PatchSelector
       {
         if (JMe80Panel_PatchSelector.this.jPatch.isEnabled ())
         {
-          if (getSelectedPatch () == this.me80_patch)
-            setSelectedPatch (null);
-          else
-            setSelectedPatch (this.me80_patch);
+        final PatchSlot_Me80 patchSlot =
+          (PatchSlot_Me80) JMe80Panel_PatchSelector.this.getDataValue (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME);
+        if (patchSlot.getPatchInBank () == this.me80_patch)
+          JMe80Panel_PatchSelector.this.setDataValue
+            (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, PatchSlot_Me80.MANUAL_SLOT);
+        else
+          JMe80Panel_PatchSelector.this.setDataValue
+            (MidiDevice_Me80.CURRENT_PATCH_SLOT_NAME, patchSlot.withPatchInBank (this.me80_patch));
         }
       }
 
