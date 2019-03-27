@@ -77,6 +77,29 @@ public final class MidiDevice_Me80
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   public final static String CURRENT_PATCH_NO_NAME = "current_patch_no";
+  public final static String CURRENT_PATCH_SLOT_NAME = "current_patch_slot";
+  
+  private static class PatchSlot_Me80_CustomConverter
+    implements ParameterDescriptor_RolandBoss.CustomValueConverter<PatchSlot_Me80>
+  {
+
+    @Override
+    public final PatchSlot_Me80 fromDevice (final byte[] bytes)
+    {
+      if (bytes == null || bytes.length != 1)
+        throw new IllegalArgumentException ();
+      return PatchSlot_Me80.fromByte (bytes[0]);
+    }
+
+    @Override
+    public final byte[] toDevice (final PatchSlot_Me80 c)
+    {
+      if (c == null)
+        throw new IllegalArgumentException ();
+      return new byte[]{c.toByte ()};
+    }
+    
+  }
   
   private void registerParameters_Me80_CurrentPatchNo ()
   {
@@ -84,12 +107,17 @@ public final class MidiDevice_Me80
     registerParameter (new ParameterDescriptor_RolandBoss (CURRENT_PATCH_NO_NAME, Integer.class,
       ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.INT_IN_BYTE,
       new byte[]{0x00, 0x00, 0x00, 0x00}, new byte[]{0x00, 0x00, 0x00, 0x01}, CURRENT_PATCH_NO_RAW_NAME));
+
+    registerParameter (new ParameterDescriptor_RolandBoss (CURRENT_PATCH_SLOT_NAME, PatchSlot_Me80.class,
+      new byte[]{0x00, 0x00, 0x00, 0x00}, new byte[]{0x00, 0x00, 0x00, 0x01}, CURRENT_PATCH_NO_RAW_NAME,
+      new PatchSlot_Me80_CustomConverter ()));
     
   }
   
   private final static String[] CURRENT_PATCH_NO_RAW_SUB_KEYS = new String[]
   {
-    CURRENT_PATCH_NO_NAME
+    CURRENT_PATCH_NO_NAME,
+    CURRENT_PATCH_SLOT_NAME
   };
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1184,9 +1212,9 @@ public final class MidiDevice_Me80
   private void registerParameters_Me80_Patches ()
   {   
     byte patchCounter = 1; // Start with 1, hence with 0x20010000 for U1.1; note that 0x20000000 is the temporary patch.
-    for (final ME80_BANK me80_bank : ME80_BANK.values ())
-      for (final ME80_PATCH_IN_BANK me80_patch_in_bank :
-        ME80_PATCH_IN_BANK.values ())
+    for (final PatchSlot_Me80.ME80_BANK me80_bank : PatchSlot_Me80.ME80_BANK.values ())
+      for (final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch_in_bank :
+        PatchSlot_Me80.ME80_PATCH_IN_BANK.values ())
       {
         registerParameter (new ParameterDescriptor_RolandBoss (
           toParameterName (me80_bank, me80_patch_in_bank),
@@ -1206,8 +1234,8 @@ public final class MidiDevice_Me80
    * 
    */
   public static String toParameterName
-  (final ME80_BANK me80_bank,
-   final ME80_PATCH_IN_BANK me80_patch_in_bank)
+  (final PatchSlot_Me80.ME80_BANK me80_bank,
+   final PatchSlot_Me80.ME80_PATCH_IN_BANK me80_patch_in_bank)
   {
     return "patch." + me80_bank.name ().trim ().toLowerCase () + "." + me80_patch_in_bank.name ().trim ().toLowerCase ();
   }
@@ -1446,8 +1474,8 @@ public final class MidiDevice_Me80
    */
   public final void writePatchToDevice
   ( final byte[] patch,
-    final ME80_BANK targetBank,
-    final ME80_PATCH_IN_BANK targetPatchInBank)
+    final PatchSlot_Me80.ME80_BANK targetBank,
+    final PatchSlot_Me80.ME80_PATCH_IN_BANK targetPatchInBank)
   {
     if (patch == null || patch.length != MidiDevice_Me80_Base.PATCH_SIZE)
       throw new IllegalArgumentException ();
