@@ -47,7 +47,6 @@ import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80_Base;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.PatchSlot_Me80;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.Patch_Me80;
-import org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.dialog.JTargetPatchSelectorDialog_Me80;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Boolean;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
