@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import org.javajdj.jservice.midi.MidiService;
-import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_Alesis_QVGT;
+import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.swing.JMidiService;
 
 /** A {@link JFrame} for MIDI instruments.
@@ -94,12 +94,12 @@ public class JQVGTFrame
     setJMenuBar (jMenuBar);
     this.tabbedPane = new JTabbedPane ();
     final MidiService midiService = new JMidiService ();
-    final MidiDevice_Alesis_QVGT midiDevice_Alesis_Quadraverb_GT = new MidiDevice_Alesis_QVGT (midiService);
-    final JQGVTPanel jQvGt = new JQGVTPanel (midiService, midiDevice_Alesis_Quadraverb_GT);
+    final MidiDevice_QVGT midiDevice_QVGT = new MidiDevice_QVGT (midiService);
+    final JQGVTPanel jQVGT = new JQGVTPanel (midiService, midiDevice_QVGT);
     final Runnable r = () ->
     {
-      JQVGTFrame.this.tabbedPane.add ("Instrument: Alesis QVGT", jQvGt);
-      LOG.log (Level.INFO, "Created MIDI Device {0}.", jQvGt.getName ());
+      JQVGTFrame.this.tabbedPane.add ("Instrument: Alesis QVGT", jQVGT);
+      LOG.log (Level.INFO, "Created MIDI Device {0}.", jQVGT.getName ());
     };
     if (SwingUtilities.isEventDispatchThread ())
       r.run ();
