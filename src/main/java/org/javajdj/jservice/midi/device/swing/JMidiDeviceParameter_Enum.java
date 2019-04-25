@@ -86,12 +86,12 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
     return (JComboBox<E>) getValueComponent ();
   }
   
-  private class ValueItemListener
+  private final class ValueItemListener
     implements ItemListener
   {
 
     @Override
-    public void itemStateChanged (ItemEvent ie)
+    public final void itemStateChanged (final ItemEvent ie)
     {
       if (isReadOnly ())
         return;
@@ -101,7 +101,10 @@ public class JMidiDeviceParameter_Enum<E extends Enum<E>>
         if (item == null)
           // This should be fixed, should the exception be thrown :-).
           throw new IllegalStateException ();
-        JMidiDeviceParameter_Enum.this.setDataValue (item);
+        // Set the value on the device, but avoid unnecessary updates.
+        // (Some components backfire non-GUI induced changes to the displayed value.)
+        if (! item.equals (getDataValue ()))
+          JMidiDeviceParameter_Enum.this.setDataValue (item);
       }
     }
       
