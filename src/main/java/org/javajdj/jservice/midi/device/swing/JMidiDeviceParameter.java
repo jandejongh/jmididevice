@@ -165,7 +165,7 @@ public class JMidiDeviceParameter<C>
    * 
    * @param newDataValue The new value, non-{@code null}.
    * 
-   * @throws NullPointerException     If the value is {@code null} (conform {@link Map#put} and {@link MidiDevice#put}).
+   * @throws NullPointerException If the value is {@code null} (conform {@link Map#put} and {@link MidiDevice#put}).
    * 
    * @see JMidiDeviceMultiParameter#setDataValue
    * @see #getKey
