@@ -71,33 +71,33 @@ final class JQVGTPanel_PITCH extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Input", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_INPUT_NAME, MidiDevice_QVGT.PitchInput.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
-      "Wave", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_WAVESHAPE_NAME, MidiDevice_QVGT.LfoWaveshape.class));
+      "Wave", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_WAVESHAPE_NAME, MidiDevice_QVGT.LfoWaveshape.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_SPEED_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_FEEDBACK_NAME, 0, 99));
+      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_SPEED_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_FEEDBACK_NAME, 0, 99));
+      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
-      "Trigger", MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_TRIGGER_NAME));
+      "Trigger", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_TRIGGER_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Detune", MidiDevice_QVGT.EDIT_BUFFER_PITCH_DETUNE_TUNE_NAME, 0, 198));
+      "Detune", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_DETUNE_TUNE_NAME, 0, 198));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_PHASER_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_SPEED_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_PHASER_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_DEPTH_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Stero Separation", MidiDevice_QVGT.EDIT_BUFFER_PITCH_LESLIE_SEPARATION_NAME, 0, 99));
+      "Stero Separation", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_SEPARATION_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
-      "Motor Control", MidiDevice_QVGT.EDIT_BUFFER_PITCH_LESLIE_MOTOR_CONTROL_NAME));
+      "Motor Control", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_MOTOR_CONTROL_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_LESLIE_MOTOR_SPEED_NAME, MidiDevice_QVGT.LeslieSpeed.class));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_MOTOR_SPEED_NAME, MidiDevice_QVGT.LeslieSpeed.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Chorus Enable", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_ENABLE_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
@@ -107,11 +107,11 @@ final class JQVGTPanel_PITCH extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_DEPTH_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Spectrum Shift", MidiDevice_QVGT.EDIT_BUFFER_PITCH_RINGMOD_SPECTRUM_SHIFT_NAME, 0, 299));
+      "Spectrum Shift", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_SPECTRUM_SHIFT_NAME, 0, 299));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Output Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_RINGMOD_OUTPUT_SHIFT_MIX_NAME, 0, 98));
+      "Output Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_OUTPUT_SHIFT_MIX_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "DL/REV Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_RINGMOD_DL_REV_SHIFT_MIX_NAME, 0, 98));
+      "DL/REV Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_DL_REV_SHIFT_MIX_NAME, 0, 98));
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -189,25 +189,25 @@ final class JQVGTPanel_PITCH extends JPanel
               case MONO_CHORUS:
               case STEREO_CHORUS:
               {
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_WAVESHAPE_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_SPEED_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_DEPTH_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CHORUS_FEEDBACK_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_WAVESHAPE_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_SPEED_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_FEEDBACK_NAME));
                 add (new JLabel ());
                 add (new JLabel ());
                 break;
               }
               case MONO_FLANGE:
               case STEREO_FLANGE:
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_SPEED_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_DEPTH_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_FEEDBACK_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_FLANGE_TRIGGER_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_SPEED_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_TRIGGER_NAME));
                 add (new JLabel ());
                 add (new JLabel ());
                 break;
               case DETUNE:
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_DETUNE_TUNE_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_DETUNE_TUNE_NAME));
                 add (new JLabel ());
                 add (new JLabel ());
                 add (new JLabel ());
@@ -215,8 +215,8 @@ final class JQVGTPanel_PITCH extends JPanel
                 add (new JLabel ());
                 break;
               case PHASER:
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_PHASER_SPEED_NAME));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_PHASER_DEPTH_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_SPEED_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_DEPTH_NAME));
                 add (new JLabel ());
                 add (new JLabel ());
                 add (new JLabel ());
@@ -234,9 +234,9 @@ final class JQVGTPanel_PITCH extends JPanel
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
           add (new JLabel ());
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_LESLIE_SEPARATION_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_LESLIE_MOTOR_CONTROL_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_LESLIE_MOTOR_SPEED_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_SEPARATION_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_MOTOR_CONTROL_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_MOTOR_SPEED_NAME));
           add (new JLabel ());
           add (new JLabel ());
           break;
@@ -260,9 +260,9 @@ final class JQVGTPanel_PITCH extends JPanel
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
           add (new JLabel ());
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_RINGMOD_SPECTRUM_SHIFT_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_RINGMOD_OUTPUT_SHIFT_MIX_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_RINGMOD_DL_REV_SHIFT_MIX_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_SPECTRUM_SHIFT_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_OUTPUT_SHIFT_MIX_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_DL_REV_SHIFT_MIX_NAME));
           add (new JLabel ());
           add (new JLabel ());
           break;
