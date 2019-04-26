@@ -95,7 +95,7 @@ public class JQVGTFrame
     this.tabbedPane = new JTabbedPane ();
     final MidiService midiService = new JMidiService ();
     final MidiDevice_QVGT midiDevice_QVGT = new MidiDevice_QVGT (midiService);
-    final JQGVTPanel jQVGT = new JQGVTPanel (midiService, midiDevice_QVGT);
+    final JQVGTPanel jQVGT = new JQVGTPanel (midiService, midiDevice_QVGT);
     final Runnable r = () ->
     {
       JQVGTFrame.this.tabbedPane.add ("Instrument: Alesis QVGT", jQVGT);
