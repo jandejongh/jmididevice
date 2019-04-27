@@ -65,7 +65,6 @@ final class JQVGTPanel_DELAY extends JPanel
     if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
-    setLayout (new GridLayout (9, 1, 5, 0));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Mode", MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME, MidiDevice_QVGT.DelayMode.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
@@ -311,6 +310,7 @@ final class JQVGTPanel_DELAY extends JPanel
       {
         case C1_EQ_PCH_DL_REV:
         {
+          setLayout (new GridLayout (9, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT1_NAME));
           add (new JLabel ());
@@ -349,6 +349,7 @@ final class JQVGTPanel_DELAY extends JPanel
         case C2_LES_DL_REV:
         case C6_RING_DL_REV:
         {
+          setLayout (new GridLayout (9, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF267_IN_MIX_NAME));
@@ -388,6 +389,7 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C3_GEQ_DL:
         {
+          setLayout (new GridLayout (9, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT_NAME));
@@ -427,6 +429,7 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C4_5EQ_PCH_DL:
         {
+          setLayout (new GridLayout (9, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_EXTENDED_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT1_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF14_IN_MIX_NAME));
@@ -523,22 +526,15 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C5_3EQ_REV:
         {
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
+          setLayout (new GridLayout (1, 1, 5, 0));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
           break;
         }
         case C7_RESO_DL_REV:
         {
+          setLayout (new GridLayout (9, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF267_IN_MIX_NAME));
@@ -578,6 +574,7 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C8_SAMPLING:
         {
+          setLayout (new GridLayout (9, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_PLAYBACK_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_START_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_LENGTH_NAME));
