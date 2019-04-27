@@ -42,12 +42,45 @@ public class JMidiDeviceParameter_Integer_Slider
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  private static JSlider createValueComponent (final int minValue, final int maxValue)
+  private static JSlider createValueComponent (final int minValue, final int maxValue, final int displayOffset)
   {
-    return new JSlider (minValue, maxValue);
+    return new JSlider (minValue + displayOffset, maxValue + displayOffset);
   }
 
   /** Constructs the component.
+   * 
+   * @param midiDevice      The MIDI device, non-{@code null}.
+   * @param displayName     The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
+   * @param key             The parameter key (must exist on the {@code midiDevice}).
+   * @param minValue        The minimum parameter value (inclusive), see {@link JSlider#JSlider(int, int)}.
+   * @param maxValue        The maximum parameter value (inclusive), see {@link JSlider#JSlider(int, int)}.
+   * @param displayOffset   The offset, positive or negative, to apply to the parameter value in order to display it.
+   * 
+   * @throws IllegalArgumentException If the device is {@code null}, or the key is unregistered at the MIDI device.
+   * 
+   * @see JMidiDeviceParameter
+   * 
+   */
+  public JMidiDeviceParameter_Integer_Slider (final MidiDevice midiDevice,
+                                         final String displayName,
+                                         final String key,
+                                         final int minValue,
+                                         final int maxValue,
+                                         final int displayOffset)
+  {
+    super (midiDevice, displayName, key, createValueComponent (minValue, maxValue, displayOffset));
+    this.displayOffset = displayOffset;
+    getSlider ().setMajorTickSpacing (maxValue - minValue);
+    // getSlider ().setPaintTicks (true);
+    getSlider ().setPaintLabels (true);
+    getSlider ().addChangeListener (new ValueChangeListener ());
+    dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
+  }
+  
+  /** Constructs the component.
+   * 
+   * <p>
+   * Constructor for zero display offset cases.
    * 
    * @param midiDevice      The MIDI device, non-{@code null}.
    * @param displayName     The name to put into a {@link JLabel}; if {@code null}, no parameter label is created.
@@ -66,13 +99,16 @@ public class JMidiDeviceParameter_Integer_Slider
                                          final int minValue,
                                          final int maxValue)
   {
-    super (midiDevice, displayName, key, createValueComponent (minValue, maxValue));
-    getSlider ().setMajorTickSpacing (maxValue - minValue);
-    // getSlider ().setPaintTicks (true);
-    getSlider ().setPaintLabels (true);
-    getSlider ().addChangeListener (new ValueChangeListener ());
-    dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
+    this (midiDevice, displayName, key, minValue, maxValue, 0);
   }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // DISPLAY OFFSET
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final int displayOffset;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -106,8 +142,9 @@ public class JMidiDeviceParameter_Integer_Slider
       {
         if (! JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValueIsAdjusting ())
         {
-          final int newValue = JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValue ();
-          JMidiDeviceParameter_Integer_Slider.this.getSlider ().setToolTipText (Integer.toString (newValue));
+          final int newDisplayedValue = JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValue ();
+          final int newValue = newDisplayedValue - JMidiDeviceParameter_Integer_Slider.this.displayOffset;
+          JMidiDeviceParameter_Integer_Slider.this.getSlider ().setToolTipText (Integer.toString (newDisplayedValue));
           // Set the value on the device, but avoid unnecessary updates.
           // (Some components backfire non-GUI induced changes to the displayed value.)
           final Integer oldValue = getDataValue ();
@@ -140,7 +177,7 @@ public class JMidiDeviceParameter_Integer_Slider
     SwingUtilsJdJ.invokeOnSwingEDT (() ->
     {
       if (newDataValue != null)
-        getSlider ().setValue (newDataValue);
+        getSlider ().setValue (newDataValue + JMidiDeviceParameter_Integer_Slider.this.displayOffset);
     });
   }
     
