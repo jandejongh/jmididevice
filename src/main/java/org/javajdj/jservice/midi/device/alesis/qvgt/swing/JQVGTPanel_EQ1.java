@@ -38,7 +38,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * Auxiliary file to {@link JQVGTPanel}.
  * 
  * <p>
- * Due to space limitations on the screen, the EQ parameters are divided among two panels,
+ * Due to space limitations on the GUI, the EQ parameters are divided among two panels,
  * {@link JQVGTPanel_EQ1} and {@link JQVGTPanel_EQ2}.
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
