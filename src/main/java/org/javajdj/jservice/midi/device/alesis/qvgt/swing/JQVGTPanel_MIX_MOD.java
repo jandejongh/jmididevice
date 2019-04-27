@@ -68,7 +68,6 @@ final class JQVGTPanel_MIX_MOD extends JPanel
     if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
-    setLayout (new GridLayout (6, 1, 5, 0));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Modulation Type", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_TYPE_NAME, MidiDevice_QVGT.MixModulation.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -147,14 +146,18 @@ final class JQVGTPanel_MIX_MOD extends JPanel
       {
         case C1_EQ_PCH_DL_REV:
         {
+          setLayout (new GridLayout (8, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_TYPE_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_DEPTH_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_SPEED_NAME));
           break;
         }
         case C4_5EQ_PCH_DL:
         {
+          setLayout (new GridLayout (8, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_TYPE_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_DEPTH_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_SPEED_NAME));
           break;
@@ -166,14 +169,10 @@ final class JQVGTPanel_MIX_MOD extends JPanel
         case C7_RESO_DL_REV:
         case C8_SAMPLING:
         {
-          add (new JLabel ());
-          add (new JLabel ());
+          setLayout (new GridLayout (1, 1, 5, 0));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
           break;
         }
         default:
