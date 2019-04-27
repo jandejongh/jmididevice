@@ -179,6 +179,7 @@ final class JQVGTPanel_PITCH extends JPanel
         case C1_EQ_PCH_DL_REV:
         case C4_5EQ_PCH_DL:
         {
+          setLayout (new GridLayout (8, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_INPUT_NAME));
           final MidiDevice_QVGT.PitchMode mode =
@@ -229,6 +230,7 @@ final class JQVGTPanel_PITCH extends JPanel
         }
         case C2_LES_DL_REV:
         {
+          setLayout (new GridLayout (8, 1, 5, 0));
           add (new JLabel ());
           final JLabel label = new JLabel ("Leslie");
           label.setHorizontalAlignment (SwingConstants.CENTER);
@@ -243,6 +245,7 @@ final class JQVGTPanel_PITCH extends JPanel
         }
         case C5_3EQ_REV:
         {
+          setLayout (new GridLayout (8, 1, 5, 0));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_ENABLE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_WAVESHAPE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_SPEED_NAME));
@@ -255,6 +258,7 @@ final class JQVGTPanel_PITCH extends JPanel
         }
         case C6_RING_DL_REV:
         {
+          setLayout (new GridLayout (8, 1, 5, 0));
           add (new JLabel ());
           final JLabel label = new JLabel ("Ring Modulator");
           label.setHorizontalAlignment (SwingConstants.CENTER);
@@ -271,16 +275,10 @@ final class JQVGTPanel_PITCH extends JPanel
         case C7_RESO_DL_REV:
         case C8_SAMPLING:
         {
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
+          setLayout (new GridLayout (1, 1, 5, 0));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
           break;
         }
         default:
