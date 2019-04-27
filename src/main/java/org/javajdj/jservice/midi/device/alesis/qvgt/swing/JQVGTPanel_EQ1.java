@@ -102,27 +102,27 @@ final class JQVGTPanel_EQ1 extends JPanel
       "High Rotor Level", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF2_HIGH_ROTOR_LEVEL_NAME, 0, 26));
     
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "16   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME, 0, 28));
+      "16   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "32   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME, 0, 28));
+      "32   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "62   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME, 0, 28));
+      "62   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "126 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME, 0, 28));
+      "126 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "250 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME, 0, 28));
+      "250 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "500 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME, 0, 28));
+      "500 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "1   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME, 0, 28));
+      "1   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "2   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME, 0, 28));
+      "2   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "4   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME, 0, 28));
+      "4   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "8   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME, 0, 28));
+      "8   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "16  kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME, 0, 28));
+      "16  kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME, 0, 28, -14));
     
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Mode", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_MODE_NAME, MidiDevice_QVGT.EqModeConfig4.class));
