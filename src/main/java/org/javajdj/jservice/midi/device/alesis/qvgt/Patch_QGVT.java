@@ -448,6 +448,77 @@ public final class Patch_QGVT
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
+  // REVERB MODE [CONFIGURATIONS 1, 2, 5, 6, 7 ONLY]
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  /** The offset in the decoded Alesis Quadraverb GT patch/program data of the reverb mode.
+   * 
+   * <p>
+   * The reverb mode has a unique address in the patch data, but is is only valid in
+   * {@link Configuration#C1_EQ_PCH_DL_REV},
+   * {@link Configuration#C2_LES_DL_REV},
+   * {@link Configuration#C5_3EQ_REV},
+   * {@link Configuration#C6_RING_DL_REV},
+   * and {@link Configuration#C7_RESO_DL_REV},
+   * in which case it represents a {@link MidiDevice_QVGT.ReverbMode}.
+   * 
+   * @see MidiDevice_QVGT.ReverbMode
+   * @see Configuration
+   * @see Configuration#C1_EQ_PCH_DL_REV
+   * @see Configuration#C2_LES_DL_REV
+   * @see Configuration#C5_3EQ_REV
+   * @see Configuration#C6_RING_DL_REV
+   * @see Configuration#C7_RESO_DL_REV
+   * 
+   */
+  public final static int OFFSET_REVERB_MODE = 0x32;
+  
+  /** Returns the reverb mode of this program, provided it is in configurations 1, 2, 5, 6, or 7.
+   * 
+   * <p>
+   * A {@link RuntimeException} is thrown if this program is in a configuration other than
+   * {@link Configuration#C1_EQ_PCH_DL_REV},
+   * {@link Configuration#C2_LES_DL_REV},
+   * {@link Configuration#C5_3EQ_REV},
+   * {@link Configuration#C6_RING_DL_REV},
+   * or {@link Configuration#C7_RESO_DL_REV},
+   * or if the patch data is otherwise found to be invalid.
+   * 
+   * @return The reverb mode of this program (if in configuration 1, 2, 5, 6, or 7).
+   * 
+   * @see #getConfiguration
+   * @see MidiDevice_QVGT.ReverbMode
+   * @see Configuration#C1_EQ_PCH_DL_REV
+   * @see Configuration#C2_LES_DL_REV
+   * @see Configuration#C5_3EQ_REV
+   * @see Configuration#C6_RING_DL_REV
+   * @see Configuration#C7_RESO_DL_REV
+   * 
+   */
+  public final MidiDevice_QVGT.ReverbMode getReverbMode ()
+  {
+    switch (getConfiguration ())
+    {
+      case C1_EQ_PCH_DL_REV:
+      case C2_LES_DL_REV:
+      case C5_3EQ_REV:
+      case C6_RING_DL_REV:
+      case C7_RESO_DL_REV:
+        final int byteValue = this.decodedBytes[Patch_QGVT.OFFSET_REVERB_MODE];
+        if (byteValue < 0)
+          throw new RuntimeException ();
+        final MidiDevice_QVGT.ReverbMode[] enumValues = MidiDevice_QVGT.ReverbMode.values ();
+        if (byteValue >= enumValues.length)
+          throw new RuntimeException ();
+        return enumValues[byteValue];
+      default:
+        throw new RuntimeException ();
+    }
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
   // EQUALS / HASHCODE
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
