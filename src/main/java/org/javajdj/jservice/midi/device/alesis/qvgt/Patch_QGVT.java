@@ -316,6 +316,81 @@ public final class Patch_QGVT
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
+  // EQ MODE [CONFIGURATIONS 1 OR 4 ONLY]
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /** The offset in the decoded Alesis Quadraverb GT patch/program data of the eq mode.
+   * 
+   * <p>
+   * The eq mode has a unique address in the patch data; it is the first (most significant) bit in {@code 0x7C},
+   * but is is only valid in {@link Configuration#C1_EQ_PCH_DL_REV} and {@link Configuration#C4_5EQ_PCH_DL},
+   * in which case it represents a {@link MidiDevice_QVGT.EqModeConfig1} or {@link MidiDevice_QVGT.EqModeConfig4},
+   * respectively.
+   * 
+   * @see MidiDevice_QVGT.EqModeConfig1
+   * @see MidiDevice_QVGT.EqModeConfig4
+   * @see Configuration
+   * @see Configuration#C1_EQ_PCH_DL_REV
+   * @see Configuration#C4_5EQ_PCH_DL
+   * 
+   */
+  public final static int OFFSET_EQ_MODE = 0x7C;
+  
+  /** Returns the eq mode of this program, provided it is in configuration 1.
+   * 
+   * <p>
+   * A {@link RuntimeException} is thrown if this program is in a configuration other than
+   * {@link Configuration#C1_EQ_PCH_DL_REV},
+   * or if the patch data is otherwise found to be invalid.
+   * 
+   * @return The eq mode of this program (if in configuration 1).
+   * 
+   * @see #getConfiguration
+   * @see MidiDevice_QVGT.EqModeConfig1
+   * @see Configuration#C1_EQ_PCH_DL_REV
+   * 
+   */
+  public final MidiDevice_QVGT.EqModeConfig1 getEqMode_Config1 ()
+  {
+    switch (getConfiguration ())
+    {
+      case C1_EQ_PCH_DL_REV:
+        final boolean bitValue = (this.decodedBytes[Patch_QGVT.OFFSET_EQ_MODE] & 0x80) != 0;
+        return MidiDevice_QVGT.EqModeConfig1.values ()[bitValue ? 1 : 0];
+      default:
+        throw new RuntimeException ();
+    }
+  }
+  
+  /** Returns the eq mode of this program, provided it is in configuration 4.
+   * 
+   * <p>
+   * A {@link RuntimeException} is thrown if this program is in a configuration other than
+   * {@link Configuration#C4_5EQ_PCH_DL},
+   * or if the patch data is otherwise found to be invalid.
+   * 
+   * @return The eq mode of this program (if in configuration 4).
+   * 
+   * @see #getConfiguration
+   * @see MidiDevice_QVGT.EqModeConfig4
+   * @see Configuration#C4_5EQ_PCH_DL
+   * 
+   */
+  public final MidiDevice_QVGT.EqModeConfig4 getEqMode_Config4 ()
+  {
+    switch (getConfiguration ())
+    {
+      case C4_5EQ_PCH_DL:
+        final boolean bitValue = (this.decodedBytes[Patch_QGVT.OFFSET_EQ_MODE] & 0x80) != 0;
+        return MidiDevice_QVGT.EqModeConfig4.values ()[bitValue ? 1 : 0];
+      default:
+        throw new RuntimeException ();
+    }
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
   // PITCH MODE [CONFIGURATIONS 1 AND 4 ONLY]
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
