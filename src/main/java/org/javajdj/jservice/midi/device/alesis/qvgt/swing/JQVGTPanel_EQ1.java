@@ -74,7 +74,9 @@ final class JQVGTPanel_EQ1 extends JPanel
     setLayout (new GridLayout (9, 1, 5, 0));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Preset", MidiDevice_QVGT.EDIT_BUFFER_EQ_PRESET_NAME, MidiDevice_QVGT.EqPreset.class));
-    
+    //
+    // Config 1
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Mode", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_MODE_NAME, MidiDevice_QVGT.EqModeConfig1.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -84,7 +86,7 @@ final class JQVGTPanel_EQ1 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_F_NAME, 200, 9999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_BW_NAME, 20, 255));
+      "Mid Bandwidth", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_BW_NAME, 20, 255));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_AMP_NAME, 0, 560));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -94,13 +96,17 @@ final class JQVGTPanel_EQ1 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_MID_F_NAME, 200, 9999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_MID_BW_NAME, 20, 255));
+      "Mid Bandwidth", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_MID_BW_NAME, 20, 255));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_MID_AMP_NAME, 0, 560));
-    
+    //
+    // Config 2
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "High Rotor Level", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF2_HIGH_ROTOR_LEVEL_NAME, 0, 26));
-    
+    //
+    // Config 3
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "16   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -123,7 +129,9 @@ final class JQVGTPanel_EQ1 extends JPanel
       "8   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "16  kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME, 0, 28, -14));
-    
+    //
+    // Config 4
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Mode", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_MODE_NAME, MidiDevice_QVGT.EqModeConfig4.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -143,14 +151,16 @@ final class JQVGTPanel_EQ1 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_F_NAME, 200, 9999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_BW_NAME, 20, 255));
+      "Mid Bandwidth", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_BW_NAME, 20, 255));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_AMP_NAME, 0, 560));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "High Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_HIGH_F_NAME, 2000, 18000));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "High Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_HIGH_AMP_NAME, 0, 560));
-    
+    //
+    // Config 5
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Low Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_LOW_F_NAME, 20, 999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -158,14 +168,16 @@ final class JQVGTPanel_EQ1 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_F_NAME, 200, 9999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_BW_NAME, 20, 255));
+      "Mid Bandwidth", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_BW_NAME, 20, 255));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Mid Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_AMP_NAME, 0, 560));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "High Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_F_NAME, 2000, 18000));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "High Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_AMP_NAME, 0, 560));
-    
+    //
+    // Config 7
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Reso Gate Mode", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF7_RESO_GATE_MODE_NAME, MidiDevice_QVGT.EqResonatorGateMode.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -180,7 +192,7 @@ final class JQVGTPanel_EQ1 extends JPanel
       "Reso 4 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF7_RESO_4_TUNE_NAME, 0, 60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Reso 5 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF7_RESO_5_TUNE_NAME, 0, 60));
-    
+    //
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
