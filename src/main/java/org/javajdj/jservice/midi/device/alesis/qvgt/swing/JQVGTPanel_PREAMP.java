@@ -153,7 +153,7 @@ final class JQVGTPanel_PREAMP extends JPanel
         case C7_RESO_DL_REV:
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 0, 4));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_COMPRESSION_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_OVERDRIVE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_DISTORTION_NAME));
