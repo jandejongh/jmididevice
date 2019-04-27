@@ -108,10 +108,15 @@ public class JMidiDeviceParameter_Integer_Slider
         {
           final int newValue = JMidiDeviceParameter_Integer_Slider.this.getSlider ().getValue ();
           JMidiDeviceParameter_Integer_Slider.this.getSlider ().setToolTipText (Integer.toString (newValue));
-          JMidiDeviceParameter_Integer_Slider.this.setDataValue (newValue);
+          // Set the value on the device, but avoid unnecessary updates.
+          // (Some components backfire non-GUI induced changes to the displayed value.)
+          final Integer oldValue = getDataValue ();
+          if (oldValue == null || oldValue != newValue)
+            JMidiDeviceParameter_Integer_Slider.this.setDataValue (newValue);
         }
       }
     }
+    
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
