@@ -45,9 +45,9 @@ import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_String;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
 
-/** *  A {@link JPanel} for selecting the current patch on a Boss ME-80,
-  switch between manualSlot and banks,
-  and showing/setting the patch name.
+/**A {@link JPanel} for selecting the current patch on a Boss ME-80,
+ *   switch between manual and banks,
+ *   and showing/setting the patch name.
  * 
  * <p>
  * Subordinate to {@link JMe80Panel}.
