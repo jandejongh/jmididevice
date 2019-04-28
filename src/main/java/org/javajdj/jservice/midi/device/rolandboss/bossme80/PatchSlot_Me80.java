@@ -224,6 +224,7 @@ public final class PatchSlot_Me80
    */
   public enum ME80_BANK
   {
+    
     U1 (true),
     U2 (true),
     U3 (true),
@@ -290,6 +291,7 @@ public final class PatchSlot_Me80
    */
   public enum ME80_PATCH_IN_BANK
   {
+    
     PIB_1 ("1"),
     PIB_2 ("2"),
     PIB_3 ("3"),
