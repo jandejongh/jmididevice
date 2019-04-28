@@ -1455,7 +1455,7 @@ public final class MidiDevice_Me80
       ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.BOOLEAN_IN_BYTE,
       new byte[]{0x7F, 0x00, 0x06, 0x00}, new byte[]{0x00, 0x00, 0x00, 0x01}, null));
     addRQ1Request (COMMAND_USB_DIRECT_MON_NAME);
-    // I do not know what this parameter does... But i'd like to try...
+    // I do not know what this parameter does... But I'd like to try...
     registerParameter (new ParameterDescriptor_RolandBoss (COMMAND_USB_IN_OUT_MODE_NAME, Integer.class,
       ParameterDescriptor_RolandBoss.ParameterConversion_RolandBoss.INT_IN_BYTE,
       new byte[]{0x7F, 0x00, 0x06, 0x01}, new byte[]{0x00, 0x00, 0x00, 0x01}, null));
