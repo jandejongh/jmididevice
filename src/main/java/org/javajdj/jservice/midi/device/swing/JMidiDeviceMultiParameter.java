@@ -51,7 +51,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * Note that this class does not add the {@link JComponent}s
  * to this {@link JPanel}; that is up to the sub-classes to implement
  * (since there is no way to guess how the components are to be laid out, if at all).
- * Sub-classes are not obliged to even use object's of this class as their main {@link JPanel}.
+ * Sub-classes are not obliged to even use objects of this class as their main {@link JPanel}.
  * 
  * <p>
  * Ready-to-go {@link JMidiDeviceMultiParameter}s for <i>single</i> parameters are available in the same package.
