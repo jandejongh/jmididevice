@@ -167,7 +167,7 @@ public class MidiUtils_QVGT
   public static byte[] createMidiSysExMessage_QVGT_DumpRequest_AllPrograms ()
   {
     final byte[] rawMidiMessage = MidiUtils_QVGT.MIDI_DUMP_REQUEST_TEMPLATE.clone ();
-    rawMidiMessage[rawMidiMessage.length - 2] = (byte) 101; // Any value < 100 will do.
+    rawMidiMessage[rawMidiMessage.length - 2] = (byte) 101; // Any value > 100 will do.
     return rawMidiMessage;
   }
 
