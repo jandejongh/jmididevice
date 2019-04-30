@@ -5045,6 +5045,16 @@ public class MidiDevice_QVGT
     getMidiService ().sendRawMidiMessage (rawMidiMessage);    
   }
 
+  protected void sendMidiSysExMessage_QGVT_DataDump (final Patch_QGVT patch, final int programNumber)
+  {
+    if (patch == null)
+      throw new IllegalArgumentException ();
+    final byte[] rawMidiMessage = MidiUtils_QVGT.createMidiSysExMessage_QVGT_DataDump (patch.getEncodedBytes (), programNumber);
+    // XXX The following should work as well!! XXX
+    //sendMidiSysEx ((byte) 0x03 /* XXX MUST BE DONE DIFFERENTLY IN SUPER CLASS!! XXX */, rawMidiMessage);
+    getMidiService ().sendRawMidiMessage (rawMidiMessage);
+  }
+
   protected void sendMidiSysExMessage_QGVT_DumpRequest (final int programNumber)
   {
     final byte[] rawMidiMessage = MidiUtils_QVGT.createMidiSysExMessage_QVGT_DumpRequest (programNumber);
@@ -5272,7 +5282,7 @@ public class MidiDevice_QVGT
             final byte[] convertedValue = parameterDescriptor_QVGT.convertToDevice (value);
             if (convertedValue == null)
               throw new IllegalArgumentException ();
-            sendMidiControlChange (getMidiChannel (), (byte) parameterDescriptor_QVGT.getController (), (int) convertedValue[0]);
+            sendMidiControlChange (getMidiChannel (), parameterDescriptor_QVGT.getController (), (int) convertedValue[0]);
             return oldValue;
           }
           case MidiProgramChange:
@@ -5311,14 +5321,17 @@ public class MidiDevice_QVGT
                 default:
                   throw new RuntimeException ();
               }
-              MidiDevice_QVGT.this.sendMidiSysExMessage_QVGT_Editing (function, page, editingValue);
+              sendMidiSysExMessage_QVGT_Editing (function, page, editingValue);
             }
             return oldValue;
           }
           case MidiSysEx_QVGT_DataDump:
           {
-            throw new UnsupportedOperationException ();
-            // break;            
+            if (value == null || ! (value instanceof Patch_QGVT))
+              throw new IllegalArgumentException ();
+            final int programNumber = parameterDescriptor_QVGT.getProgram ();
+            sendMidiSysExMessage_QGVT_DataDump ((Patch_QGVT) value, programNumber);
+            return oldValue;
           }
           default:
             throw new RuntimeException ();
