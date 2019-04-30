@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.swing.JMidiService;
 import org.javajdj.jservice.midi.swing.JRawMidiService;
 
