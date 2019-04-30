@@ -115,7 +115,7 @@ public class JMidiDeviceMultiParameter
    * @return The MIDI device, non-{@code null} and fixed.
    * 
    */
-  private MidiDevice getMidiDevice ()
+  protected MidiDevice getMidiDevice ()
   {
     return this.midiDevice;
   }
