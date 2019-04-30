@@ -46,7 +46,8 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * @see JQVGTPanel_MIX
  * 
  */
-final class JQVGTPanel_MIX_MOD extends JPanel
+final class JQVGTPanel_MIX_MOD
+  extends JPanel
 {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
