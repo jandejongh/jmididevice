@@ -92,8 +92,8 @@ public class JMidiDeviceMultiParameter
     super ();
     if (midiDevice == null || componentMap == null || ! midiDevice.keySet ().containsAll (componentMap.keySet ()))
       throw new IllegalArgumentException ();
-    for (Set<JComponent> component : componentMap.values ())
-      if (component != null && component.contains (null))
+    for (Set<JComponent> componentSet : componentMap.values ())
+      if (componentSet != null && componentSet.contains (null))
         throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
     this.componentMap = componentMap;
@@ -210,13 +210,14 @@ public class JMidiDeviceMultiParameter
       throw new RuntimeException ();
     if (! this.componentMap.keySet ().containsAll (changes.keySet ()))
       throw new IllegalArgumentException ();
-    SwingUtilsJdJ.invokeOnSwingEDT (()->
-    {
-      for (final Map.Entry<String, Object> entry : changes.entrySet ())
-        if (JMidiDeviceMultiParameter.this.componentMap.get (entry.getKey ()) != null)
-          for (final JComponent jComponent : JMidiDeviceMultiParameter.this.componentMap.get (entry.getKey ()))
-            SwingUtilsJdJ.enableComponentAndDescendants (jComponent, entry.getValue () != null);
-    });
+    if (this.disableWhenNull)
+      SwingUtilsJdJ.invokeOnSwingEDT (()->
+      {
+        for (final Map.Entry<String, Object> entry : changes.entrySet ())
+          if (JMidiDeviceMultiParameter.this.componentMap.get (entry.getKey ()) != null)
+            for (final JComponent jComponent : JMidiDeviceMultiParameter.this.componentMap.get (entry.getKey ()))
+              SwingUtilsJdJ.enableComponentAndDescendants (jComponent, entry.getValue () != null);
+      });
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,6 +256,32 @@ public class JMidiDeviceMultiParameter
       return Collections.unmodifiableSet (this.componentMap.get (key));
     else
       return null;
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // DISABLE WHEN NULL
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private volatile boolean disableWhenNull = true;
+  
+  public final boolean isDisableWhenNull ()
+  {
+    return this.disableWhenNull;
+  }
+  
+  public final synchronized void setDisableWhenNull (final boolean disableWhenNull)
+  {
+    if (disableWhenNull != this.disableWhenNull)
+    {
+      this.disableWhenNull = disableWhenNull;
+      for (final Map.Entry<String, Set<JComponent>> entry : this.componentMap.entrySet ())
+        if (entry.getValue () != null)
+          for (final JComponent jComponent : entry.getValue ())
+            SwingUtilsJdJ.enableComponentAndDescendants (
+              jComponent, (! disableWhenNull) || getMidiDevice ().get (entry.getKey ()) != null);
+    }
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
