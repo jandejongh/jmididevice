@@ -105,7 +105,7 @@ public final class Patch_QGVT
     {
       case DECODED_PATCH_SIZE:
         // XXX Should consider to NOT clone the input data?
-        this.decodedBytes = bytes.clone (); /* MidiUtils.ensureAllMidiDataBytes (bytes).clone (); */
+        this.decodedBytes = bytes.clone ();
         this.encodedBytes = MidiUtils_QVGT.encodeToMidi (this.decodedBytes, Patch_QGVT.ENCODED_PATCH_SIZE);
         break;
       case ENCODED_PATCH_SIZE:
