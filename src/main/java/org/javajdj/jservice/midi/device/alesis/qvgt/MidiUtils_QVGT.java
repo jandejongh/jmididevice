@@ -17,6 +17,7 @@
 package org.javajdj.jservice.midi.device.alesis.qvgt;
 
 import java.util.logging.Logger;
+import org.javajdj.jservice.midi.MidiUtils;
 
 /** MIDI utility class specific to the Alesis Quadraverb GT.
  *
@@ -99,6 +100,70 @@ public class MidiUtils_QVGT
     //   "0x" + Integer.toHexString (value).toUpperCase (),
     //   HexUtils.bytesToHex (rawMidiMessage)
     // });
+    return rawMidiMessage;
+  }
+  
+  private final static byte[] MIDI_DATA_DUMP_PREFIX_TEMPLATE = new byte[]
+  {
+    (byte) 0xF0,                           // System Exclusive Status
+    (byte) 0x00, (byte) 0x00, (byte) 0x0E, // Alesis manufacturer id# (Vendor ID)
+    (byte) 0x07,                           // Quadraverb-GT id#
+    (byte) 0x02,                           // Opcode: 02 - MIDI Data Dump
+    (byte) 0x00,                           // Program#, to be set appropriately!
+  };
+
+  private final static int MIDI_DATA_DUMP_MESSAGE_SIZE =
+    MidiUtils_QVGT.MIDI_DATA_DUMP_PREFIX_TEMPLATE.length // SysEx prefix
+    + Patch_QGVT.ENCODED_PATCH_SIZE // Encoded patch data
+    + 1; // End-Of-Exclusive
+  
+  /** Formats a MIDI Data Dump for given program number for the Alesis Quadraverb GT.
+   * 
+   * <p>
+   * Program numbers (patches) are numbered 0 through 99, inclusive.
+   * The value 100 ({@link MidiDevice_QVGT#EDIT_BUFFER_PROGRAM_NUMBER})
+   * is reserved for the Edit Buffer.
+   * 
+   * @param patchBytes    The patch bytes, non-{@code null} and either encoded with length {@link Patch_QGVT#ENCODED_PATCH_SIZE}
+   *                        or decoded with length {@link Patch_QGVT#DECODED_PATCH_SIZE}.
+   * @param programNumber The program number, between 0 and 100, inclusive.
+   * 
+   * @return The formatted MIDI message.
+   * 
+   * @throws IllegalArgumentException If {@code patchBytes == null} or of incorrect length,
+   *                                    contains illegal bytes (in the encoded use case),
+   *                                    or if program number is negative or strictly larger than 100.
+   * 
+   * @see MidiDevice_QVGT#EDIT_BUFFER_PROGRAM_NUMBER
+   * @see Patch_QGVT#ENCODED_PATCH_SIZE
+   * @see Patch_QGVT#DECODED_PATCH_SIZE
+   * 
+   */
+  public static byte[] createMidiSysExMessage_QVGT_DataDump (final byte[] patchBytes, final int programNumber)
+  {
+    if (patchBytes == null || programNumber < 0 || programNumber > MidiDevice_QVGT.EDIT_BUFFER_PROGRAM_NUMBER)
+      throw new IllegalArgumentException ();
+    final byte[] encodedPatchBytes;
+    switch (patchBytes.length)
+    {
+      case Patch_QGVT.DECODED_PATCH_SIZE:
+        encodedPatchBytes = MidiUtils_QVGT.encodeToMidi (patchBytes, Patch_QGVT.ENCODED_PATCH_SIZE);
+        break;
+      case Patch_QGVT.ENCODED_PATCH_SIZE:
+        encodedPatchBytes = MidiUtils.ensureAllMidiDataBytes (patchBytes);
+        break;
+      default:
+        throw new IllegalArgumentException ();
+    }
+    final byte[] rawMidiMessage = new byte[MidiUtils_QVGT.MIDI_DATA_DUMP_MESSAGE_SIZE];
+    System.arraycopy (MidiUtils_QVGT.MIDI_DATA_DUMP_PREFIX_TEMPLATE, 0,
+                      rawMidiMessage, 0,
+                      MidiUtils_QVGT.MIDI_DATA_DUMP_PREFIX_TEMPLATE.length);
+    rawMidiMessage[MidiUtils_QVGT.MIDI_DATA_DUMP_PREFIX_TEMPLATE.length - 1] = (byte) programNumber;
+    System.arraycopy (encodedPatchBytes, 0,
+                      rawMidiMessage, MidiUtils_QVGT.MIDI_DATA_DUMP_PREFIX_TEMPLATE.length,
+                      Patch_QGVT.ENCODED_PATCH_SIZE);
+    rawMidiMessage[rawMidiMessage.length - 1] = (byte) 0xF7; // End-Of-Exclusive
     return rawMidiMessage;
   }
   
@@ -212,10 +277,17 @@ public class MidiUtils_QVGT
     int dstBitOffset = 1;
     for (final byte messageByte : message)
     {
-      encodedMessage[dstPosition] |= (messageByte >>> dstBitOffset);
+      encodedMessage[dstPosition] |= ((messageByte & 0xFF) >>> dstBitOffset);
+      // Sanity check...
+      // if (encodedMessage[dstPosition] < 0)
+      //   throw new RuntimeException ();
+      // XXX Does this actually make sense when encoding?? Why would you ever want to do that (dropping bits from decoded input)??
       if (dstPosition + 1 >= encodedMessage.length)
         break;
       encodedMessage[dstPosition + 1] = (byte) (0x7F & (messageByte << (7 - dstBitOffset)));
+      // Sanity check...
+      // if (encodedMessage[dstPosition + 1] < 0)
+      //   throw new RuntimeException ();
       dstPosition++;
       dstBitOffset++;
       if (dstBitOffset == 8)
