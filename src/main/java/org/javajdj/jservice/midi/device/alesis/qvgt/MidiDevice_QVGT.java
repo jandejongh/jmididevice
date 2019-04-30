@@ -29,6 +29,7 @@ import org.javajdj.jservice.midi.device.AbstractMidiDevice;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.javajdj.jservice.Service;
 import org.javajdj.util.hex.HexUtils;
 import org.javajdj.jservice.midi.MidiService;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
@@ -1258,7 +1259,7 @@ public class MidiDevice_QVGT
       ParameterDescriptor_QVGT.Function_QVGT.F_EQ,
       2, /* page */
       EDIT_BUFFER_PROGRAM_NUMBER, /* program */
-      0x69, /* offset */ // UNDOCUMENTED BUT APPEARS TO BE SAME ADDRESS AS MULTITAB NUMBER!
+      0x69, /* offset */ // UNDOCUMENTED BUT APPEARS TO BE SAME ADDRESS AS MULTITAP NUMBER! -> XXX NO CANNOT BE RIGHT [CONFIG 4!!]
       1, /* size */
       EDIT_BUFFER_NAME, /* parentKey */
       null, /* customValueConverter */
@@ -5341,6 +5342,40 @@ public class MidiDevice_QVGT
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // WRITE PATCH TO DEVICE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  /** Writes a patch to a specific patch slot on the Alesis Quadraverb GT.
+   * 
+   * <p>
+   * The request is ignored if the device (as a {@link Service}) is not active.
+   * 
+   * @param patch             The patch, non-{@code null} and of proper size.
+   * @param targetPatchNumber The target patch (program) number on the Alesis Quadraverb GT.
+   * 
+   * @throws IllegalArgumentException If the patch is {@code null}.
+   *                                  or the target patch number is out of range (0 through 99 inclusive).
+   *
+   * @see MidiDevice_QVGT#EDIT_BUFFER_PROGRAM_NUMBER
+   * @see Service#getStatus
+   * @see Status#ACTIVE
+   * 
+   */
+  public final void writePatchToDevice
+  ( final Patch_QGVT patch,
+    final int targetPatchNumber)
+  {
+    if (patch == null || targetPatchNumber < 0 || targetPatchNumber >= MidiDevice_QVGT.EDIT_BUFFER_PROGRAM_NUMBER)
+      throw new IllegalArgumentException ();
+    if (getStatus () != Status.ACTIVE)
+      return;
+    // LOG.log (Level.INFO, "Writing {0} to {1}.", new Object[]{patch, targetPatchNumber});
+    sendMidiSysExMessage_QGVT_DataDump (patch, targetPatchNumber);
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
