@@ -265,12 +265,12 @@ public class MidiUtils_QVGT
     int dstPosition = 0;
     int dstBitOffset = 0;
     // LOG.log (Level.INFO, "Raw Message: {0}", HexUtils.bytesToHex (rawMessage));
-    int rawIndex = 0;
+    // int rawIndex = 0;
     for (final byte rawMessageByte : rawMessage)
     {
       // LOG.log (Level.INFO, "rawIndex = {0}, dstPosition = {1}, dstBitOffset = {2}.",
       //   new Object[]{rawIndex, dstPosition, dstBitOffset});
-      rawIndex++;
+      // rawIndex++;
       if (rawMessageByte < 0)
         throw new IllegalArgumentException ();
       else if (dstBitOffset == 0)
