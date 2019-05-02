@@ -636,13 +636,99 @@ public class MidiDevice_QVGT
     RES5_EQ3;
   }
   
+  /** The (selected) resonator number in Config 4 with the appropriate Eq (quintuple resonators) mode.
+   * 
+   * <p>
+   * Only applicable to {@link Patch_QGVT.Configuration#C4_5EQ_PCH_DL}
+   * combined with {@link EqModeConfig4#RES5_EQ3}. In this combination,
+   * the Alesis Quadraverb GT has 5 (!) resonators available that can be
+   * edited on the device by selecting one of the resonators (Resonator Number, or something equivalent),
+   * allowing sub-sequent menu entries to refer to <i>only</i> that resonator
+   * (i.e., allowing setting <i>that</i> resonator's parameters.
+   * A similar approach is taken towards setting parameters of one of 8 (!) TAPs
+   * in {@link DelayModeExtended#MULTI_TAP} configurations, when applicable.
+   * Note that for both resonators and taps,
+   * all parameter values are simultaneously individually available in the patch data,
+   * irrespective of the selected resonator or tap.
+   * 
+   * <p>
+   * The problem we encounter in the implementation of the QVGT MIDI is that both
+   * the selected resonator from the EQ (if applicable)
+   * as well as the selected tap from the DELAY (if applicable)
+   * share <i>the same</i> address in the patch data, viz., {@code 0x69}.
+   * Noting that both quintuple-resonator mode and the {@link DelayModeExtended#MULTI_TAP} mode
+   * are available in {@link Patch_QGVT.Configuration#C4_5EQ_PCH_DL},
+   * we are faced with the problem that the byte value in the patch data may actually exceed the
+   * admissible range for the resonators (since we have only five resonators and eight tabs).
+   * Hence, defining an {@code Enum} <i>only</i> for the five resonators available leads to runtime errors
+   * in case higher-numbered TAPs are selected.
+   * 
+   * <p>
+   * Note that this problem is easy to solve on the QVGT because it can show/edit only either
+   * the EQ <i>or</i> the DELAY parameters, so there's ample opportunity to "fix" the problem of a too high-numbered
+   * (selected) TAP number interpreted as a (selected) RESONATOR number.
+   * In addition, the selected resonator or tap clearly has no effect on the signal-processing requirements arising from
+   * the patch data (in other words, the signal processing is most likely to ignore {@code 0x69}).
+   * 
+   * <p>
+   * In our implementation, we circumvent the problem outlined above by simple defining eight instead of five
+   * resonators, clearly indicating that the upper three are non-existent,
+   * and dealing with these values in the code using the {@link MidiDevice},
+   * instead of trying to fix it at the device implementation.
+   * 
+   * <p>
+   * XXX In a future revision of this {@link MidiDevice} implementation,
+   * we seek to remove the definitions of {@link EqResonatorConfig4}
+   * and {@link DelayTap} altogether,
+   * as well as the corresponding parameters.
+   * Instead,
+   * we plan to simply show <i>all</i> five
+   * resonator configurations and <i>all</i>
+   * eight tap configurations
+   * (whenever applicable) simultaneously in the GUI,
+   * obviating the need to use either of them.
+   * 
+   */
   public enum EqResonatorConfig4
   {
+    /** The first resonator.
+     * 
+     */
     RESONATOR_1,
+    /** The second resonator.
+     * 
+     */
     RESONATOR_2,
+    /** The third resonator.
+     * 
+     */
     RESONATOR_3,
+    /** The fourth resonator.
+     * 
+     */
     RESONATOR_4,
-    RESONATOR_5;
+    /** The fifth (highest-numbered) resonator.
+     * 
+     */
+    RESONATOR_5,
+    /** A non-existent resonator number.
+     * 
+     * @see EqResonatorConfig4 for an explanation.
+     * 
+     */
+    NX_RESO_6,
+    /** A non-existent resonator number.
+     * 
+     * @see EqResonatorConfig4 for an explanation.
+     * 
+     */
+    NX_RESO_7,
+    /** A non-existent resonator number.
+     * 
+     * @see EqResonatorConfig4 for an explanation.
+     * 
+     */
+    NX_RESO_8;
   }
   
   public enum EqResonatorGateMode // Config 7.
@@ -5037,7 +5123,7 @@ public class MidiDevice_QVGT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  protected void sendMidiSysExMessage_QVGT_Editing
+  private void sendMidiSysExMessage_QVGT_Editing
   (final ParameterDescriptor_QVGT.Function_QVGT function, final int page, final int value)
   {
     final byte[] rawMidiMessage = MidiUtils_QVGT.createMidiSysExMessage_QVGT_Editing (function, page, value);
@@ -5046,7 +5132,7 @@ public class MidiDevice_QVGT
     getMidiService ().sendRawMidiMessage (rawMidiMessage);    
   }
 
-  protected void sendMidiSysExMessage_QGVT_DataDump (final Patch_QGVT patch, final int programNumber)
+  private void sendMidiSysExMessage_QGVT_DataDump (final Patch_QGVT patch, final int programNumber)
   {
     if (patch == null)
       throw new IllegalArgumentException ();
@@ -5056,7 +5142,7 @@ public class MidiDevice_QVGT
     getMidiService ().sendRawMidiMessage (rawMidiMessage);
   }
 
-  protected void sendMidiSysExMessage_QGVT_DumpRequest (final int programNumber)
+  private void sendMidiSysExMessage_QGVT_DumpRequest (final int programNumber)
   {
     final byte[] rawMidiMessage = MidiUtils_QVGT.createMidiSysExMessage_QVGT_DumpRequest (programNumber);
     // XXX The following should work as well!! XXX
@@ -5064,7 +5150,7 @@ public class MidiDevice_QVGT
     getMidiService ().sendRawMidiMessage (rawMidiMessage);
   }
 
-  protected void sendMidiSysExMessage_QGVT_DumpRequest_EditBuffer ()
+  private void sendMidiSysExMessage_QGVT_DumpRequest_EditBuffer ()
   {
     final byte[] rawMidiMessage = MidiUtils_QVGT.createMidiSysExMessage_QVGT_DumpRequest_EditBuffer ();
     // XXX The following should work as well!! XXX
@@ -5072,7 +5158,7 @@ public class MidiDevice_QVGT
     getMidiService ().sendRawMidiMessage (rawMidiMessage);
   }
   
-  protected void sendMidiSysExMessage_QGVT_DumpRequest_AllPrograms ()
+  private void sendMidiSysExMessage_QGVT_DumpRequest_AllPrograms ()
   {
     final byte[] rawMidiMessage = MidiUtils_QVGT.createMidiSysExMessage_QVGT_DumpRequest_AllPrograms ();
     getMidiService ().sendRawMidiMessage (rawMidiMessage);
