@@ -77,17 +77,17 @@ final class JQVGTPanel_PITCH extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_SPEED_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Trigger", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_TRIGGER_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Detune", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_DETUNE_TUNE_NAME, 0, 198));
+      "Detune [cents]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_DETUNE_TUNE_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_SPEED_NAME, 0, 98));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -179,7 +179,7 @@ final class JQVGTPanel_PITCH extends JPanel
         case C1_EQ_PCH_DL_REV:
         case C4_5EQ_PCH_DL:
         {
-          setLayout (new GridLayout (8, 1, 5, 0));
+          setLayout (new GridLayout (6, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_INPUT_NAME));
           final MidiDevice_QVGT.PitchMode mode =
@@ -194,8 +194,6 @@ final class JQVGTPanel_PITCH extends JPanel
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_SPEED_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               }
               case MONO_FLANGE:
@@ -204,24 +202,15 @@ final class JQVGTPanel_PITCH extends JPanel
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_TRIGGER_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case DETUNE:
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_DETUNE_TUNE_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case PHASER:
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_SPEED_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_DEPTH_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               default:
                 throw new RuntimeException ();
