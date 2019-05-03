@@ -341,28 +341,255 @@ public class MidiDevice_QVGT
 
   public final static String EDIT_BUFFER_PREAMP_NAME = EDIT_BUFFER_NAME + ".preamp";
   
-  public final static String EDIT_BUFFER_PREAMP_COMPRESSION_NAME    = EDIT_BUFFER_PREAMP_NAME + ".compression";
-  public final static String EDIT_BUFFER_PREAMP_OVERDRIVE_NAME      = EDIT_BUFFER_PREAMP_NAME + ".overdrive";
-  public final static String EDIT_BUFFER_PREAMP_DISTORTION_NAME     = EDIT_BUFFER_PREAMP_NAME + ".distortion";
-  public final static String EDIT_BUFFER_PREAMP_TONE_NAME           = EDIT_BUFFER_PREAMP_NAME + ".tone";
-  public final static String EDIT_BUFFER_PREAMP_BASS_BOOST_NAME     = EDIT_BUFFER_PREAMP_NAME + ".bassBoost";
-  public final static String EDIT_BUFFER_PREAMP_CAB_SIMULATOR_NAME  = EDIT_BUFFER_PREAMP_NAME + ".cabSimulator";
-  public final static String EDIT_BUFFER_PREAMP_EFFECT_LOOP_NAME    = EDIT_BUFFER_PREAMP_NAME + ".effectLoop";
-  public final static String EDIT_BUFFER_PREAMP_NOISE_GATE_RAW_NAME = EDIT_BUFFER_PREAMP_NAME + ".noiseGateRaw";
-  public final static String EDIT_BUFFER_PREAMP_OUTPUT_LEVEL_NAME   = EDIT_BUFFER_PREAMP_NAME + ".outputLevel";
+  public final static String EDIT_BUFFER_PREAMP_COMPRESSION_NAME     = EDIT_BUFFER_PREAMP_NAME + ".compression";
+  public final static String EDIT_BUFFER_PREAMP_OVERDRIVE_NAME       = EDIT_BUFFER_PREAMP_NAME + ".overdrive";
+  public final static String EDIT_BUFFER_PREAMP_DISTORTION_NAME      = EDIT_BUFFER_PREAMP_NAME + ".distortion";
+  public final static String EDIT_BUFFER_PREAMP_TONE_NAME            = EDIT_BUFFER_PREAMP_NAME + ".tone";
+  public final static String EDIT_BUFFER_PREAMP_BASS_BOOST_NAME      = EDIT_BUFFER_PREAMP_NAME + ".bassBoost";
+  public final static String EDIT_BUFFER_PREAMP_CAB_SIMULATOR_NAME   = EDIT_BUFFER_PREAMP_NAME + ".cabSimulator";
+  public final static String EDIT_BUFFER_PREAMP_EFFECT_LOOP_NAME     = EDIT_BUFFER_PREAMP_NAME + ".effectLoop";
+  public final static String EDIT_BUFFER_PREAMP_NOISE_GATE_RAW_NAME  = EDIT_BUFFER_PREAMP_NAME + ".noiseGateRaw";
+  public final static String EDIT_BUFFER_PREAMP_NOISE_GATE_NAME      = EDIT_BUFFER_PREAMP_NAME + ".noiseGate";
+  public final static String EDIT_BUFFER_PREAMP_OUTPUT_LEVEL_NAME    = EDIT_BUFFER_PREAMP_NAME + ".outputLevel";
 
+  /** The PREAMP TONE type.
+   * 
+   * @see #EDIT_BUFFER_PREAMP_TONE_NAME
+   * 
+   */
   public enum PreampTone
   {
     FLAT,
     PRESENCE,
     BRIGHT;
   }
-  
+
+  /** The PREAMP CAB SIMULATOR type.
+   * 
+   * @see #EDIT_BUFFER_PREAMP_CAB_SIMULATOR_NAME
+   * 
+   */  
   public enum CabSimulator
   {
     OFF,
     CAB1_2_10INCH,
     CAB2_4_12INCH;
+  }
+  
+  /** The PREAMP NOISE GATE settings type.
+   * 
+   * <p>
+   * The PREAMP NOISE GATE setting is effectively a 18-valued enum
+   * located in 5 consecutive bits at address {@code 0x7E}.
+   * But the first value corresponds to the AUTO mode, whereas the
+   * rest refers to MANUAL mode.
+   * For GUI purposes, a more complex description of the PREAMP NOISE GATE setting
+   * is therefore required.
+   * 
+   * <p>
+   * Objects of this class are immutable.
+   * 
+   * @see #EDIT_BUFFER_PREAMP_NOISE_GATE_RAW_NAME
+   * @see #EDIT_BUFFER_PREAMP_NOISE_GATE_NAME
+   * 
+   */
+  public final static class NoiseGate
+  {
+    
+    /** When entering {@link Mode#MANUAL}, this value is chosen as default for the noise-gate setting.
+     * 
+     * <p>
+     * Precisely "half-way".
+     * 
+     * <p>
+     * Note that the value is the same as the one shown on the Alesis Quadraverb GT GUI.
+     * 
+     */
+    public static final int DEFAULT_MANUAL_NOISE_GATE = 8; // GUI value; byte value -> 9!
+    
+    private final byte b;
+    
+    private NoiseGate (final byte b)
+    {
+      if (b < 0 || b > 17)
+        throw new IllegalArgumentException ();
+      this.b = b;
+    }
+    
+    private NoiseGate (final Mode mode)
+    {
+      if (mode == null)
+        throw new IllegalArgumentException ();
+      switch (mode)
+      {
+        case AUTO:
+          this.b = 0;
+          break;
+        case OFF:
+          this.b = 1;
+          break;
+        case MANUAL:
+          this.b = DEFAULT_MANUAL_NOISE_GATE + 1;
+          break;
+        default:
+          throw new IllegalArgumentException ();
+      }
+    }
+    
+    private NoiseGate (final int value)
+    {
+      if (value < 0 || value > 16)
+        throw new IllegalArgumentException ();
+      this.b = (byte) (value + 1);
+    }
+    
+    private static NoiseGate fromByte (final byte b)
+    {
+      return new NoiseGate (b);
+    }
+    
+    private byte toByte ()
+    {
+      if (this.b < 0 || this.b > 17)
+        throw new IllegalArgumentException ();
+      return this.b;
+    }
+    
+    /** Creates a new NOISE GATE settings object from given noise-gate mode.
+     * 
+     * <p>
+     * In case the mode is set to {@link Mode#MANUAL},
+     * the noise-gate (user) value is set to {@link #DEFAULT_MANUAL_NOISE_GATE}.
+     * 
+     * @param mode The mode, non-{@code null}.
+     * 
+     * @return The NOISE GATE settings object.
+     * 
+     * @throws IllegalArgumentException If {@code mode == null}.
+     * 
+     */
+    public static NoiseGate fromMode (final Mode mode)
+    {
+      return new NoiseGate (mode);
+    }
+    
+    /** Creates a new NOISE GATE settings object from given noise-gate (user) value.
+     * 
+     * <p>
+     * In case the user value is zero,
+     * the mode is set to {@link Mode#OFF},
+     * and to {@link Mode#MANUAL} otherwise.
+     * 
+     * @param value The noise-gate (user) value, between 0 and 16 inclusive.
+     * 
+     * @return The NOISE GATE settings object.
+     * 
+     * @throws IllegalArgumentException If {@code value < 0} or {@code value > 16}.
+     * 
+     */
+    public final static NoiseGate fromValue (final int value)
+    {
+      return new NoiseGate (value);
+    }
+    
+    /** The NOISE GATE mode (AUTO, OFF or MANUAL).
+     * 
+     */
+    public enum Mode
+    {
+      AUTO,
+      OFF,
+      MANUAL; 
+    }
+    
+    /** Returns the noise-gate mode corresponding to this settings object.
+     * 
+     * @return The noise-gate mode (AUTO, OFF, or MANUAL).
+     * 
+     * @see #getValue
+     * 
+     */
+    public final Mode getMode ()
+    {
+      if (this.b < 0 || this.b > 17)
+        throw new RuntimeException ();
+      switch (this.b)
+      {
+        case 0:
+          return Mode.AUTO;
+        case 1:
+          return Mode.OFF;
+        default:
+          return Mode.MANUAL;
+      }
+    }
+    
+    /** Returns the user value of the noise gate.
+     * 
+     * <p>
+     * Note that zero is returned if the mode is {@link Mode#OFF}.
+     * 
+     * @return The user value of the noise gate between 0 and 16, {@code null} if the mode is {@link Mode#AUTO}.
+     * 
+     * @see #getMode
+     * 
+     */
+    public final Integer getValue ()
+    {
+      if (this.b < 0 || this.b > 17)
+        throw new RuntimeException ();
+      switch (this.b)
+      {
+        case 0:
+          return null;
+        default:
+          return this.b - 1;
+      }      
+    }
+
+    @Override
+    public final int hashCode ()
+    {
+      int hash = 7;
+      hash = 23 * hash + this.b;
+      return hash;
+    }
+
+    @Override
+    public final boolean equals (Object obj)
+    {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass () != obj.getClass ())
+        return false;
+      final NoiseGate other = (NoiseGate) obj;
+      return this.b == other.b;
+    }
+    
+  }
+  
+  private final class NoiseGateConverter
+    implements ParameterDescriptor_QVGT.CustomValueConverter<NoiseGate> 
+  {
+
+    @Override
+    public final NoiseGate fromDevice (final byte[] bytes)
+    {
+      if (bytes == null || bytes.length != 1)
+        throw new IllegalArgumentException ();
+      return NoiseGate.fromByte (bytes[0]);
+    }
+
+    @Override
+    public final byte[] toDevice (final NoiseGate c)
+    {
+      if (c == null)
+        throw new IllegalArgumentException ();
+      return new byte[]{c.toByte ()};
+    }
+    
   }
   
   private void registerParameters_EditBuffer_Preamp ()
@@ -479,6 +706,20 @@ public class MidiDevice_QVGT
       5, /* bitSize */
       EDIT_BUFFER_NAME, /* parentKey */
       null /* customValueConverter */));
+    
+    registerParameter (new ParameterDescriptor_QVGT (
+      EDIT_BUFFER_PREAMP_NOISE_GATE_NAME,
+      NoiseGate.class,
+      ParameterDescriptor_QVGT.ParameterConversion_QVGT.CUSTOM,
+      ParameterDescriptor_QVGT.Function_QVGT.F_PREAMP,
+      7, /* page */
+      EDIT_BUFFER_PROGRAM_NUMBER, /* program */
+      0x7E, /* offset */
+      1, /* size */
+      3, /* bitOffset */
+      5, /* bitSize */
+      EDIT_BUFFER_NAME, /* parentKey */
+      new NoiseGateConverter () /* customValueConverter */));
     
     registerParameter (new ParameterDescriptor_QVGT (
       EDIT_BUFFER_PREAMP_OUTPUT_LEVEL_NAME,
@@ -3600,6 +3841,9 @@ public class MidiDevice_QVGT
   public final static String EDIT_BUFFER_REVERB_CF5_HALL_GATE_REL_TIME_NAME    = EB_REVERB_NAME + ".cf5.hall.gateRelTime";
   public final static String EDIT_BUFFER_REVERB_CF5_HALL_GATE_LEVEL_NAME       = EB_REVERB_NAME + ".cf5.hall.gateLevel";
   
+  /** The REVERB MODE in Configurations 1, 2, 5, 6, 7.
+   * 
+   */
   public enum ReverbMode
   {
     PLATE,
@@ -3609,6 +3853,14 @@ public class MidiDevice_QVGT
     REVERSE;
   }
   
+  /** The REVERB INPUT1 in Configuration 1.
+   * 
+   * <p>
+   * Verified against QVGT 20190503.
+   * 
+   * @see #EDIT_BUFFER_REVERB_CF1_INPUT1_NAME
+   * 
+   */
   public enum ReverbInput1Config1
   {
     PREAMP_OUT,
@@ -3617,8 +3869,23 @@ public class MidiDevice_QVGT
     DELAY_INPUT_MIX;
   }
   
+  /** The REVERB INPUT1 in Configuration 2.
+   * 
+   * <p>
+   * Verified against QVGT 20190503.
+   * 
+   * @see #EDIT_BUFFER_REVERB_CF2_INPUT1_NAME
+   * 
+   */
   public enum ReverbInput1Config2
   {
+    /** Non-existent setting in Configuration 2.
+     * 
+     * <p>
+     * The QVGT resets the value to {@link ReverbInput1Config2#PREAMP_OUT}.
+     * 
+     */
+    NX_PITCH_OUT,
     PREAMP_OUT,
     LESLIE_OUT,
     DELAY_INPUT_MIX;
@@ -5002,7 +5269,8 @@ public class MidiDevice_QVGT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 1000L;
+  // XXX
+  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 2000L;
 
   private final Runnable qvgtMainRequestLoop = () ->
   {
