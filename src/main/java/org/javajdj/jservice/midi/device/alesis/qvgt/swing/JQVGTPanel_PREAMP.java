@@ -17,9 +17,17 @@
 package org.javajdj.jservice.midi.device.alesis.qvgt.swing;
 
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
@@ -63,24 +71,24 @@ final class JQVGTPanel_PREAMP extends JPanel
     if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (
-      midiDevice, "Compression", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_COMPRESSION_NAME, 0, 7));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (
-      midiDevice, "Overdrive", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_OVERDRIVE_NAME, 0, 7));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (
-      midiDevice, "Distortion", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_DISTORTION_NAME, 0, 8));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Enum (
-      midiDevice, "Tone", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_TONE_NAME, MidiDevice_QVGT.PreampTone.class));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (
-      midiDevice, "Bass Boost", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_BASS_BOOST_NAME));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Enum (
-      midiDevice, "Cab Simulator", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_CAB_SIMULATOR_NAME, MidiDevice_QVGT.CabSimulator.class));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (
-      midiDevice, "Effect Loop", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_EFFECT_LOOP_NAME));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (
-      midiDevice, "Noise Gate", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_NOISE_GATE_RAW_NAME, 0, 17));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (
-      midiDevice, "Output Level", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_OUTPUT_LEVEL_NAME, 0, 99));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Compression", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_COMPRESSION_NAME, 0, 7));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Overdrive", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_OVERDRIVE_NAME, 0, 7));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Distortion", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_DISTORTION_NAME, 0, 8));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
+      "Tone", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_TONE_NAME, MidiDevice_QVGT.PreampTone.class));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
+      "Bass Boost", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_BASS_BOOST_NAME));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
+      "Cab Simulator", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_CAB_SIMULATOR_NAME, MidiDevice_QVGT.CabSimulator.class));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
+      "Effect Loop", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_EFFECT_LOOP_NAME));
+    addMidiDeviceParameter (new JMidiDeviceParameter_NoiseGate (midiDevice,
+      "Noise Gate", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_NOISE_GATE_NAME));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Output Level", MidiDevice_QVGT.EDIT_BUFFER_PREAMP_OUTPUT_LEVEL_NAME, 0, 99));
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -161,7 +169,7 @@ final class JQVGTPanel_PREAMP extends JPanel
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_BASS_BOOST_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_CAB_SIMULATOR_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_EFFECT_LOOP_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_NOISE_GATE_RAW_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_NOISE_GATE_NAME));
           if (configuration != Patch_QGVT.Configuration.C8_SAMPLING)
             add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PREAMP_OUTPUT_LEVEL_NAME));
           break;
@@ -174,6 +182,140 @@ final class JQVGTPanel_PREAMP extends JPanel
     repaint ();
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // JMidiDeviceParameter IMPLEMENTATION FOR MidiDevice_QVGT.NoiseGate.
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final static class JMidiDeviceParameter_NoiseGate
+    extends JMidiDeviceParameter<MidiDevice_QVGT.NoiseGate>
+  {
+
+    private static class ValueComponent
+      extends JPanel
+    {
+
+      public ValueComponent (final JComboBox jComboBox, final JSlider jSlider)
+      {
+        if (jComboBox == null || jSlider == null)
+          throw new IllegalArgumentException ();
+        this.jComboBox = jComboBox;
+        this.jSlider = jSlider;
+        setLayout (new BoxLayout (this, BoxLayout.X_AXIS));
+        add (this.jComboBox);
+        add (this.jSlider);
+      }
+            
+      private final JComboBox jComboBox;
+      
+      private final JSlider jSlider;
+      
+    }
+    
+    private static JPanel createValueComponent (final MidiDevice midiDevice, final String key)
+    {
+      if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
+        throw new IllegalArgumentException ();
+      final JComboBox jComboBox = new JComboBox (MidiDevice_QVGT.NoiseGate.Mode.values ());
+      final JSlider jSlider = new JSlider (0, 16);
+      jSlider.setMajorTickSpacing (16);
+      jSlider.setPaintLabels (true);
+      return new ValueComponent (jComboBox, jSlider);
+    }
+
+    public JMidiDeviceParameter_NoiseGate
+      (final MidiDevice midiDevice, final String displayName, final String key)
+    {
+      super (midiDevice, displayName, key, createValueComponent (midiDevice, key));
+      final JComboBox jComboBox = ((ValueComponent) JMidiDeviceParameter_NoiseGate.this.getValueComponent ()).jComboBox;
+      jComboBox.setEditable (false);
+      jComboBox.addItemListener (this.jComboBoxListener);
+      final JSlider jSlider = ((ValueComponent) JMidiDeviceParameter_NoiseGate.this.getValueComponent ()).jSlider;
+      jSlider.addChangeListener (this.jSliderListener);
+      dataValueChanged (Collections.singletonMap (getKey (), getDataValue ()));
+    }
+
+    private final ItemListener jComboBoxListener = (final ItemEvent ie) ->
+    {
+      if (isReadOnly ())
+        return;
+      if (ie.getStateChange () == ItemEvent.SELECTED)
+      {
+        MidiDevice_QVGT.NoiseGate.Mode newMode = (MidiDevice_QVGT.NoiseGate.Mode) ie.getItem ();
+        if (newMode == null)
+          throw new IllegalStateException ();
+        // Set the value on the device, but avoid unnecessary updates.
+        // (Some components backfire non-GUI induced changes to the displayed value.)
+        final MidiDevice_QVGT.NoiseGate oldNoiseGate = getDataValue ();
+        if (oldNoiseGate == null || ! newMode.equals (oldNoiseGate.getMode ()))
+          JMidiDeviceParameter_NoiseGate.this.setDataValue (MidiDevice_QVGT.NoiseGate.fromMode (newMode));
+      }
+    };
+    
+    private final ChangeListener jSliderListener = (final ChangeEvent ce) ->
+    {
+      if (isReadOnly ())
+        return;
+      final JSlider jSlider = ((ValueComponent) JMidiDeviceParameter_NoiseGate.this.getValueComponent ()).jSlider;
+      if (ce.getSource () == jSlider && ! jSlider.getValueIsAdjusting ())
+      {
+        final int newValue = jSlider.getValue ();
+        // Set the value on the device, but avoid unnecessary updates.
+        // (Some components backfire non-GUI induced changes to the displayed value.)
+        final MidiDevice_QVGT.NoiseGate oldNoiseGate = getDataValue ();
+        if (oldNoiseGate == null || oldNoiseGate.getValue () == null || newValue != oldNoiseGate.getValue ())
+        {
+          JMidiDeviceParameter_NoiseGate.this.setDataValue (MidiDevice_QVGT.NoiseGate.fromValue (newValue));
+          jSlider.setToolTipText (Integer.toString (newValue));
+        }
+      }
+    };
+    
+    /** Sets the new value on the value components.
+     * 
+     * @param newDataValue The new value; may be {@code null}.
+     * 
+     * @see #getValueComponent
+     * 
+     */
+    @Override
+    protected final void dataValueChanged (final MidiDevice_QVGT.NoiseGate newDataValue)
+    {
+      super.dataValueChanged (newDataValue);
+      SwingUtilsJdJ.invokeOnSwingEDT (() ->
+      {
+        final JComboBox jComboBox = ((ValueComponent) JMidiDeviceParameter_NoiseGate.this.getValueComponent ()).jComboBox;
+        final JSlider jSlider = ((ValueComponent) JMidiDeviceParameter_NoiseGate.this.getValueComponent ()).jSlider;
+        if (newDataValue == null)
+        {
+          jComboBox.setSelectedItem (null);
+          jSlider.setVisible (false);
+          jSlider.setToolTipText ("disabled");
+        }
+        else
+        {
+          final MidiDevice_QVGT.NoiseGate newNoiseGate = (MidiDevice_QVGT.NoiseGate) newDataValue;
+          final MidiDevice_QVGT.NoiseGate.Mode newMode = newNoiseGate.getMode ();
+          jComboBox.setSelectedItem (newMode);
+          final Integer newValue = newNoiseGate.getValue ();
+          if (newValue == null)
+          {
+            jSlider.setVisible (false);
+            jSlider.setToolTipText ("disabled");
+          }
+          else
+          {
+            jSlider.setVisible (true);
+            jSlider.setValue (newValue);            
+            jSlider.setToolTipText (Integer.toString (newValue));
+          }
+        }
+      });
+    }
+     
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
