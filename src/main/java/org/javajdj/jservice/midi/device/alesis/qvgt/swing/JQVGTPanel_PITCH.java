@@ -65,7 +65,6 @@ final class JQVGTPanel_PITCH extends JPanel
     if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
-    setLayout (new GridLayout (8, 1, 5, 0));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Mode", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_MODE_NAME, MidiDevice_QVGT.PitchMode.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
