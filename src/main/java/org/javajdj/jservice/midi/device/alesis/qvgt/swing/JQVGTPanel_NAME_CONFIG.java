@@ -17,13 +17,18 @@
 package org.javajdj.jservice.midi.device.alesis.qvgt.swing;
 
 import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.javajdj.jservice.midi.device.MidiDevice;
+import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.device.alesis.qvgt.Patch_QGVT;
+import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_String;
+import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JPanel} the NAME and CONFIGURATION of the current patch (Edit Buffer)
  *  of an Alesis Quadraverb GT {@link MidiDevice}.
@@ -38,6 +43,12 @@ final class JQVGTPanel_NAME_CONFIG
   extends JPanel
 {
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // CONSTRUCTORS / FACTORIES / CLONING
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   /** Constructs the panel.
    * 
    * @param midiDevice The MIDI device, must be non-{@code null} and, at the present time, a {@link MidiDevice_QVGT}.
@@ -48,17 +59,86 @@ final class JQVGTPanel_NAME_CONFIG
   public JQVGTPanel_NAME_CONFIG (final MidiDevice midiDevice)
   {
     super ();
-    setLayout (new GridLayout (6, 1, 5, 5));
-    add (new JMidiDeviceParameter_String (midiDevice,
+    if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
+      throw new IllegalArgumentException ();
+    this.midiDevice = midiDevice;
+    addMidiDeviceParameter (new JMidiDeviceParameter_String (this.midiDevice,
       "Name", MidiDevice_QVGT.EDIT_BUFFER_NAME_NAME));
-    add (new JLabel ());
-    add (new JMidiDeviceParameter_Enum (midiDevice,
+    addMidiDeviceParameter (new JMidiDeviceParameter_Enum (this.midiDevice,
       "Config", MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME, Patch_QGVT.Configuration.class));
-    add (new JLabel ());
-    add (new JLabel ());
-    add (new JLabel ());
+    setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
+    midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
     
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final MidiDevice midiDevice;
+  
+  private MidiDevice getMidiDevice ()
+  {
+    return this.midiDevice;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // MIDI DEVICE LISTENER
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final MidiDeviceListener midiDeviceListener = (final Map<String, Object> changes) ->
+  {
+    if (changes == null)
+      return;
+    if (changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME)
+     || changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_NAME_NAME))
+    {
+      SwingUtilsJdJ.invokeOnSwingEDT (
+      // XXX The commented-out version should work as well; apparently our device does not provide the new values properly [?].
+      // () -> setGuiParameters ((Patch_QGVT.Configuration) changes.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME)));
+      () -> setGuiParameters ((Patch_QGVT.Configuration) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME)));
+    }
+  };
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // PARAMETER MAP
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final Map<String, JMidiDeviceParameter> parameterMap = new HashMap<> ();
+
+  private void addMidiDeviceParameter (final JMidiDeviceParameter midiDeviceParameter)
+  {
+    if (midiDeviceParameter == null || this.parameterMap.containsKey (midiDeviceParameter.getKey ()))
+      throw new IllegalArgumentException ();
+    this.parameterMap.put (midiDeviceParameter.getKey (), midiDeviceParameter);
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // SET GUI PARAMETERS
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private void setGuiParameters (final Patch_QGVT.Configuration configuration)
+  {
+    removeAll ();
+    if (configuration != null)
+    {
+      setLayout (new GridLayout (7, 1, 5, 5));
+      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_NAME_NAME));
+      add (new JLabel ());
+      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
+    }
+    // We need to validate (); but this was found through trial-and-error.
+    validate ();
+    repaint ();
+  }
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // END OF FILE
