@@ -2540,6 +2540,7 @@ public class MidiDevice_QVGT
   public final static String EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_PANNING_NAME   = EB_DELAY_NAME + ".cf4.multitap.tap.8.panning";
   public final static String EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_FEEDBACK_NAME  = EB_DELAY_NAME + ".cf4.multitap.tap.8.feedback";
   public final static String EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME = EB_DELAY_NAME + ".cf4.multitap.masterFeedback";
+  public final static String EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME     = EB_DELAY_NAME + ".cf4.multitap.totalDelay";
   
   public final static String EDIT_BUFFER_DELAY_CF7_MONO_DELAY_NAME         = EDIT_BUFFER_DELAY_NAME + ".cf7.mono.delay";
   public final static String EDIT_BUFFER_DELAY_CF7_MONO_FEEDBACK_NAME      = EDIT_BUFFER_DELAY_NAME + ".cf7.mono.feedback";
@@ -2610,6 +2611,36 @@ public class MidiDevice_QVGT
     OFF,
     GATED,
     ONE_SHOT;
+  }
+  
+  private final static class MultiTapTotalDelayConverter
+    implements ParameterDescriptor_QVGT.CustomValueConverter<Integer>
+  {
+
+    @Override
+    public final Integer fromDevice (final byte[] bytes)
+    {
+      if (bytes == null || bytes.length != Patch_QGVT.DECODED_PATCH_SIZE)
+        throw new IllegalArgumentException ();
+      final int totalMultiTapDelay_ms =
+          256 * (bytes[0x0D] & 0xFF) + (bytes[0x18] & 0xFF)  // TAP 1
+        + 256 * (bytes[0x23] & 0xFF) + (bytes[0x24] & 0xFF)  // TAP 2
+        + 256 * (bytes[0x2C] & 0xFF) + (bytes[0x2D] & 0xFF)  // TAP 3
+        + 256 * (bytes[0x31] & 0xFF) + (bytes[0x32] & 0xFF)  // TAP 4
+        + 256 * (bytes[0x36] & 0xFF) + (bytes[0x37] & 0xFF)  // TAP 5
+        + 256 * (bytes[0x3B] & 0xFF) + (bytes[0x3C] & 0xFF)  // TAP 6
+        + 256 * (bytes[0x40] & 0xFF) + (bytes[0x41] & 0xFF)  // TAP 7
+        + 256 * (bytes[0x4B] & 0xFF) + (bytes[0x4C] & 0xFF); // TAP 8
+      // LOG.log (Level.INFO, "Total Muti-Tap Delay calculated: {0} ms.", totalMultiTapDelay_ms);
+      return totalMultiTapDelay_ms;
+    }
+
+    @Override
+    public final byte[] toDevice (final Integer c)
+    {
+      throw new UnsupportedOperationException ();
+    }
+    
   }
   
   private void registerParameters_EditBuffer_Delay ()
@@ -3570,6 +3601,18 @@ public class MidiDevice_QVGT
       null, /* customValueConverter */
       new ONLY_CONFIGS (EnumSet.of (Patch_QGVT.Configuration.C4_5EQ_PCH_DL))));
     
+    registerParameter (new ParameterDescriptor_QVGT (
+      EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME,
+      Integer.class,
+      ParameterDescriptor_QVGT.ParameterConversion_QVGT.CUSTOM,
+      null, /* function */
+      null, /* page */
+      EDIT_BUFFER_PROGRAM_NUMBER, /* program */
+      0x00, /* offset */
+      Patch_QGVT.DECODED_PATCH_SIZE, /* size */
+      EDIT_BUFFER_NAME, /* parentKey */
+      new MultiTapTotalDelayConverter () /* customValueConverter */));
+
     registerParameter (new ParameterDescriptor_QVGT (
       EDIT_BUFFER_DELAY_CF7_MONO_DELAY_NAME,
       Integer.class,
@@ -5269,7 +5312,7 @@ public class MidiDevice_QVGT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 1000L;
+  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 2000L; // XXX Set me back to 1000L!
 
   private final Runnable qvgtMainRequestLoop = () ->
   {
@@ -5501,9 +5544,9 @@ public class MidiDevice_QVGT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // XXX WHAT IS THIS?? STILL NEEDED?? XXX
   protected final void onMidiDataDumpFromDeviceEncoded (final int program, final byte[] encodedProgramBytes)
   {
-    
   }
   
   protected final void onMidiDataDumpFromDevice (final int program, final byte[] programBytes)
