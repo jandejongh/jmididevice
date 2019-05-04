@@ -148,7 +148,7 @@ final class JQVGTPanel_DELAY1 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Master Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME, 0, 99));
     final JMidiDeviceParameter<Integer> multiTapTotalDelayParameter = new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Total Tap Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME, 1, 1470);
+      "Total Tap Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME, 8, 1470);
     multiTapTotalDelayParameter.setReadOnly (true);
     addMidiDeviceParameter (multiTapTotalDelayParameter);
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
