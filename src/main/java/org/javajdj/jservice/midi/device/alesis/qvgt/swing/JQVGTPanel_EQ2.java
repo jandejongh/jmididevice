@@ -28,7 +28,6 @@ import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.device.alesis.qvgt.Patch_QGVT;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Integer_Slider;
 import org.javajdj.swing.SwingUtilsJdJ;
 
@@ -71,66 +70,107 @@ final class JQVGTPanel_EQ2 extends JPanel
     if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
+    //
+    // Config 1
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 1 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_TUNE_NAME, 0, 60));
+      "Mid Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_F_NAME, 200, 9999));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Mid BW [P8]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_BW_NAME, 20, 255, 0, 0.01, "%4.2f"));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Mid Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "High Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_HIGH_F_NAME, 2000, 18000));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "High Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_HIGH_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Reso 1 Tune [m2]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_TUNE_NAME, 0, 60, -24));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Reso 1 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_DECAY_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 1 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_AMP_NAME, 0, 99));
+      "Reso 1 Level", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_AMP_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 2 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_2_TUNE_NAME, 0, 60));
+      "Reso 2 Tune [m2]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_2_TUNE_NAME, 0, 60, -24));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Reso 2 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_2_DECAY_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 2 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_2_AMP_NAME, 0, 99));
+      "Reso 2 Level", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_2_AMP_NAME, 0, 99));
+    //
+    // Config 3
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_MID_F_NAME, 200, 9999));
+      "16   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Bandwidth", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_MID_BW_NAME, 20, 255));
+      "32   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_MID_AMP_NAME, 0, 560));
+      "62   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid High Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_MID_F_NAME, 2000, 18000));
+      "126 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid High Bandwidth", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_MID_BW_NAME, 20, 255));
+      "250 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Mid High Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_MID_AMP_NAME, 0, 560));
+      "500 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "High Frequency", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_F_NAME, 2000, 18000));
+      "1   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "High Amplitude", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_AMP_NAME, 0, 560));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
-      "Reso Number", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_NUMBER_NAME, MidiDevice_QVGT.EqResonatorConfig4.class));
+      "2   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 1 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_1_TUNE_NAME, 0, 60));
+      "4   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 1 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_1_DECAY_NAME, 0, 99));
+      "8   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME, 0, 28, -14));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 1 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_1_AMP_NAME, 0, 99));
+      "16  kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME, 0, 28, -14));
+    //
+    // Config 4
+    //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 2 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_2_TUNE_NAME, 0, 60));
+      "Mid Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_MID_F_NAME, 200, 9999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 2 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_2_DECAY_NAME, 0, 99));
+      "Mid BW [P8]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_MID_BW_NAME, 20, 255));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 2 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_2_AMP_NAME, 0, 99));
+      "Mid Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_MID_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 3 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_3_TUNE_NAME, 0, 60));
+      "Mid High Freq", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_MID_F_NAME, 2000, 18000));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 3 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_3_DECAY_NAME, 0, 99));
+      "Mid High BW [P8]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_MID_BW_NAME, 20, 255));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 3 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_3_AMP_NAME, 0, 99));
+      "Mid High Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_MID_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 4 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_4_TUNE_NAME, 0, 60));
+      "High Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_F_NAME, 2000, 18000));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 4 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_4_DECAY_NAME, 0, 99));
+      "High Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_5B_HIGH_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 4 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_4_AMP_NAME, 0, 99));
+      "Low Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_LOW_F_NAME, 20, 999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 5 Tune", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_5_TUNE_NAME, 0, 60));
+      "Low Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_LOW_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 5 Decay", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_5_DECAY_NAME, 0, 99));
+      "Mid Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_F_NAME, 200, 9999));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reso 5 Amp", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_5_AMP_NAME, 0, 99));
+      "Mid BW [P8]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_BW_NAME, 20, 255));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Mid Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "High Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_HIGH_F_NAME, 2000, 18000));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "High Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_HIGH_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    //
+    // Config 5
+    //
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Low Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_LOW_F_NAME, 20, 999));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Low Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_LOW_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Mid Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_F_NAME, 200, 9999));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Mid BW [P8]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_BW_NAME, 20, 255));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Mid Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "High Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_F_NAME, 2000, 18000));
+    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "High Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    //
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -160,8 +200,7 @@ final class JQVGTPanel_EQ2 extends JPanel
       return;
     if (changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME)
      || changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_MODE_NAME)
-     || changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_MODE_NAME)
-     || changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_NUMBER_NAME))
+     || changes.containsKey (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_MODE_NAME))
     {
       SwingUtilsJdJ.invokeOnSwingEDT (
       // XXX The commented-out version should work as well; apparently our device does not provide the new values properly [?].
@@ -207,15 +246,19 @@ final class JQVGTPanel_EQ2 extends JPanel
             {
               case EQ3:
               {
-                setLayout (new GridLayout (1, 1, 5, 0));
-                final JLabel label = new JLabel ("Not Available");
-                label.setHorizontalAlignment (SwingConstants.CENTER);
-                add (label);
+                setLayout (new GridLayout (7, 1, 5, 5));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_F_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_BW_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_MID_AMP_NAME));
+                add (new JLabel ());
+                add (new JLabel ());
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_HIGH_F_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_3B_HIGH_AMP_NAME));
                 break;
               }
               case RES2_EQ1:
               {
-                setLayout (new GridLayout (7, 1, 5, 0));
+                setLayout (new GridLayout (7, 1, 5, 5));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_TUNE_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_DECAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF1_RESO_1_AMP_NAME));
@@ -240,10 +283,18 @@ final class JQVGTPanel_EQ2 extends JPanel
         }
         case C3_GEQ_DL:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
-          final JLabel label = new JLabel ("Not Available");
-          label.setHorizontalAlignment (SwingConstants.CENTER);
-          add (label);
+          setLayout (new GridLayout (11, 1, 5, 0));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME));
           break;
         }
         case C4_5EQ_PCH_DL:
@@ -270,45 +321,16 @@ final class JQVGTPanel_EQ2 extends JPanel
               }
               case RES5_EQ3:
               {
-                setLayout (new GridLayout (5, 1, 5, 0));
-                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_NUMBER_NAME));
-                add (new JLabel ());
-                final MidiDevice_QVGT.EqResonatorConfig4 resonator =
-                  (MidiDevice_QVGT.EqResonatorConfig4) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_NUMBER_NAME);
-                if (resonator != null)
-                  switch (resonator)
-                  {
-                    case RESONATOR_1:
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_1_TUNE_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_1_DECAY_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_1_AMP_NAME));
-                      break;
-                    case RESONATOR_2:
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_2_TUNE_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_2_DECAY_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_2_AMP_NAME));
-                      break;
-                    case RESONATOR_3:
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_3_TUNE_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_3_DECAY_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_3_AMP_NAME));
-                      break;
-                    case RESONATOR_4:
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_4_TUNE_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_4_DECAY_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_4_AMP_NAME));
-                      break;
-                    case RESONATOR_5:
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_5_TUNE_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_5_DECAY_NAME));
-                      add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_5_AMP_NAME));
-                      break;
-                    default:
-                      add (new JLabel ("Error - Wrong resonator value: " + resonator));
-                      break;
-                  }
-                else
-                  add (new JLabel ("Error - Null resonator number!"));
+                setLayout (new GridLayout (9, 1, 5, 5));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_LOW_F_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_LOW_AMP_NAME));
+                add (new JPanel ());
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_F_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_BW_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_MID_AMP_NAME));
+                add (new JPanel ());
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_HIGH_F_NAME));
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF4_RESO_HIGH_AMP_NAME));
                 break;
               }
               default:
@@ -318,10 +340,16 @@ final class JQVGTPanel_EQ2 extends JPanel
         }
         case C5_3EQ_REV:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
-          final JLabel label = new JLabel ("Not Available");
-          label.setHorizontalAlignment (SwingConstants.CENTER);
-          add (label);
+          setLayout (new GridLayout (9, 1, 5, 5));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_LOW_F_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_LOW_AMP_NAME));
+          add (new JLabel ());
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_F_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_BW_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_MID_AMP_NAME));
+          add (new JLabel ());
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_F_NAME));
+          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_AMP_NAME));
           break;
         }
         case C6_RING_DL_REV:
