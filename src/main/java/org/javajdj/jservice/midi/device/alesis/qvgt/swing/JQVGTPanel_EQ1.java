@@ -258,7 +258,7 @@ final class JQVGTPanel_EQ1 extends JPanel
         }
         case C2_LES_DL_REV:
         {
-          setLayout (new GridLayout (7, 1, 10, 5));
+          setLayout (new GridLayout (7, 1, 5, 5));
           add (new JLabel ());
           final JLabel label = new JLabel ("Leslie");
           label.setHorizontalAlignment (SwingConstants.CENTER);
@@ -361,7 +361,7 @@ final class JQVGTPanel_EQ1 extends JPanel
         }
         case C6_RING_DL_REV:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (1, 1, 5, 5));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
@@ -369,7 +369,7 @@ final class JQVGTPanel_EQ1 extends JPanel
         }
         case C7_RESO_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF7_RESO_GATE_MODE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF7_RESO_DECAY_NAME));
@@ -383,7 +383,7 @@ final class JQVGTPanel_EQ1 extends JPanel
         }
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (1, 1, 5, 5));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
