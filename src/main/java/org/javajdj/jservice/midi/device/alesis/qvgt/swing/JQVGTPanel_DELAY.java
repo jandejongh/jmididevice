@@ -74,163 +74,163 @@ final class JQVGTPanel_DELAY extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Input", MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT_NAME, MidiDevice_QVGT.DelayInput.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Input Mix", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF14_IN_MIX_NAME, 0, 198));
+      "Input Mix", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF14_IN_MIX_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Input Mix", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF267_IN_MIX_NAME, 0, 198));
+      "Input Mix", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF267_IN_MIX_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_MONO_DELAY_NAME, 1, 775));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_MONO_DELAY_NAME, 1, 775));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_MONO_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_MONO_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_L_DELAY_NAME, 1, 375));
+      "L Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_L_DELAY_NAME, 1, 375));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_L_FEEDBACK_NAME, 0, 99));
+      "L Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_L_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_R_DELAY_NAME, 1, 375));
+      "R Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_R_DELAY_NAME, 1, 375));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_R_FEEDBACK_NAME, 0, 99));
+      "R Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_R_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_PING_PONG_DELAY_NAME, 1, 375));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_PING_PONG_DELAY_NAME, 1, 375));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_PING_PONG_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_PING_PONG_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_MONO_DELAY_NAME, 1, 800));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_MONO_DELAY_NAME, 1, 800));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_MONO_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_MONO_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_L_DELAY_NAME, 1, 400));
+      "L Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_L_DELAY_NAME, 1, 400));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_L_FEEDBACK_NAME, 0, 99));
+      "L Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_L_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_R_DELAY_NAME, 1, 400));
+      "R Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_R_DELAY_NAME, 1, 400));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_R_FEEDBACK_NAME, 0, 99));
+      "R Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_R_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_PING_PONG_DELAY_NAME, 1, 400));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_PING_PONG_DELAY_NAME, 1, 400));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_PING_PONG_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_PING_PONG_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_MONO_DELAY_NAME, 1, 1500));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_MONO_DELAY_NAME, 1, 1500));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_MONO_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_MONO_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_L_DELAY_NAME, 1, 750));
+      "L Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_L_DELAY_NAME, 1, 750));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_L_FEEDBACK_NAME, 0, 99));
+      "L Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_L_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_R_DELAY_NAME, 1, 750));
+      "R Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_R_DELAY_NAME, 1, 750));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_R_FEEDBACK_NAME, 0, 99));
+      "R Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_R_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_PING_PONG_DELAY_NAME, 1, 750));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_PING_PONG_DELAY_NAME, 1, 750));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_PING_PONG_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_PING_PONG_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MONO_DELAY_NAME, 1, 1470));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MONO_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MONO_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MONO_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_L_DELAY_NAME, 1, 705));
+      "L Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_L_DELAY_NAME, 1, 705));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_L_FEEDBACK_NAME, 0, 99));
+      "L Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_L_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_R_DELAY_NAME, 1, 705));
+      "R Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_R_DELAY_NAME, 1, 705));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_R_FEEDBACK_NAME, 0, 99));
+      "R Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_R_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_DELAY_NAME, 1, 705));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_DELAY_NAME, 1, 705));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Tap", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_NUMBER_NAME, MidiDevice_QVGT.DelayTap.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[1]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_DELAY_NAME, 0, 1470));
+      "Delay[1] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[1]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[1]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_PANNING_NAME, 0, 198));
+      "Panning[1]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[1]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_FEEDBACK_NAME, 0, 99));
+      "Feedback[1] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_1_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[2]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_DELAY_NAME, 0, 1470));
+      "Delay[2] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[2]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[2]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_PANNING_NAME, 0, 198));
+      "Panning[2]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[2]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_FEEDBACK_NAME, 0, 99));
+      "Feedback[2] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_2_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[3]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_DELAY_NAME, 0, 1470));
+      "Delay[3] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[3]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[3]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_PANNING_NAME, 0, 198));
+      "Panning[3]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[3]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_FEEDBACK_NAME, 0, 99));
+      "Feedback[3] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_3_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[4]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_DELAY_NAME, 0, 1470));
+      "Delay[4] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[4]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[4]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_PANNING_NAME, 0, 198));
+      "Panning[4]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[4]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_FEEDBACK_NAME, 0, 99));
+      "Feedback[4] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_4_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[5]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_DELAY_NAME, 0, 1470));
+      "Delay[5] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[5]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[5]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_PANNING_NAME, 0, 198));
+      "Panning[5]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[5]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_FEEDBACK_NAME, 0, 99));
+      "Feedback[5] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_5_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[6]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_DELAY_NAME, 0, 1470));
+      "Delay[6] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[6]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[6]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_PANNING_NAME, 0, 198));
+      "Panning[6]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[6]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_FEEDBACK_NAME, 0, 99));
+      "Feedback[6] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_6_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[7]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_DELAY_NAME, 0, 1470));
+      "Delay[7] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[7]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[7]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_PANNING_NAME, 0, 198));
+      "Panning[7]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[7]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_FEEDBACK_NAME, 0, 99));
+      "Feedback[7] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_7_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay[8]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_DELAY_NAME, 0, 1470));
+      "Delay[8] [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_DELAY_NAME, 1, 1470));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Volume[8]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_VOLUME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Panning[8]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_PANNING_NAME, 0, 198));
+      "Panning[8]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_PANNING_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback[8]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_FEEDBACK_NAME, 0, 99));
+      "Feedback[8] [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_8_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Master Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME, 0, 99));
+      "Master Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_DELAY_NAME, 1, 720));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_DELAY_NAME, 1, 720));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_L_DELAY_NAME, 1, 320));
+      "L Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_L_DELAY_NAME, 1, 320));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "L Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_L_FEEDBACK_NAME, 0, 99));
+      "L Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_L_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_R_DELAY_NAME, 1, 320));
+      "R Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_R_DELAY_NAME, 1, 320));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "R Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_R_FEEDBACK_NAME, 0, 99));
+      "R Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_R_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_PING_PONG_DELAY_NAME, 1, 320));
+      "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_PING_PONG_DELAY_NAME, 1, 320));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Feedback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_PING_PONG_FEEDBACK_NAME, 0, 99));
+      "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_PING_PONG_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Sample Playback", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_PLAYBACK_NAME, MidiDevice_QVGT.SamplePlayback.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Sample Start", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_START_NAME, 0, 150));
+      "Sample Start [s]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_START_NAME, 0, 150, 0, 0.01, "%3.2f"));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Sample Length", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_LENGTH_NAME, 5, 155));
+      "Sample Length [s]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_LENGTH_NAME, 5, 155, 0, 0.01, "%3.2f"));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Audio Trigger", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_AUDIO_TRIGGER_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
@@ -310,11 +310,16 @@ final class JQVGTPanel_DELAY extends JPanel
       {
         case C1_EQ_PCH_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT1_NAME));
-          add (new JLabel ());
+          final JPanel input2Panel = new JPanel ();
+          input2Panel.setLayout (new GridLayout (1, 2, 5, 5));
+          input2Panel.add (new JLabel ("Input 2"));
+          input2Panel.add (new JLabel ("PITCH"));
+          add (input2Panel);
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF14_IN_MIX_NAME));
+          add (new JLabel ());
           final MidiDevice_QVGT.DelayMode mode =
             (MidiDevice_QVGT.DelayMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME);
           if (mode != null)
@@ -323,23 +328,16 @@ final class JQVGTPanel_DELAY extends JPanel
               case MONO:
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_MONO_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_MONO_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case STEREO:
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_L_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_L_FEEDBACK_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_R_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_STEREO_R_FEEDBACK_NAME));
-                add (new JLabel ());
                 break;
               case PING_PONG:
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_PING_PONG_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF1_PING_PONG_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               default:
                 throw new RuntimeException ();
@@ -349,38 +347,48 @@ final class JQVGTPanel_DELAY extends JPanel
         case C2_LES_DL_REV:
         case C6_RING_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
-          add (new JLabel ());
+          final JPanel input1Panel = new JPanel ();
+          input1Panel.setLayout (new GridLayout (1, 2, 5, 5));
+          input1Panel.add (new JLabel ("Input 1"));
+          input1Panel.add (new JLabel ("PREAMP"));
+          add (input1Panel);
+          final JPanel input2Panel = new JPanel ();
+          input2Panel.setLayout (new GridLayout (1, 2, 5, 5));
+          input2Panel.add (new JLabel ("Input 2"));
+          switch (configuration)
+          {
+            case C2_LES_DL_REV:
+              input2Panel.add (new JLabel ("LESLIE"));
+              break;
+            case C6_RING_DL_REV:
+              input2Panel.add (new JLabel ("RING MODULATOR"));
+              break;
+            default:
+              throw new RuntimeException ();
+          }
+          add (input2Panel);
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF267_IN_MIX_NAME));
+          add (new JLabel ());
           final MidiDevice_QVGT.DelayMode mode =
             (MidiDevice_QVGT.DelayMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME);
           if (mode != null)
             switch (mode)
             {
               case MONO:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_MONO_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_MONO_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case STEREO:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_L_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_L_FEEDBACK_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_R_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_STEREO_R_FEEDBACK_NAME));
-                add (new JLabel ());
                 break;
               case PING_PONG:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_PING_PONG_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF26_PING_PONG_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               default:
                 throw new RuntimeException ();
@@ -389,38 +397,29 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C3_GEQ_DL:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT_NAME));
+          add (new JLabel ());
           final MidiDevice_QVGT.DelayMode mode =
             (MidiDevice_QVGT.DelayMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME);
           if (mode != null)
             switch (mode)
             {
               case MONO:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_MONO_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_MONO_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case STEREO:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_L_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_L_FEEDBACK_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_R_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_STEREO_R_FEEDBACK_NAME));
-                add (new JLabel ());
                 break;
               case PING_PONG:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_PING_PONG_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF3_PING_PONG_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               default:
                 throw new RuntimeException ();
@@ -429,38 +428,42 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C4_5EQ_PCH_DL:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_EXTENDED_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_INPUT1_NAME));
+          final JPanel input2Panel = new JPanel ();
+          input2Panel.setLayout (new GridLayout (1, 2, 5, 5));
+          input2Panel.add (new JLabel ("Input 2"));
+          input2Panel.add (new JLabel ("PITCH"));
+          add (input2Panel);
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF14_IN_MIX_NAME));
+          add (new JLabel ());
           final MidiDevice_QVGT.DelayModeExtended mode =
             (MidiDevice_QVGT.DelayModeExtended) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_EXTENDED_NAME);
           if (mode != null)
             switch (mode)
             {
               case MONO:
+                setLayout (new GridLayout (9, 1, 5, 5));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MONO_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MONO_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case STEREO:
+                setLayout (new GridLayout (9, 1, 5, 5));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_L_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_L_FEEDBACK_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_R_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_STEREO_R_FEEDBACK_NAME));
-                add (new JLabel ());
                 break;
               case PING_PONG:
+                setLayout (new GridLayout (9, 1, 5, 5));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case MULTI_TAP:
+                setLayout (new GridLayout (13, 1, 5, 1));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_NUMBER_NAME));
+                add (new JLabel ());
                 final MidiDevice_QVGT.DelayTap delayTap =
                   (MidiDevice_QVGT.DelayTap) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TAP_NUMBER_NAME);
                 if (delayTap != null)
@@ -517,6 +520,7 @@ final class JQVGTPanel_DELAY extends JPanel
                     default:
                       throw new RuntimeException ();
                   }
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME));
                 break;
               default:
@@ -526,7 +530,7 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C5_3EQ_REV:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (1, 1, 5, 5));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
@@ -534,38 +538,40 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C7_RESO_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+
+
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME));
-          add (new JLabel ());
+          final JPanel input1Panel = new JPanel ();
+          input1Panel.setLayout (new GridLayout (1, 2, 5, 5));
+          input1Panel.add (new JLabel ("Input 1"));
+          input1Panel.add (new JLabel ("PREAMP"));
+          add (input1Panel);
+          final JPanel input2Panel = new JPanel ();
+          input2Panel.setLayout (new GridLayout (1, 2, 5, 5));
+          input2Panel.add (new JLabel ("Input 2"));
+          input2Panel.add (new JLabel ("RESONATORS"));
+          add (input2Panel);
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF267_IN_MIX_NAME));
+          add (new JLabel ());
           final MidiDevice_QVGT.DelayMode mode =
             (MidiDevice_QVGT.DelayMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_MODE_NAME);
           if (mode != null)
             switch (mode)
             {
               case MONO:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               case STEREO:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_L_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_L_FEEDBACK_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_R_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_STEREO_R_FEEDBACK_NAME));
-                add (new JLabel ());
                 break;
               case PING_PONG:
-                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_PING_PONG_DELAY_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_PING_PONG_FEEDBACK_NAME));
-                add (new JLabel ());
-                add (new JLabel ());
-                add (new JLabel ());
                 break;
               default:
                 throw new RuntimeException ();
@@ -574,7 +580,7 @@ final class JQVGTPanel_DELAY extends JPanel
         }
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (8, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_PLAYBACK_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_START_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_SAMPLE_LENGTH_NAME));
@@ -583,7 +589,6 @@ final class JQVGTPanel_DELAY extends JPanel
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_MIDI_LOW_LIMIT_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_MIDI_BASE_NOTE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF8_MIDI_HIGH_LIMIT_NAME));
-          add (new JLabel ());
           break;
         }
         default:
