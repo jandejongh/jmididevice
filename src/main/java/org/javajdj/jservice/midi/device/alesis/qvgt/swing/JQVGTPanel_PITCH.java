@@ -73,15 +73,15 @@ final class JQVGTPanel_PITCH extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Wave", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_WAVESHAPE_NAME, MidiDevice_QVGT.LfoWaveshape.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_SPEED_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_SPEED_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
@@ -89,9 +89,9 @@ final class JQVGTPanel_PITCH extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Detune [cents]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_DETUNE_TUNE_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_SPEED_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_PHASER_DEPTH_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Stero Separation", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_SEPARATION_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
@@ -103,15 +103,15 @@ final class JQVGTPanel_PITCH extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Wave", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_WAVESHAPE_NAME, MidiDevice_QVGT.LfoWaveshape.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_SPEED_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_DEPTH_NAME, 0, 98));
+      "Depth", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_DEPTH_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Spectrum Shift", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_SPECTRUM_SHIFT_NAME, 0, 299));
+      "Spectrum Shift [Hz]", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_SPECTRUM_SHIFT_NAME, 1, 300));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Output Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_OUTPUT_SHIFT_MIX_NAME, 0, 98));
+      "Output Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_OUTPUT_SHIFT_MIX_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "DL/REV Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_DL_REV_SHIFT_MIX_NAME, 0, 98));
+      "DL/REV Shift Mix", MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_DL_REV_SHIFT_MIX_NAME, 0, 198, -99));
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -179,7 +179,7 @@ final class JQVGTPanel_PITCH extends JPanel
         case C1_EQ_PCH_DL_REV:
         case C4_5EQ_PCH_DL:
         {
-          setLayout (new GridLayout (6, 1, 5, 5));
+          setLayout (new GridLayout (7, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_INPUT_NAME));
           final MidiDevice_QVGT.PitchMode mode =
@@ -190,6 +190,7 @@ final class JQVGTPanel_PITCH extends JPanel
               case MONO_CHORUS:
               case STEREO_CHORUS:
               {
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_WAVESHAPE_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_SPEED_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_CHORUS_DEPTH_NAME));
@@ -198,6 +199,7 @@ final class JQVGTPanel_PITCH extends JPanel
               }
               case MONO_FLANGE:
               case STEREO_FLANGE:
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_SPEED_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_DEPTH_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF14_FLANGE_FEEDBACK_NAME));
@@ -219,7 +221,7 @@ final class JQVGTPanel_PITCH extends JPanel
         }
         case C2_LES_DL_REV:
         {
-          setLayout (new GridLayout (8, 1, 5, 0));
+          setLayout (new GridLayout (7, 1, 5, 5));
           add (new JLabel ());
           final JLabel label = new JLabel ("Leslie");
           label.setHorizontalAlignment (SwingConstants.CENTER);
@@ -228,27 +230,25 @@ final class JQVGTPanel_PITCH extends JPanel
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_SEPARATION_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_MOTOR_CONTROL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF2_LESLIE_MOTOR_SPEED_NAME));
-          add (new JLabel ());
-          add (new JLabel ());
           break;
         }
         case C5_3EQ_REV:
         {
-          setLayout (new GridLayout (8, 1, 5, 0));
+          setLayout (new GridLayout (7, 1, 5, 5));
+          final JLabel label = new JLabel ("Reverb Chorus");
+          label.setHorizontalAlignment (SwingConstants.CENTER);
+          add (label);
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_ENABLE_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_WAVESHAPE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_SPEED_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF5_CHORUS_DEPTH_NAME));
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
-          add (new JLabel ());
           break;
         }
         case C6_RING_DL_REV:
         {
-          setLayout (new GridLayout (8, 1, 5, 0));
-          add (new JLabel ());
+          setLayout (new GridLayout (7, 1, 5, 5));
           final JLabel label = new JLabel ("Ring Modulator");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
@@ -256,15 +256,16 @@ final class JQVGTPanel_PITCH extends JPanel
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_SPECTRUM_SHIFT_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_OUTPUT_SHIFT_MIX_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_PITCH_CF6_RINGMOD_DL_REV_SHIFT_MIX_NAME));
-          add (new JLabel ());
-          add (new JLabel ());
           break;
         }
         case C3_GEQ_DL:
         case C7_RESO_DL_REV:
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (7, 1, 5, 5));
+          add (new JLabel ());
+          add (new JLabel ());
+          add (new JLabel ());
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);
