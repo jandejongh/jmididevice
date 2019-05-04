@@ -27,7 +27,6 @@ import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.device.alesis.qvgt.Patch_QGVT;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Boolean;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Enum;
 import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Integer_Slider;
 import org.javajdj.swing.SwingUtilsJdJ;
