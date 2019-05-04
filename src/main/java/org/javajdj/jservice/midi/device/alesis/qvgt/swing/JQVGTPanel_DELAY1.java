@@ -147,6 +147,10 @@ final class JQVGTPanel_DELAY1 extends JPanel
       "Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_PING_PONG_FEEDBACK_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Master Feedback [%]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME, 0, 99));
+    final JMidiDeviceParameter<Integer> multiTapTotalDelayParameter = new JMidiDeviceParameter_Integer_Slider (midiDevice,
+      "Total Tap Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME, 1, 1470);
+    multiTapTotalDelayParameter.setReadOnly (true);
+    addMidiDeviceParameter (multiTapTotalDelayParameter);
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF7_MONO_DELAY_NAME, 1, 720));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -396,6 +400,9 @@ final class JQVGTPanel_DELAY1 extends JPanel
                 break;
               case MULTI_TAP:
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME));
+                add (new JLabel ());
+                add (new JLabel ());
+                add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME));
                 break;
               default:
                 throw new RuntimeException ();
