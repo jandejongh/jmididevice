@@ -401,7 +401,9 @@ final class JQVGTPanel_DELAY1 extends JPanel
               case MULTI_TAP:
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_MASTER_FEEDBACK_NAME));
                 add (new JLabel ());
-                add (new JLabel ());
+                final JLabel label = new JLabel ("Total TAP Delay cannot exceed 1470 ms!");
+                label.setHorizontalAlignment (SwingConstants.CENTER);
+                add (label);
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_DELAY_CF4_MULTITAP_TOTAL_DELAY_NAME));
                 break;
               default:
