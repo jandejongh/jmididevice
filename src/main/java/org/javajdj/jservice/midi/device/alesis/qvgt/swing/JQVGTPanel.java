@@ -114,9 +114,13 @@ public class JQVGTPanel
     addBorderFXGroup (jPitchJPanel, "PITCH");
     add (jPitchJPanel);
     
-    final JPanel jDelayJPanel = new JQVGTPanel_DELAY (midiDevice);
-    addBorderFXGroup (jDelayJPanel, "DELAY");
-    add (jDelayJPanel);
+    final JPanel jDelay1JPanel = new JQVGTPanel_DELAY1 (midiDevice);
+    addBorderFXGroup (jDelay1JPanel, "DELAY [1/2]");
+    add (jDelay1JPanel);
+    
+    final JPanel jDelay2JPanel = new JQVGTPanel_DELAY2 (midiDevice);
+    addBorderFXGroup (jDelay2JPanel, "DELAY [2/2]");
+    add (jDelay2JPanel);
     
     final JPanel jReverb1JPanel = new JQVGTPanel_REVERB1 (midiDevice);
     addBorderFXGroup (jReverb1JPanel, "REVERB [1/2]");
@@ -134,9 +138,9 @@ public class JQVGTPanel
     addBorderFXGroup (jMixModJPanel, "MIX [MODULATION]");
     add (jMixModJPanel);
     
-    final JPanel jModulationJPanel = new JQVGTPanel_MODULATION (midiDevice);
-    addBorderFXGroup (jModulationJPanel, "MODULATION");
-    add (jModulationJPanel);
+//    final JPanel jModulationJPanel = new JQVGTPanel_MODULATION (midiDevice);
+//    addBorderFXGroup (jModulationJPanel, "MODULATION");
+//    add (jModulationJPanel);
     
   }
   
