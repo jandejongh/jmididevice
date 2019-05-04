@@ -3499,7 +3499,7 @@ public class MidiDevice_QVGT
       ParameterDescriptor_QVGT.Function_QVGT.F_DELAY,
       7, /* page */
       EDIT_BUFFER_PROGRAM_NUMBER, /* program */
-      0x43, /* offset */ // XXX THIS IS WRONG; IT IS THE PANNING PARAMETER OFFSET -> NOT IN DOC -> FIGURE OUT!! XXX
+      0x4A, /* offset */ // UNDOCUMENTED -> FOUND THROUGH MIDI DEBUGGING 20190504.
       1, /* size */
       EDIT_BUFFER_NAME, /* parentKey */
       null, /* customValueConverter */
@@ -3562,7 +3562,7 @@ public class MidiDevice_QVGT
       Integer.class,
       ParameterDescriptor_QVGT.ParameterConversion_QVGT.INT_IN_BYTE,
       ParameterDescriptor_QVGT.Function_QVGT.F_DELAY,
-      7, /* page */
+      8, /* page */
       EDIT_BUFFER_PROGRAM_NUMBER, /* program */
       0x68, /* offset */
       1, /* size */
@@ -5269,8 +5269,7 @@ public class MidiDevice_QVGT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // XXX
-  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 2000L;
+  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 1000L;
 
   private final Runnable qvgtMainRequestLoop = () ->
   {
@@ -5551,6 +5550,20 @@ public class MidiDevice_QVGT
       final Object oValue = parameterDescriptor_qvgt.convertFromDevice (value);
       if (oValue == null)
         throw new RuntimeException ();
+      // Small debug section for logging changes (if non-null values) from the device's EDIT BUFFER.
+      // if (key.equals (EDIT_BUFFER_NAME))
+      // {
+      //   final Patch_QGVT oldPatch = (Patch_QGVT) get (EDIT_BUFFER_NAME);
+      //   final Patch_QGVT newPatch = (Patch_QGVT) oValue;
+      //   if (oldPatch != null)
+      //   {
+      //     final byte[] oBytes = oldPatch.getDecodedBytes ();
+      //     final byte[] nBytes = newPatch.getDecodedBytes ();
+      //     for (int i = 0; i < Patch_QGVT.DECODED_PATCH_SIZE; i++)
+      //       if (oBytes[i] != nBytes[i])
+      //         LOG.log (Level.INFO, "Change in patch detected @0x{0}.", Integer.toHexString (i));
+      //   }
+      // }
       updateParameterFromDevice (key, oValue);
       if (this.subParameters.containsKey (key))
       {
