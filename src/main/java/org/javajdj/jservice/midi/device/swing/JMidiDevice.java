@@ -96,30 +96,10 @@ public class JMidiDevice
     final JMenu deviceMenu = new JMenu ("Device");
     final JMenu deviceNewMenu = new JMenu ("New");
     final JMenuItem deviceNewMe80MenuItem = new JMenuItem ("BOSS ME-80");
-    deviceNewMe80MenuItem.addActionListener ((ActionEvent) ->
-    {
-      SwingUtilsJdJ.invokeOnSwingEDT (() ->
-      {
-        final MidiService midiService = new JMidiService ();
-        final MidiDevice_Me80 midiDevice_Me80 = new MidiDevice_Me80 (midiService);
-        final JMe80Panel jMe80 = new JMe80Panel (midiService, midiDevice_Me80);
-        JMidiDevice.this.tabbedPane.add ("Instrument: BOSS ME-80", jMe80);
-        LOG.log (Level.INFO, "Created MIDI Device {0}.", jMe80.getName ());    
-      });
-    });
+    deviceNewMe80MenuItem.addActionListener ((ActionEvent) -> JMidiDevice.this.newMe80 ());
     deviceNewMenu.add (deviceNewMe80MenuItem);
     final JMenuItem deviceNewQVGTMenuItem = new JMenuItem ("Alesis Quadraverb GT");
-    deviceNewQVGTMenuItem.addActionListener ((ActionEvent) ->
-    {
-      SwingUtilsJdJ.invokeOnSwingEDT (() ->
-      {
-        final MidiService midiService = new JMidiService ();
-        final MidiDevice_QVGT midiDevice_QVGT = new MidiDevice_QVGT (midiService);
-        final JQVGTPanel jQVGT = new JQVGTPanel (midiService, midiDevice_QVGT);
-        JMidiDevice.this.tabbedPane.add ("Instrument: Alesis QVGT", jQVGT);
-        LOG.log (Level.INFO, "Created MIDI Device {0}.", jQVGT.getName ());    
-      });
-    });
+    deviceNewQVGTMenuItem.addActionListener ((ActionEvent) -> JMidiDevice.this.newQVGT ());
     deviceNewMenu.add (deviceNewQVGTMenuItem);
     deviceMenu.add (deviceNewMenu);
     jMenuBar.add (deviceMenu);
@@ -210,6 +190,42 @@ public class JMidiDevice
   {
     final PropertyChangeEvent pce = new PropertyChangeEvent (this, propertyName, oldValue, newValue);
     fire (pce);
+  }
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // NEW DEVICE PANELS
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  /** Creates a MIDI Service, a BOSS ME-80 MIDI Device, a panel to control the device, and adds the panel to the tabbed pane.
+   * 
+   */
+  protected final void newMe80 ()
+  {
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
+    {
+      final MidiService midiService = new JMidiService ();
+      final MidiDevice_Me80 midiDevice_Me80 = new MidiDevice_Me80 (midiService);
+      final JMe80Panel jMe80 = new JMe80Panel (midiService, midiDevice_Me80);
+      this.tabbedPane.add ("Instrument: BOSS ME-80", jMe80);
+      LOG.log (Level.INFO, "Created MIDI Device {0}.", jMe80.getName ());    
+    });    
+  }
+  
+  /** Creates a MIDI Service, an Alesis QVGT MIDI Device, a panel to control the device, and adds the panel to the tabbed pane.
+   * 
+   */
+  protected final void newQVGT ()
+  {
+    SwingUtilsJdJ.invokeOnSwingEDT (() ->
+    {
+      final MidiService midiService = new JMidiService ();
+      final MidiDevice_QVGT midiDevice_QVGT = new MidiDevice_QVGT (midiService);
+      final JQVGTPanel jQVGT = new JQVGTPanel (midiService, midiDevice_QVGT);
+      this.tabbedPane.add ("Instrument: Alesis QVGT", jQVGT);
+      LOG.log (Level.INFO, "Created MIDI Device {0}.", jQVGT.getName ());    
+    });    
   }
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
