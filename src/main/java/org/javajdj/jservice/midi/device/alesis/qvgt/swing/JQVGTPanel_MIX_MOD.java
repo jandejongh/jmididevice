@@ -74,13 +74,13 @@ final class JQVGTPanel_MIX_MOD
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Depth", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_DEPTH_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_SPEED_NAME, 0, 98, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
       "Modulation Type", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_TYPE_NAME, MidiDevice_QVGT.MixModulation.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Depth", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_DEPTH_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Speed", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_SPEED_NAME, 0, 98));
+      "Speed", MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_SPEED_NAME, 0, 98, 1));
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -147,7 +147,7 @@ final class JQVGTPanel_MIX_MOD
       {
         case C1_EQ_PCH_DL_REV:
         {
-          setLayout (new GridLayout (8, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_TYPE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF1_DEPTH_NAME));
@@ -156,7 +156,7 @@ final class JQVGTPanel_MIX_MOD
         }
         case C4_5EQ_PCH_DL:
         {
-          setLayout (new GridLayout (8, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_TYPE_NAME));
           add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MODULATION_CF4_DEPTH_NAME));
@@ -170,7 +170,7 @@ final class JQVGTPanel_MIX_MOD
         case C7_RESO_DL_REV:
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (1, 1, 5, 5));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);

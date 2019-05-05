@@ -19,6 +19,7 @@ package org.javajdj.jservice.midi.device.alesis.qvgt.swing;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
@@ -67,61 +68,61 @@ final class JQVGTPanel_MIX
     if (midiDevice == null || ! (midiDevice instanceof MidiDevice_QVGT))
       throw new IllegalArgumentException ();
     this.midiDevice = midiDevice;
-    setLayout (new GridLayout (7, 1, 5, 0));
+    setLayout (new GridLayout (9, 1, 5, 5));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Direct Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Master Fx Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
-      "Preamp Signal", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PREAMP_SIGNAL_NAME, MidiDevice_QVGT.PreampSignal.class));
+      "    Preamp Signal", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PREAMP_SIGNAL_NAME, MidiDevice_QVGT.PreampSignal.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Preamp/Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PREAMP_OR_EQ_LEVEL_NAME, 0, 99));
+      "    Preamp/Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PREAMP_OR_EQ_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Pitch Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PITCH_LEVEL_NAME, 0, 99));
+      "    Pitch Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PITCH_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_DELAY_LEVEL_NAME, 0, 99));
+      "    Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_DELAY_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_REVERB_LEVEL_NAME, 0, 99));
+      "    Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_REVERB_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Leslie Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_LESLIE_LEVEL_NAME, 0, 99));
+      "    Leslie Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_LESLIE_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_DELAY_LEVEL_NAME, 0, 99));
+      "    Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_DELAY_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_REVERB_LEVEL_NAME, 0, 99));
+      "    Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_REVERB_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF3_EQ_LEVEL_NAME, 0, 99));
+      "    Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF3_EQ_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF3_DELAY_LEVEL_NAME, 0, 99));
+      "    Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF3_DELAY_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
-      "Preamp Signal", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PREAMP_SIGNAL_NAME, MidiDevice_QVGT.PreampSignal.class));
+      "    Preamp Signal", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PREAMP_SIGNAL_NAME, MidiDevice_QVGT.PreampSignal.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Preamp/Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PREAMP_OR_EQ_LEVEL_NAME, 0, 99));
+      "    Preamp/Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PREAMP_OR_EQ_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Pitch Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PITCH_LEVEL_NAME, 0, 99));
+      "    Pitch Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PITCH_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_DELAY_LEVEL_NAME, 0, 99));
+      "    Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_DELAY_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Enum (midiDevice,
-      "Preamp Signal", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_PREAMP_SIGNAL_NAME, MidiDevice_QVGT.PreampSignal.class));
+      "    Preamp Signal", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_PREAMP_SIGNAL_NAME, MidiDevice_QVGT.PreampSignal.class));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Preamp/Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_PREAMP_OR_EQ_LEVEL_NAME, 0, 99));
+      "    Preamp/Eq Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_PREAMP_OR_EQ_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_REVERB_LEVEL_NAME, 0, 99));
+      "    Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_REVERB_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Preamp Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_PREAMP_LEVEL_NAME, 0, 99));
+      "    Preamp Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_PREAMP_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Ring Mod Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_RINGMOD_LEVEL_NAME, 0, 99));
+      "    Ring Mod Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_RINGMOD_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_DELAY_LEVEL_NAME, 0, 99));
+      "    Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_DELAY_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_REVERB_LEVEL_NAME, 0, 99));
+      "    Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_REVERB_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Preamp Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_PREAMP_LEVEL_NAME, 0, 99));
+      "    Preamp Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_PREAMP_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Resonator Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_RESONATOR_LEVEL_NAME, 0, 99));
+      "    Resonator Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_RESONATOR_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_DELAY_LEVEL_NAME, 0, 99));
+      "    Delay Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_DELAY_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_REVERB_LEVEL_NAME, 0, 99));
+      "    Reverb Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_REVERB_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Preamp Level", MidiDevice_QVGT.EDIT_BUFFER_MIX_CF8_PREAMP_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
@@ -193,8 +194,10 @@ final class JQVGTPanel_MIX
         case C1_EQ_PCH_DL_REV:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PREAMP_SIGNAL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PREAMP_OR_EQ_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_PITCH_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF1_DELAY_LEVEL_NAME));
@@ -204,6 +207,7 @@ final class JQVGTPanel_MIX
         case C2_LES_DL_REV:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_LESLIE_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF2_DELAY_LEVEL_NAME));
@@ -213,6 +217,7 @@ final class JQVGTPanel_MIX
         case C3_GEQ_DL:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF3_EQ_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF3_DELAY_LEVEL_NAME));
@@ -221,8 +226,11 @@ final class JQVGTPanel_MIX
         case C4_5EQ_PCH_DL:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PREAMP_SIGNAL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PREAMP_OR_EQ_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_PITCH_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF4_DELAY_LEVEL_NAME));
@@ -231,8 +239,11 @@ final class JQVGTPanel_MIX
         case C5_3EQ_REV:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_PREAMP_SIGNAL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_PREAMP_OR_EQ_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF5_REVERB_LEVEL_NAME));
           break;
@@ -240,6 +251,7 @@ final class JQVGTPanel_MIX
         case C6_RING_DL_REV:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_PREAMP_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF6_RINGMOD_LEVEL_NAME));
@@ -250,6 +262,7 @@ final class JQVGTPanel_MIX
         case C7_RESO_DL_REV:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_MASTER_FX_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_PREAMP_LEVEL_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF7_RESONATOR_LEVEL_NAME));
@@ -260,7 +273,9 @@ final class JQVGTPanel_MIX
         case C8_SAMPLING:
         {
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_DIRECT_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF8_PREAMP_LEVEL_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_MIX_CF8_PLAYBACK_LEVEL_NAME));
           break;
         }
