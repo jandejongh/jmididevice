@@ -60,7 +60,7 @@ public class JQVGTFrame
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public final static String RELEASE_STRING = "0.3.0-SNAPSHOT";
+  public final static String RELEASE_STRING = "0.3.0";
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -71,7 +71,7 @@ public class JQVGTFrame
   public JQVGTFrame ()
   {
     super ();
-    setTitle ("JQuadraverbGT - Release " + RELEASE_STRING + " - (C) Jan de Jongh 2019");
+    setTitle ("JQVGT - Release " + RELEASE_STRING + " - (C) Jan de Jongh 2019");
     setMinimumSize (new Dimension (600, 300));
     setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
     final JMenuBar jMenuBar = new JMenuBar ();
@@ -85,7 +85,7 @@ public class JQVGTFrame
     helpAboutItem.addActionListener ((ActionEvent) ->
     {
       JOptionPane.showMessageDialog (JQVGTFrame.this,
-        "JQuadraverbGT was designed and realized by \n\n" +
+        "JQVGT was designed and realized by \n\n" +
         "Jan de Jongh\n\n"
         + "Copyright (c) 2019 Jan de Jongh");
     });
