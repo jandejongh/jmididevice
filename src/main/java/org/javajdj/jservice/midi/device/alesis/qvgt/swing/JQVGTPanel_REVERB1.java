@@ -91,21 +91,21 @@ final class JQVGTPanel_REVERB1 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Input Mix", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_IN_MIX_NAME, 0, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Pre Delay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_DELAY_NAME, 1, 140));
+      "Pre Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_DELAY_NAME, 1, 140));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Pre Delay Mix", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_MIX_NAME, 0 /* XXX Service Manual: 1 */, 198, -99));
+      "PreDly Mix [Pre/Post]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_MIX_NAME, 0 /* XXX Service Manual: 1 */, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Diffusion", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_DIFFUSION_NAME, 0, 8));
+      "Diffusion", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_DIFFUSION_NAME, 0, 8, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Density", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_NON_HALL_DENSITY_NAME, 0, 8));
+      "Density", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_NON_HALL_DENSITY_NAME, 0, 8, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Pre Delay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PRE_DELAY_NAME, 1, 140));
+      "Pre Delay [ms]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PRE_DELAY_NAME, 1, 140));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Pre Delay Mix", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PRE_MIX_NAME, 0 /* XXX Service Manual: 1 */, 198, -99));
+      "PreDly Mix [Pre/Post]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PRE_MIX_NAME, 0 /* XXX Service Manual: 1 */, 198, -99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Diffusion", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_DIFFUSION_NAME, 0, 8));
+      "Diffusion", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_DIFFUSION_NAME, 0, 8, 1));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Density", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_NON_HALL_DENSITY_NAME, 0, 8));
+      "Density", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_NON_HALL_DENSITY_NAME, 0, 8, 1));
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -173,11 +173,12 @@ final class JQVGTPanel_REVERB1 extends JPanel
       {
         case C1_EQ_PCH_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1_INPUT1_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1_INPUT2_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_IN_MIX_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_DELAY_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_MIX_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_DIFFUSION_NAME));
@@ -189,11 +190,12 @@ final class JQVGTPanel_REVERB1 extends JPanel
         }
         case C2_LES_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF2_INPUT1_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF2_INPUT2_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_IN_MIX_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_DELAY_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_MIX_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_DIFFUSION_NAME));
@@ -205,11 +207,14 @@ final class JQVGTPanel_REVERB1 extends JPanel
         }
         case C5_3EQ_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));    
+          setLayout (new GridLayout (9, 1, 5, 5));    
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_INPUT_NAME));
+          add (new JLabel ());
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PRE_DELAY_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PRE_MIX_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_DIFFUSION_NAME));
           final MidiDevice_QVGT.ReverbMode mode =
             (MidiDevice_QVGT.ReverbMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME);
@@ -219,11 +224,12 @@ final class JQVGTPanel_REVERB1 extends JPanel
         }
         case C6_RING_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF6_INPUT1_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF6_INPUT2_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_IN_MIX_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_DELAY_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_MIX_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_DIFFUSION_NAME));
@@ -235,11 +241,12 @@ final class JQVGTPanel_REVERB1 extends JPanel
         }
         case C7_RESO_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF7_INPUT1_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF7_INPUT2_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_IN_MIX_NAME));
+          add (new JLabel ());
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_DELAY_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PRE_MIX_NAME));
           add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_DIFFUSION_NAME));
@@ -253,7 +260,7 @@ final class JQVGTPanel_REVERB1 extends JPanel
         case C4_5EQ_PCH_DL:
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (1, 1, 5, 5));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);

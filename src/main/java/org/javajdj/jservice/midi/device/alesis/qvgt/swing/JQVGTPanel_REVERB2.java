@@ -74,62 +74,62 @@ final class JQVGTPanel_REVERB2 extends JPanel
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_FORWARD_DECAY_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "[Reverse] Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_REVERSE_TIME_NAME, 0, 99));
+      "[Reverse] Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_REVERSE_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_NON_HALL_LOW_DECAY_NAME, 0, 60));
+      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_NON_HALL_LOW_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_NON_HALL_HIGH_DECAY_NAME, 0, 60));
+      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_NON_HALL_HIGH_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_LOW_DECAY_NAME, 0, 60));
+      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_LOW_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_HIGH_DECAY_NAME, 0, 60));
+      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_HIGH_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Gate Enabled", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Hold Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_HOLD_TIME_NAME, 0, 99));
+      "Gate Hold Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_HOLD_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Release Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_REL_TIME_NAME, 0, 99));
+      "Gate Rel Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_REL_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gated Level", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_LEVEL_NAME, 0, 99));
+      "Gated Level [%]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Gate Enabled", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Hold Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_HOLD_TIME_NAME, 0, 99));
+      "Gate Hold Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_HOLD_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Release Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_REL_TIME_NAME, 0, 99));
+      "Gate Rel Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_REL_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gated Level", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_LEVEL_NAME, 0, 99));
+      "Gated Level [%]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_LEVEL_NAME, 0, 99));
     //
     // Config 5.
     //
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_FORWARD_DECAY_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "[Reverse] Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_REVERSE_TIME_NAME, 0, 99));
+      "[Reverse] Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_REVERSE_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_NON_HALL_LOW_DECAY_NAME, 0, 60));
+      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_NON_HALL_LOW_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_NON_HALL_HIGH_DECAY_NAME, 0, 60));
+      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_NON_HALL_HIGH_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_LOW_DECAY_NAME, 0, 60));
+      "Low Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_LOW_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_HIGH_DECAY_NAME, 0, 60));
+      "High Decay", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_HIGH_DECAY_NAME, 0, 60, -60));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Gate Enabled", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Hold Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_HOLD_TIME_NAME, 0, 99));
+      "Gate Hold Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_HOLD_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Release Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_REL_TIME_NAME, 0, 99));
+      "Gate Rel Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_REL_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gated Level", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_LEVEL_NAME, 0, 99));
+      "Gated Level [%]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_LEVEL_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Boolean (midiDevice,
       "Gate Enabled", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_NAME));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Hold Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_HOLD_TIME_NAME, 0, 99));
+      "Gate Hold Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_HOLD_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gate Release Time", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_REL_TIME_NAME, 0, 99));
+      "Gate Rel Time [0-99]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_REL_TIME_NAME, 0, 99));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "Gated Level", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_LEVEL_NAME, 0, 99));
+      "Gated Level [%]", MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_LEVEL_NAME, 0, 99));
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
   }
@@ -200,7 +200,7 @@ final class JQVGTPanel_REVERB2 extends JPanel
         case C6_RING_DL_REV:
         case C7_RESO_DL_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           final MidiDevice_QVGT.ReverbMode mode =
             (MidiDevice_QVGT.ReverbMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME);
           if (mode != null)
@@ -240,12 +240,16 @@ final class JQVGTPanel_REVERB2 extends JPanel
               case PLATE:
               case ROOM:
               case CHAMBER:
+                add (new JLabel ());
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_HOLD_TIME_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_REL_TIME_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_PLROCH_GATE_LEVEL_NAME));
                 break;
               case HALL:
+                add (new JLabel ());
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_HOLD_TIME_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF1267_HALL_GATE_REL_TIME_NAME));
@@ -261,7 +265,7 @@ final class JQVGTPanel_REVERB2 extends JPanel
         }
         case C5_3EQ_REV:
         {
-          setLayout (new GridLayout (9, 1, 5, 0));
+          setLayout (new GridLayout (9, 1, 5, 5));
           final MidiDevice_QVGT.ReverbMode mode =
             (MidiDevice_QVGT.ReverbMode) getMidiDevice ().get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_MODE_NAME);
           if (mode != null)
@@ -301,12 +305,16 @@ final class JQVGTPanel_REVERB2 extends JPanel
               case PLATE:
               case ROOM:
               case CHAMBER:
+                add (new JLabel ());
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_HOLD_TIME_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_REL_TIME_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_PLROCH_GATE_LEVEL_NAME));
                 break;
               case HALL:
+                add (new JLabel ());
+                add (new JLabel ());
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_HOLD_TIME_NAME));
                 add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_REVERB_CF5_HALL_GATE_REL_TIME_NAME));
@@ -324,7 +332,7 @@ final class JQVGTPanel_REVERB2 extends JPanel
         case C4_5EQ_PCH_DL:
         case C8_SAMPLING:
         {
-          setLayout (new GridLayout (1, 1, 5, 0));
+          setLayout (new GridLayout (1, 1, 5, 5));
           final JLabel label = new JLabel ("Not Available");
           label.setHorizontalAlignment (SwingConstants.CENTER);
           add (label);

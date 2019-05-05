@@ -3942,6 +3942,13 @@ public class MidiDevice_QVGT
   
   public enum ReverbInput1Config6
   {
+    /** Non-existent setting in Configuration 6.
+     * 
+     * <p>
+     * The QVGT resets the value to {@link ReverbInput1Config6#PREAMP_OUT}.
+     * 
+     */
+    NX_PITCH_OUT,
     PREAMP_OUT,
     RING_MOD_OUT,
     DELAY_INPUT_MIX;
@@ -3949,6 +3956,13 @@ public class MidiDevice_QVGT
   
   public enum ReverbInput1Config7
   {
+    /** Non-existent setting in Configuration 7.
+     * 
+     * <p>
+     * The QVGT resets the value to {@link ReverbInput1Config7#PREAMP_OUT}.
+     * 
+     */
+    NX_PITCH_OUT,
     PREAMP_OUT,
     RESO_OUT,
     DELAY_INPUT_MIX;
@@ -3956,26 +3970,26 @@ public class MidiDevice_QVGT
   
   public enum ReverbInput2Config1
   {
-    DELAY_OUT,
-    PITCH_OUT;
+    PITCH_OUT,
+    DELAY_OUT;
   }
   
   public enum ReverbInput2Config2
   {
-    DELAY_OUT,
-    LESLIE_OUT;
+    LESLIE_OUT,
+    DELAY_OUT;
   }
   
   public enum ReverbInput2Config6
   {
-    DELAY_OUT,
-    RING_MOD_OUT;
+    RING_MOD_OUT,
+    DELAY_OUT;
   }
   
   public enum ReverbInput2Config7
   {
-    DELAY_OUT,
-    RESO_OUT;
+    RESO_OUT,
+    DELAY_OUT;
   }
   
   private void registerParameters_EditBuffer_Reverb ()
@@ -5312,7 +5326,7 @@ public class MidiDevice_QVGT
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 2000L; // XXX Set me back to 1000L!
+  private final long QVGT_MAIN_REQUEST_LOOP_PERIOD_MS = 2000L; // XXX Set me back to 1000L! XXX
 
   private final Runnable qvgtMainRequestLoop = () ->
   {
