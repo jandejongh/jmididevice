@@ -7,7 +7,7 @@
   
   <groupId>org.javajdj</groupId>
   <artifactId>jmididevice</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.0</version>
   <description>A Java library holding a few MIDI device implementations, some with Swing components.</description>
   <url>https://github.com/jandejongh/jmididevice</url>
   
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>jservice</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
     
     <dependency>
@@ -60,7 +60,7 @@
          <configuration>
           <archive>
             <manifest>
-              <mainClass>org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80</mainClass>
+              <mainClass>org.javajdj.jservice.midi.device.swing.JMidiDevice</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -79,7 +79,7 @@
               <archive>
                 <manifest>
                   <mainClass>
-                    org.javajdj.jservice.midi.device.rolandboss.bossme80.swing.JMe80
+                    org.javajdj.jservice.midi.device.swing.JMidiDevice
                   </mainClass>
                 </manifest>
               </archive>
