@@ -22,8 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_Integer_Slider;
+import org.javajdj.jservice.midi.device.swing.parameter.JMidiDeviceParameter;
+import org.javajdj.jservice.midi.device.swing.parameter.JMidiDeviceParameter_Integer_Slider;
 
 /**A {@link JPanel} for selecting the current patch on an Alesis Quadraverb GT.
  * 

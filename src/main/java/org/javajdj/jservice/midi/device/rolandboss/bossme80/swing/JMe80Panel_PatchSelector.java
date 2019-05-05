@@ -40,8 +40,8 @@ import javax.swing.border.TitledBorder;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.MidiDevice_Me80;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.rolandboss.bossme80.PatchSlot_Me80;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceMultiParameter;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter_String;
+import org.javajdj.jservice.midi.device.swing.parameter.JMidiDeviceMultiParameter;
+import org.javajdj.jservice.midi.device.swing.parameter.JMidiDeviceParameter_String;
 import org.javajdj.swing.JColorCheckBox;
 import org.javajdj.swing.SwingUtilsJdJ;
 

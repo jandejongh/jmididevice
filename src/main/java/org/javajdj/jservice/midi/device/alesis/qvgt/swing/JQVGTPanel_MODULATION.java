@@ -26,7 +26,7 @@ import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.MidiDeviceListener;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.device.alesis.qvgt.Patch_QGVT;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
+import org.javajdj.jservice.midi.device.swing.parameter.JMidiDeviceParameter;
 import org.javajdj.swing.SwingUtilsJdJ;
 
 /** A {@link JPanel} for monitoring and editing MODULATION parameters of an Alesis Quadraverb GT {@link MidiDevice}.

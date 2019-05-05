@@ -36,7 +36,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.javajdj.jservice.midi.device.MidiDevice;
 import org.javajdj.jservice.midi.device.alesis.qvgt.MidiDevice_QVGT;
 import org.javajdj.jservice.midi.device.alesis.qvgt.Patch_QGVT;
-import org.javajdj.jservice.midi.device.swing.JMidiDeviceParameter;
+import org.javajdj.jservice.midi.device.swing.parameter.JMidiDeviceParameter;
 import org.javajdj.swing.DefaultMouseListener;
 import org.javajdj.swing.JColorCheckBox;
 

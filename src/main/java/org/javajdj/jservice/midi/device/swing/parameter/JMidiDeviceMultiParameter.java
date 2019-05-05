@@ -14,7 +14,7 @@
  * limitations under the License.
  * 
  */
-package org.javajdj.jservice.midi.device.swing;
+package org.javajdj.jservice.midi.device.swing.parameter;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
