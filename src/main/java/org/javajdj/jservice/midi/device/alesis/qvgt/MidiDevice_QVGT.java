@@ -2444,7 +2444,7 @@ public class MidiDevice_QVGT
       Integer.class,
       ParameterDescriptor_QVGT.ParameterConversion_QVGT.INT_IN_BYTE,
       ParameterDescriptor_QVGT.Function_QVGT.F_PITCH,
-      1, /* page */
+      2, /* page */
       EDIT_BUFFER_PROGRAM_NUMBER, /* program */
       0x79, /* offset */
       1, /* size */
