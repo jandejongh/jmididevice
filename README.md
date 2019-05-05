@@ -62,6 +62,8 @@ You're all prepared now.
 
 ### Screenshot
 Upon starting the main method in jmididevice, the following screen (well, more or less) will pop up.
+(As of v0.3.0, the ME-80 Patch Editor is no longer opened automatically by the main program; you must
+do so by using the Device/New/BOSS ME-80 menu entry.)
 
 ![](resources/images/Screenshot_JMe80_v0.1.0_Full.png)
 
@@ -139,14 +141,30 @@ and my personal use of this feature (i.e., never).
 
 ## Alesis Quadraverb GT Patch Editor
 
+### Introduction
+
+As of v0.3.0, jmididevice feature a MidiDevice implementation for the Alesis Quadraverb GT.
+From the main window, it can be opened through the Device/New/Alesis Quadrverb GT menu item.
+In order to use the QVGT Patch Editor, you will need to set up a MIDI connection through
+QMidinet, as explained in more detail in the previous section on the BOSS ME-80 Patch Editor.
+
+### Resources
+
+The implementation has been done using the Reference Manual and the Service Manual for
+the Alesis Quadraverb GT, available from various source on Internet.
+
+This section describes the Alesis Quadraverb GT (QVGT for short) Patch Editor in jmididevice (version 0.3.0).
+
 ### Screenshot
-Upon starting the main method in jmididevice, the following screen (well, more or less) will pop up.
+After opening the Alesis Quadraverb GT device from the menu, the following screen (approximately) will pop up.
 
 ![](resources/images/Screenshot_JQVGT_v0.3.0_Full.png)
 
-As you can see, the interface is Spartan at best, and still work in progress.
-ME-80 owners likely recognize the various effect groups of the device, and their parameters.
 The next sections describe the different panels on the application main screen, from top-left to bottom-right.
+
+### MIDI
+
+The MIDI panel is identical to that of the ME-80 Patch Editor.
 
 ## Contact
 
