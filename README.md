@@ -29,7 +29,7 @@ under the release of your choice on the github repo.
 You will need the ...-with-dependencies jar file.
 Then do the usual 'java -jar <jmididevice...with-dependencies...jar>'.
 
-The remainder of this README describes the Boss ME-80 Patch Editor (the library's Main class at the present time).
+The remainder of this README describes the Boss ME-80 and Alesis Quadraverb GT Patch Editors.
 
 ## BOSS ME-80 Patch Editor
 
