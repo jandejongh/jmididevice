@@ -139,6 +139,7 @@ All parameters are supported but are read-only at the present time, and not well
 I will probably fix this in a future release, but it may take a while,
 given the excessive ratio between CTL-related programming time (several days)
 and my personal use of this feature (i.e., never).
+(Update: Full CTL support is present in v0.3.0.)
 
 ## Alesis Quadraverb GT Patch Editor
 
