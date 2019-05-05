@@ -166,6 +166,35 @@ The next sections describe the different panels on the application main screen, 
 
 The MIDI panel is identical to that of the ME-80 Patch Editor.
 
+### Quadraverb GT \[Device\]
+
+The second panel controls the MidiDevice service for the QVGT in the software.
+As with the MIDI panel, this panel features a rectangular activation switch that you need to click
+in order to activate the device.
+Rest assured, these are the only two buttons you have to press in order to get started.
+
+The watchdog rectange should turn green. If not, check your MIDI connection to the Quadraverb GT.
+Beware that pressing the Watchdog button has no effect.
+
+If both MIDI and Quadraverb GT \[Device\] are activated, the appearance of the screen should
+change dramatically: All panels are updated to reflect the state of the QVGT.
+
+### Quadraverb GT \[Patch I/O\]
+
+This panel allows for saving the in-core patch data (the Edit-Buffer contents) into a patch slot on the
+Quadraverb GT. In addition, the patch data can be loaded from and saved to file. Only single-patch files
+are supported at the moment.
+
+### Quadraverb GT \[Patch Selector\]
+
+This panel selects the patch (program) to be loaded into the Edit Buffer.
+
+### Quadraverb GT Effect Groups: Name/Config - PREAMP - EQ - PITCH - DELAY - REVERB - MIX
+
+These panels (for some effect group the parameters are split among two separate panels) monitor
+and control the various parameters of the patch data in the Edit Buffer.
+Note that parameter modulation through MIDI is not yet supported in the editor.
+
 ## Contact
 
 Correspondence related to jmididevice, including to the ME-80 and QVGT the Patch Editors is welcome,
