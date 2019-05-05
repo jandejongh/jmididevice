@@ -1,0 +1,23 @@
+jmididevice Release History
+
+Author/Maintainer: Jan de Jongh
+
+0.1.0 [20190316]
+	- First public release on github/jandejongh under Apache 2.0 License.
+        - Initial release - Functional Boss ME-80 Patch Editor.
+
+0.1.1 [20190318]
+        - Bug Fixes; Parameter Invalidation (BOSS ME-80).
+	
+0.2.0 [20190327]
+        - Saving patches -> ME-80.
+        - Loading/saving patches in .tsl (JSON) format.
+        - Dependency added on json-simple.
+        - Invalidation of parameter values.
+        - Full support of all ME-80 features.
+        - Bug fixes.
+        - Issue fixes.
+        - Javadoc improvements.
+
+0.3.0 [20190505]
+        - Support for Alesis Quadraverb GT (all except [MIDI] MODULATION).
