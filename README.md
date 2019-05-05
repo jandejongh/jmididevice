@@ -106,6 +106,7 @@ This is to be fixed in future releases.
 ### ME-80 \[Lib\]
 
 This panel is reserved for a future patch librarian.
+(Note: Patch I/O is present in version 0.3.0, yet still undocumented here.)
 
 ### ME-80 \[Spare\]
 
@@ -191,7 +192,7 @@ This panel selects the patch (program) to be loaded into the Edit Buffer.
 
 ### Quadraverb GT Effect Groups: Name/Config - PREAMP - EQ - PITCH - DELAY - REVERB - MIX
 
-These panels (for some effect group the parameters are split among two separate panels) monitor
+These panels (for some effect groups the parameters are split among two separate panels) monitor
 and control the various parameters of the patch data in the Edit Buffer.
 Note that parameter modulation through MIDI is not yet supported in the editor.
 
