@@ -1,17 +1,16 @@
 # jmididevice
 A Java library holding a few MIDI device (incl. Boss ME-80) implementations, some with Swing components.
 
-This README applies to v0.1.0.
+This README applies to v0.3.0.
 
 ## Introduction
 
-The jservice library introduces (among others) the Service, MidiService, and MidiDevice interfaces.
+The jservice library introduces (among others) the Service, RawMidiService, MidiService, and MidiDevice interfaces.
 The present library, jmididevice, features implementations of MidiDevice for devices I own.
 In addition, it features Java Swing components for monitoring and/or controlling (or even playing)
 these devices.
 
-Currently (v0.1.0), the library features only a single implementation for the Boss ME-80.
-However, work on the Alesis Quadraverb (GT) and some AKAI MIDI controllers is underway.
+Currently (v0.3.0), the library features implementations for the Boss ME-80 and the Alesis Quadraverb (GT).
 
 ## License
 
@@ -32,7 +31,7 @@ Then do the usual 'java -jar <jmididevice...with-dependencies...jar>'.
 
 The remainder of this README describes the Boss ME-80 Patch Editor (the library's Main class at the present time).
 
-## Boss ME-80 Patch Editor
+## BOSS ME-80 Patch Editor
 
 ### Resources
 
@@ -40,6 +39,8 @@ As far as I know, Roland/Boss has not released an official MIDI Implementation d
 However, documentation on the MIDI implementation is available in the Boss Tone Studio
 distribution.
 In addition, the MIDI implementation appears to follow Roland "standards".
+
+This section describes the BOSS ME-80 Patch Editor in jmididevice (version 0.1.0).
 
 ### Preparing the Boss ME-80
 
@@ -136,7 +137,18 @@ I will probably fix this in a future release, but it may take a while,
 given the excessive ratio between CTL-related programming time (several days)
 and my personal use of this feature (i.e., never).
 
-### Contact
+## Alesis Quadraverb GT Patch Editor
 
-Correspondence related to the Boss ME-80 Patch Editor is welcome,
+### Screenshot
+Upon starting the main method in jmididevice, the following screen (well, more or less) will pop up.
+
+![](resources/images/Screenshot_JQVGT_v0.3.0_Full.png)
+
+As you can see, the interface is Spartan at best, and still work in progress.
+ME-80 owners likely recognize the various effect groups of the device, and their parameters.
+The next sections describe the different panels on the application main screen, from top-left to bottom-right.
+
+## Contact
+
+Correspondence related to jmididevice, including to the ME-80 and QVGT the Patch Editors is welcome,
 preferrably through opening an Issue on github.
