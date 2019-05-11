@@ -26,3 +26,5 @@ Author/Maintainer: Jan de Jongh
         - Added org.jfree.jfreechart (1.5.0) dependency.
         - Added jfreechart-based EQ editor for Config-3 (only).
         - Some minor changes to package structure.
+        - Unified classes with main method.
+        - Simplified runtime version number maintenance.
