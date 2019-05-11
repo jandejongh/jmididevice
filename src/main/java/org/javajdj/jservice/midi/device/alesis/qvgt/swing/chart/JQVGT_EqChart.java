@@ -38,6 +38,8 @@ import org.jfree.data.xy.XYSeriesCollection;
  * @see MidiDevice
  * @see MidiDevice_QVGT
  * 
+ * @since 0.4.0
+ * 
  */
 abstract class JQVGT_EqChart
   extends ChartPanel

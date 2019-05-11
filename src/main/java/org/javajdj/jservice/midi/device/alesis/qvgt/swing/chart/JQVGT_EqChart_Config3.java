@@ -49,6 +49,8 @@ import org.jfree.data.xy.XYSeriesCollection;
  * 
  * @author Jan de Jongh {@literal <jfcmdejongh@gmail.com>}
  * 
+ * @since 0.4.0
+ * 
  */
 public final class JQVGT_EqChart_Config3
   extends JQVGT_EqChart
