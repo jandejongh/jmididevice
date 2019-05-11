@@ -45,6 +45,7 @@ import org.javajdj.swing.SwingUtilsJdJ;
  * @see MidiDevice
  * @see MidiDevice_QVGT
  * @see JQVGTPanel_EQ1
+ * @see JQVGTPanel_EQ_Chart
  * 
  */
 final class JQVGTPanel_EQ2 extends JPanel
@@ -57,6 +58,17 @@ final class JQVGTPanel_EQ2 extends JPanel
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   private static final Logger LOG = Logger.getLogger (JQVGTPanel_EQ2.class.getName ());
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // COMPILE-TIME SWITCHES
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  /** Whether or not to use {@code JFreeChart} components when available.
+   * 
+   */
+  public final static boolean USE_JFREECHART = true;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -98,28 +110,31 @@ final class JQVGTPanel_EQ2 extends JPanel
     //
     // Config 3
     //
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "16   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "32   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "62   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "126 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "250 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "500 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "1   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "2   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "4   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "8   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME, 0, 28, -14));
-    addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
-      "16  kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME, 0, 28, -14));
+    if (! JQVGTPanel_EQ2.USE_JFREECHART)
+    {
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "16   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "32   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "62   Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "126 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "250 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "500 Hz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "1   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "2   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "4   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "8   kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME, 0, 28, -14));
+      addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
+        "16  kHz", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME, 0, 28, -14));
+    }
     //
     // Config 4
     //
@@ -170,6 +185,8 @@ final class JQVGTPanel_EQ2 extends JPanel
       "High Freq [Hz]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_F_NAME, 2000, 18000));
     addMidiDeviceParameter (new JMidiDeviceParameter_Integer_Slider (midiDevice,
       "High Gain [dB]", MidiDevice_QVGT.EDIT_BUFFER_EQ_CF5_HIGH_AMP_NAME, 0, 560, -280, 0.05, "%4.2f"));
+    //
+    this.jEqChart = (JQVGTPanel_EQ2.USE_JFREECHART ? new JQVGTPanel_EQ_Chart (midiDevice) : null);
     //
     setGuiParameters ((Patch_QGVT.Configuration) midiDevice.get (MidiDevice_QVGT.EDIT_BUFFER_CONFIG_NAME));
     midiDevice.addMidiDeviceListener (this.midiDeviceListener);
@@ -224,6 +241,14 @@ final class JQVGTPanel_EQ2 extends JPanel
     this.parameterMap.put (midiDeviceParameter.getKey (), midiDeviceParameter);
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  // JFREECHART COMPONENT
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  private final JQVGTPanel_EQ_Chart jEqChart;
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
   // SET GUI PARAMETERS
@@ -283,18 +308,26 @@ final class JQVGTPanel_EQ2 extends JPanel
         }
         case C3_GEQ_DL:
         {
-          setLayout (new GridLayout (11, 1, 5, 0));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME));
-          add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME));
+          if (JQVGTPanel_EQ2.USE_JFREECHART)
+          {
+            setLayout (new GridLayout (1, 1, 0, 0));
+            add (this.jEqChart);
+          }
+          else
+          {
+            setLayout (new GridLayout (11, 1, 5, 0));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00016_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00032_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00062_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00126_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00250_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_00500_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_01000_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_02000_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_04000_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_08000_HZ_NAME));
+            add (this.parameterMap.get (MidiDevice_QVGT.EDIT_BUFFER_EQ_CF3_16000_HZ_NAME));
+          }
           break;
         }
         case C4_5EQ_PCH_DL:
