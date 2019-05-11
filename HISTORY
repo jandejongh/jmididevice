@@ -21,3 +21,8 @@ Author/Maintainer: Jan de Jongh
 
 0.3.0 [20190505]
         - Support for Alesis Quadraverb GT (all except [MIDI] MODULATION).
+
+0.4.0 [20190511]
+        - Added org.jfree.jfreechart (1.5.0) dependency.
+        - Added jfreechart-based EQ editor for Config-3 (only).
+        - Some minor changes to package structure.
